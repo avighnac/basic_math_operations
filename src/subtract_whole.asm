@@ -1,8 +1,8 @@
 extern strlen
 
 section .text
-global _subtract_whole
-_subtract_whole:
+global subtract_whole
+subtract_whole:
   ; Input:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
