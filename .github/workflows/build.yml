@@ -40,7 +40,6 @@ jobs:
         echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
     - name: Create release and upload artifacts.
       uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           build/src/libbasic_math_operations.a
