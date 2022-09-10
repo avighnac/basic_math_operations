@@ -44,8 +44,8 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: build/src/libbasic_math_operations.a
         asset_name: libbasic_math_operations.a
-        file: src/basic_math_operations.h
-        asset_name: basic_math_operations.h
+        file2: src/basic_math_operations.h
+        asset_name2: basic_math_operations.h
         tag: ${{ steps.vars.outputs.sha_short }}
         overwrite: true
         body: "Automatic release ${{ steps.vars.outputs.sha_short }}."
