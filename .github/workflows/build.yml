@@ -1,0 +1,51 @@
+name: "Make libbasic_math_operations.a"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: '18 13 * * 6'
+
+jobs:
+  analyze:
+    name: Make libbasic_math_operations.a
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S basic_math_operations -B basic_math_operations/build -G "Unix Makefiles"
+        cmake --build basic_math_operations/build --config Release --target all -j 10 --
+    - name: Declare github short hash.
+      id: vars
+      shell: bash
+      run: |
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Create release with libbasic_math_operations.a.
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: build/src/libbasic_math_operations.a
+        asset_name: libbasic_math_operations.a
+        file: src/basic_math_operations.h
+        asset_name: basic_math_operations.h
+        tag: ${{ steps.vars.outputs.sha_short }}
+        overwrite: true
+        body: "Automatic release ${{ steps.vars.outputs.sha_short }}."
