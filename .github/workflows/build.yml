@@ -41,7 +41,10 @@ jobs:
     - name: Create release and upload artifacts.
       uses: softprops/action-gh-release@v1
       with:
+        name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
+        body: Automatic release ${{ steps.vars.outputs.sha_short }}.
+        tag_name: ${{ steps.vars.outputs.sha_short }}
+        generate_release_notes: true
         files: |
           build/src/libbasic_math_operations.a
           src/basic_math_operations.h
- 
