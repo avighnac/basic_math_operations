@@ -2,9 +2,9 @@ name: "Make libbasic_math_operations.a"
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   schedule:
     - cron: '18 13 * * 6'
 
