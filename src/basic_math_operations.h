@@ -50,6 +50,13 @@ bmo_function_start void subtract_whole_same_length(const char *a, const char *b,
 /// @param res Where a * b will be stored.
 bmo_function_start void multiply_whole(const char *a, const char *b, char *res);
 
+/// @brief Multiplies the first rational argument with the second rational
+/// argument and stores the result in the third argument.
+/// @param a The first non-negative rational number as a decimal.
+/// @param b The first non-negative rational number as a decimal.
+/// @param res Where a * b will be stored.
+bmo_function_start void multiply(const char *a, const char *b, char *res);
+
 /// @brief Divides the first argument by the second argument. Stores the
 /// quotient in the third argument and the remainder in the fourth argument.
 /// @param numerator The whole non-negative numerator of the division.
