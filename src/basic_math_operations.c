@@ -34,4 +34,6 @@ void divide_whole_with_remainder(const char *numerator, const char *denominator,
                                            bufferSize, buffer);
   for (size_t i = 0; i < strlen(rem); i++)
     remainder[i] = rem[i];
+  free(buffer);
+  free(rem);
 }
