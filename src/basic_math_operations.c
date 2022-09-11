@@ -11,10 +11,9 @@ extern void _multiply_whole(const char *a, const char *b, char *res, char *buf1,
                             char *buf2);
 void multiply_whole(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
-  size_t a_len = strlen(a);
-  size_t b_len = strlen(b);
-  char *buf1 = (char *)calloc(a_len + b_len + 1, 1);
-  char *buf2 = (char *)calloc(a_len + b_len + 1, 1);
+  size_t bufsize = strlen(a) + strlen(b) + 1;
+  char *buf1 = (char *)calloc(bufsize, 1);
+  char *buf2 = (char *)calloc(bufsize, 1);
   _multiply_whole(a, b, res, buf1, buf2);
   free(buf1);
   free(buf2);
