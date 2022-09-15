@@ -9,9 +9,9 @@ strlen:
 
   xor    rcx, rcx
   mov    rax, -1
-_strlen_loop:
+.loop:
   inc    rax
   mov    cl, byte[rdi + rax]
   test   cl, cl
-  jnz    _strlen_loop
+  jnz    .loop
   ret
