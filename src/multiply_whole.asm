@@ -43,10 +43,10 @@ _multiply_whole:
   pop    rdi
   pop    rax
   dec    rbx
-_multiply_whole_loop_1:
+.loop_1:
   xor    r13, r13
   lea    r9, [rax - 1]
-_multiply_whole_loop_2:
+.loop_2:
   mov    r15b, 10
   mov    r11b, byte [rsi + rbx]
   sub    r11b, 48
@@ -83,14 +83,14 @@ _multiply_whole_loop_2:
   mov    r11, r9
   dec    r9
   cmp    r11, 0
-  jg     _multiply_whole_loop_2
+  jg     .loop_2
   cmp    r10b, 0
-  jle    _after_multiply_whole_if_1
+  jle    .after_if_1
   mov    byte [rcx + r13], r10b
   add    byte [rcx + r13], 48
   xor    r10b, r10b
   inc    r13
-_after_multiply_whole_if_1:
+.after_if_1:
   xor    r11, r11
   push   rax ; optimize this too, MOVE INPUT!!
   push   rdi
@@ -102,7 +102,7 @@ _after_multiply_whole_if_1:
   pop    rdi
   mov    r9, r13
   shr    r9, 1
-_multiply_whole_loop_3:
+.loop_3:
   mov    al, byte [rcx + r11]
   lea    r15, [rcx + r13 - 1]
   sub    r15, r11
@@ -111,18 +111,18 @@ _multiply_whole_loop_3:
   mov    byte [r15], al
   inc    r11
   cmp    r11, r9
-  js     _multiply_whole_loop_3
+  js     .loop_3
   pop    rax
   xor    r11, r11
   test   r14, r14
-  jle    _after_multiply_whole_loop_4
-_multiply_whole_loop_4:
+  jle    .after_loop_4
+.loop_4:
   mov    byte [rcx + r13], 48
   inc    r13
   inc    r11
   cmp    r11, r14
-  js     _multiply_whole_loop_4
-_after_multiply_whole_loop_4:
+  js     .loop_4
+.after_loop_4:
   mov    byte [rcx + r13], 0
   push   rdi
   push   rsi
@@ -162,25 +162,25 @@ _after_multiply_whole_loop_4:
   pop    rdi
   pop    rcx
   pop    rax
-_multiply_whole_loop_5:
+.loop_5:
   mov    r15b, byte [r8 + r11]
   mov    byte [rdx + r11], r15b
   inc    r11
   cmp    r11, r9
-  js     _multiply_whole_loop_5
+  js     .loop_5
   mov    byte [rdx + r9], 0
   xor    r11, r11
-_multiply_whole_loop_6:
+.loop_6:
   mov    byte [rcx + r11], 0
   mov    byte [r8 + r11], 0
   inc    r11
   cmp    r11, r13
-  js     _multiply_whole_loop_6
+  js     .loop_6
   inc    r14
   mov    r15, rbx
   dec    rbx
   cmp    r15, 0
-  jg     _multiply_whole_loop_1
+  jg     .loop_1
   push   rdi
   push   rcx
   mov    rdi, rdx
