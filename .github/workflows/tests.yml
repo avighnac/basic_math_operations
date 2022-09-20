@@ -33,5 +33,5 @@ jobs:
     - run: |
         cmake --no-warn-unused-cli -DENABLE_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
         cmake --build build --config Release --target all -j 10 --
-        chmod +x build/tests
-        ./build/tests
+        chmod +x build/src/tests/tests
+        ./build/src/tests/tests
