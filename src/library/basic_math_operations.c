@@ -1,4 +1,5 @@
 #include "basic_math_operations.h"
+#include <assert.h>
 #include <stdlib.h>
 
 extern void add_whole(const char *a, const char *b, char *res);
@@ -70,8 +71,12 @@ void divide_whole_with_remainder(const char *numerator, const char *denominator,
       (char *)calloc(5 * bufferSize + 10 * (strlen(denominator) + 2) + 3, 1);
   char *rem = _divide_whole_with_remainder(numerator, denominator, quotient,
                                            bufferSize, buffer);
+
+  extern void remove_leading_zeroes_inplace(char *);
+  remove_leading_zeroes_inplace(quotient);
+  remove_leading_zeroes_inplace(rem);
+
   for (size_t i = 0; i < strlen(rem); i++)
     remainder[i] = rem[i];
   free(buffer);
-  free(rem);
 }
