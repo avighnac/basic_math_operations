@@ -49,7 +49,8 @@ void multiply(const char *a, const char *b, char *res) {
   size_t reslength = strlen(res);
   for (size_t i = 0; i < displacement; i++)
     res[reslength - i] = res[reslength - i - 1];
-  res[reslength - displacement] = '.';
+  if (displacement)
+    res[reslength - displacement] = '.';
 
   free(buf1);
   free(buf2);
