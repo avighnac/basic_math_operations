@@ -46,5 +46,5 @@ jobs:
         tag_name: ${{ steps.vars.outputs.sha_short }}
         generate_release_notes: true
         files: |
-          build/src/libbasic_math_operations.a
+          build/src/library/libbasic_math_operations.a
           src/basic_math_operations.h
