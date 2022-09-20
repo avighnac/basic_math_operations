@@ -1,7 +1,7 @@
 # basic_math_operations
 A biginteger library for Linux written in assembly and C.
 
-Have you wanted to add, subtract, or multiply huge numbers but your calculator or favourite programming language only gives you an approximation?
+Have you ever wanted to add, subtract, or multiply huge numbers but your calculator or favourite programming language only gives you an approximation?
 
 For example, let's say you wanted to, for some reason, multiply `387261987198787123479468764398` by `1897346897629873468761342`. These numbers are extremely huge, and would be a programmatic nightmare to deal with. Well, that is, without this library.
 
