@@ -47,4 +47,4 @@ jobs:
         generate_release_notes: true
         files: |
           build/src/library/libbasic_math_operations.a
-          src/basic_math_operations.h
+          src/library/basic_math_operations.h
