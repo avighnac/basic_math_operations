@@ -37,6 +37,46 @@ int test_add_mul_sub(void (*function)(const char *, const char *, char *),
   return number_of_failed_cases;
 }
 
+int test_div(void (*divide_func)(const char *, const char *, char *, char *),
+             std::vector<std::pair<std::string, std::string>> input,
+             std::vector<std::pair<std::string, std::string>> expected,
+             std::string functionName, std::string testName) {
+  int number_tests = expected.size();
+  int number_of_failed_cases = 0;
+
+  std::cout << "Running " << number_tests << " test cases for " << testName
+            << ".\n";
+  for (size_t i = 0; i < number_tests; i++) {
+    char *quotient = (char *)calloc(
+        input[i].first.length() + input[i].second.length() + 1, 1);
+    char *remainder = (char *)calloc(
+        input[i].first.length() + input[i].second.length() + 1, 1);
+    divide_func(input[i].first.c_str(), input[i].second.c_str(), quotient,
+                remainder);
+    if (std::string(quotient) != expected[i].first ||
+        std::string(remainder) != expected[i].second) {
+      std::cout << "error in \"" << testName << "\": check " << functionName
+                << "(\"" << input[i].first << "\", \"" << input[i].second
+                << "\") == (\"" << expected[i].first << "\", \""
+                << expected[i].second << "\") failed\n";
+      std::cout << "actual: (\"" << quotient << "\", \"" << remainder
+                << "\")\n";
+      number_of_failed_cases++;
+    }
+    free(quotient);
+    free(remainder);
+  }
+
+  if (!number_of_failed_cases) {
+    std::cout << "no errors detected in " << testName << ".\n";
+  } else {
+    std::cout << number_of_failed_cases << " error/s detected in " << testName
+              << ".\n";
+  }
+
+  return number_of_failed_cases;
+}
+
 int main() {
   std::vector<std::pair<std::string, std::string>> input;
   std::vector<std::string> expected;
@@ -198,6 +238,44 @@ int main() {
 
   number_of_failed_cases +=
       test_add_mul_sub(multiply, input, expected, functionName, testName);
+
+  functionName = "divide_whole_with_remainder";
+  testName = "divide_whole_with_remainder_unit_tests";
+
+  input = {
+      {"48", "12"},
+      {"108", "18"},
+      {"0", "918273"},
+      {"24", "13"},
+      {"127386", "1928"},
+      {"987654321", "123456789"},
+      {"2136489764859862341743187349123498", "129387"},
+      {"69420", "69421"},
+      {"9999999999999999999999999999999999999999",
+       "1111111111111111111111111111111111111111"},
+      {"4235", "117"},
+      {"16758643444472241735565049220950822212345760579123351679767884655871948"
+       "59003855646385252010434012887776046783",
+       "891702384704657816982436876498261984376893271468926489126897126489"},
+      {"2599238273685882301953116803370344458240000000000",
+       "37442210799278051022084655767363072000000000"}};
+
+  std::vector<std::pair<std::string, std::string>> expected_div = {
+      {"4", "0"},
+      {"6", "0"},
+      {"0", "0"},
+      {"1", "11"},
+      {"66", "138"},
+      {"8", "9"},
+      {"16512398964809929449969373655", "24013"},
+      {"0", "69420"},
+      {"9", "0"},
+      {"36", "23"},
+      {"1879398746928651426938692658172648369836247", "0"},
+      {"69420", "0"}};
+
+  number_of_failed_cases += test_div(divide_whole_with_remainder, input,
+                                     expected_div, functionName, testName);
 
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
