@@ -19,78 +19,78 @@ add_whole:
   ;   - r13
   ;   - r14
   
-  push   r12
-  push   r13
-  push   r14
-  call   strlen
-  push   rax
-  push   rdi
-  mov    rdi, rsi
-  call   strlen
-  mov    r8, rax
-  pop    rdi
-  pop    rax
-  mov    r9, r8
-  cmp    rax, r8
-  cmovnc r9, rax
-  xor    r10b, r10b
-  xor    rcx, rcx
+  push   r12                  ; Save callee-saved registers used.
+  push   r13                  ; In this case,
+  push   r14                  ; r12, r13, and r14.
+  call   strlen               ; Calculate the length of char *a and store it in rax.
+  push   rax                  ; Save rax,
+  push   rdi                  ; and rdi to make another call to strlen.
+  mov    rdi, rsi             ; Move char *b into rdi.
+  call   strlen               ; Calculate the length of char *b,
+  mov    r8, rax              ; and store it in r8.
+  pop    rdi                  ; Now, rax = strlen(a)
+  pop    rax                  ;      r8  = strlen(b)
+  mov    r9, r8               ; The next two lines of code
+  cmp    rax, r8              ; put std::max(rax, r8) into
+  cmovnc r9, rax              ; the r9 register.
+  xor    r10b, r10b           ; r10b = false := carry_flag
+  xor    rcx, rcx             ; rcx = 0 := loop_counter
 .loop_1:
-  lea    r13, [rcx + 1]
-  mov    r11b, 48
-  mov    r12b, r11b
-  cmp    rax, r13
-  js     .after_if_1
-  lea    r14, [rdi + rax]
-  sub    r14, rcx
-  dec    r14
-  mov    r11b, byte[r14]
+  lea    r13, [rcx + 1]       ; r13 = loop_counter + 1
+  mov    r11b, 48             ; r11b = '0', if there are no more digits in the number/s, 
+  mov    r12b, r11b           ; r12b = '0'  then these default values will be used.
+  cmp    rax, r13             ; Compare strlen(a) with loop_counter + 1.
+  js     .after_if_1          ; if (loop_counter < strlen(a)):
+  lea    r14, [rdi+rax]       ;   r11b = a[strlen(a) - loop_counter - 1]
+  sub    r14, rcx             ; The next two lines 
+  dec    r14                  ; execute that one 
+  mov    r11b, byte [r14]     ; line if statement.
 .after_if_1:
-  cmp    r8, r13
-  js     .after_if_2
-  lea    r14, [rsi + r8]
-  sub    r14, rcx
-  dec    r14
-  mov    r12b, byte[r14]
+  cmp    r8, r13              ; Compare strlen(b) with loop_counter + 1.
+  js     .after_if_2          ; if (loop_counter < strlen(b)):
+  lea    r14, [rsi+r8]        ;   r12b = b[strlen(b) - loop_counter - 1]
+  sub    r14, rcx             ; The next two lines 
+  dec    r14                  ; execute that one
+  mov    r12b, byte [r14]     ; line if statement.
 .after_if_2:
-  mov    r13b, r11b
-  add    r13b, r12b
+  mov    r13b, r11b           ; These next two lines add individual digits 
+  add    r13b, r12b           ; of the numbers.
   sub    r13b, 48
-  test   r10b, r10b
-  jz     .after_if_3
-  xor    r10b, r10b
-  inc    r13b
+  test   r10b, r10b           ; Check for carry.
+  jz     .after_if_3          ; if (carry_flag):
+  xor    r10b, r10b           ;   carry_flag = false
+  inc    r13b                 ;   r13b++, add the carry
 .after_if_3:
-  cmp    r13b, 57
-  jle    .after_if_4
-  sub    r13b, 10
-  mov    r10b, 1
+  cmp    r13b, 57             ; Compare the current addition result with '9'
+  jle    .after_if_4          ; if (r13b > '9'):
+  sub    r13b, 10             ;   r13b -= 10
+  mov    r10b, 1              ;   carry_flag = true
 .after_if_4:
-  mov    byte[rdx + rcx], r13b
-  inc    rcx
-  cmp    rcx, r9
-  js     .loop_1
-  test   r10b, r10b
-  jz     .after_if_5
-  mov    byte[rdx + rcx], 49
-  inc    r9
+  mov    byte[rdx+rcx], r13b  ; res[loop_counter] = r13b
+  inc    rcx                  ; Increment the loop counter, which now points to the end of res.
+  cmp    rcx, r9              ; Keep looping,
+  js     .loop_1              ; while (loop_counter < std::max(strlen(a), strlen(b))).
+  test   r10b, r10b           ; Check for a final carry.
+  jz     .after_if_5          ; if (carry_flag):
+  mov    byte[rdx+rcx], 49    ;   res[loop_counter] = '1'
+  inc    r9                   ;   Increment r9, which stores strlen(res).
 .after_if_5:
-  xor    rcx, rcx
-  mov    r11, r9
-  shr    r11, 1
+  xor    rcx, rcx             ; rcx = 0 := loop_counter
+  mov    r11, r9              ; Note that r9 = strlen(res).
+  shr    r11, 1               ; r11 = strlen(res) / 2
 .loop_2:
-  lea    r12, [rdx + r9]
+  lea    r12, [rdx+r9]        ; r12 = &res[strlen(res) - loop_counter - 1]
   sub    r12, rcx
   dec    r12
-  mov    r8b, byte[rdx + rcx]
-  mov    r10b, byte[r12]
-  mov    byte[rdx + rcx], r10b
-  mov    byte[r12], r8b
+  mov    r8b, byte [rdx+rcx]  ; r8b = res[loop_counter]
+  mov    r10b, byte [r12]     ; r10b = *r12 = res[strlen(res) - loop_counter - 1]
+  mov    byte [rdx+rcx], r10b ; res[loop_counter] = r10b
+  mov    byte [r12], r8b      ; res[strlen(res) - loop_counter - 1] = r8b
   inc    rcx
-  cmp    rcx, r11
+  cmp    rcx, r11             ; Keep looping while (loop_counter < strlen(res) / 2)
   js     .loop_2
-  mov    byte[rdx + r9], 0
-  pop    r14
+  mov    byte [rdx+r9], 0     ; res should be null terminated.
+  pop    r14                  ; Pop used callee-saved registers.
   pop    r13
   pop    r12
   ret
