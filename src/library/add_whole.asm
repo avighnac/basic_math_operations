@@ -36,7 +36,7 @@ add_whole:
   xor    r10b, r10b           ; r10b = false := carry_flag
   xor    rcx, rcx             ; rcx = 0 := loop_counter
 .loop_1:
-  lea    r13, [rcx + 1]       ; r13 = loop_counter + 1
+  lea    r13, [rcx+1]         ; r13 = loop_counter + 1
   mov    r11b, 48             ; r11b = '0', if there are no more digits in the number/s, 
   mov    r12b, r11b           ; r12b = '0'  then these default values will be used.
   cmp    rax, r13             ; Compare strlen(a) with loop_counter + 1.
