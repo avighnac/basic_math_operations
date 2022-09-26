@@ -34,17 +34,16 @@ add_whole:
   cmp    rax, r8              ; put std::max(rax, r8) into
   cmovnc r9, rax              ; the r9 register.
   xor    r10b, r10b           ; r10b = false := carry_flag
-  xor    rcx, rcx             ; rcx = 0 := loop_counter
+  xor    ecx, ecx             ; rcx = 0 := loop_counter
 .loop_1:
   lea    r13, [rcx+1]         ; r13 = loop_counter + 1
   mov    r11b, 48             ; r11b = '0', if there are no more digits in the number/s, 
   mov    r12b, r11b           ; r12b = '0'  then these default values will be used.
-  cmp    rax, r13             ; Compare strlen(a) with loop_counter + 1.
-  js     .after_if_1          ; if (loop_counter < strlen(a)):
-  lea    r14, [rdi+rax]       ;   r11b = a[strlen(a) - loop_counter - 1]
-  sub    r14, rcx             ; The next two lines 
-  dec    r14                  ; execute that one 
-  mov    r11b, byte [r14]     ; line if statement.
+  cmp    rcx, rax             ; Compare loop_counter with strlen(a).
+  jnb     .after_if_1         ; if (loop_counter < strlen(a)):
+  lea    r14, [rdi+rax-1]     ;   r11b = a[strlen(a) - loop_counter - 1]
+  sub    r14, rcx             ; These two lines execute 
+  mov    r11b, byte [r14]     ; that if statement.
 .after_if_1:
   cmp    r8, r13              ; Compare strlen(b) with loop_counter + 1.
   js     .after_if_2          ; if (loop_counter < strlen(b)):
@@ -53,28 +52,24 @@ add_whole:
   dec    r14                  ; execute that one
   mov    r12b, byte [r14]     ; line if statement.
 .after_if_2:
-  mov    r13b, r11b           ; These next two lines add individual digits 
-  add    r13b, r12b           ; of the numbers.
-  sub    r13b, 48
-  test   r10b, r10b           ; Check for carry.
-  jz     .after_if_3          ; if (carry_flag):
-  xor    r10b, r10b           ;   carry_flag = false
-  inc    r13b                 ;   r13b++, add the carry
-.after_if_3:
-  cmp    r13b, 57             ; Compare the current addition result with '9'
-  jle    .after_if_4          ; if (r13b > '9'):
-  sub    r13b, 10             ;   r13b -= 10
+  add    r11b, r12b           ; Add individual digits of the numbers.
+  sub    r11b, 48
+  add    r11b, r10b           ; Check for carry, if it exists,
+  xor    r10b, r10b           ; then add it and reset it.
+  cmp    r11b, 57             ; Compare the current addition result with '9'
+  jle    .after_if_3          ; if (r11b > '9'):
+  sub    r11b, 10             ;   r11b -= 10
   mov    r10b, 1              ;   carry_flag = true
-.after_if_4:
-  mov    byte[rdx+rcx], r13b  ; res[loop_counter] = r13b
+.after_if_3:
+  mov    byte [rdx+rcx], r11b ; res[loop_counter] = r11b
   inc    rcx                  ; Increment the loop counter, which now points to the end of res.
   cmp    rcx, r9              ; Keep looping,
   js     .loop_1              ; while (loop_counter < std::max(strlen(a), strlen(b))).
   test   r10b, r10b           ; Check for a final carry.
-  jz     .after_if_5          ; if (carry_flag):
-  mov    byte[rdx+rcx], 49    ;   res[loop_counter] = '1'
+  jz     .after_if_4          ; if (carry_flag):
+  mov    byte [rdx+rcx], 49   ;   res[loop_counter] = '1'
   inc    r9                   ;   Increment r9, which stores strlen(res).
-.after_if_5:
+.after_if_4:
   xor    rcx, rcx             ; rcx = 0 := loop_counter
   mov    r11, r9              ; Note that r9 = strlen(res).
   shr    r11, 1               ; r11 = strlen(res) / 2
