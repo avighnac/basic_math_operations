@@ -1,4 +1,5 @@
 #include <basic_math_operations.h>
+#include <chrono>
 #include <iostream>
 #include <stdlib.h>
 #include <string>
@@ -13,6 +14,7 @@ int test_add_mul_sub(void (*function)(const char *, const char *, char *),
 
   std::cout << "Running " << number_tests << " test cases for " << testName
             << ".\n";
+  auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *answer = (char *)calloc(
         input[i].first.length() + input[i].second.length() + 1, 1);
@@ -26,9 +28,14 @@ int test_add_mul_sub(void (*function)(const char *, const char *, char *),
     }
     free(answer);
   }
+  auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ".\n";
+    std::cout << "no errors detected in " << testName << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                                       start)
+                     .count()
+              << " microseconds)" << '\n';
   } else {
     std::cout << number_of_failed_cases << " error/s detected in " << testName
               << ".\n";
@@ -46,6 +53,7 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
 
   std::cout << "Running " << number_tests << " test cases for " << testName
             << ".\n";
+  auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *quotient = (char *)calloc(
         input[i].first.length() + input[i].second.length() + 1, 1);
@@ -66,9 +74,14 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
     free(quotient);
     free(remainder);
   }
+  auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ".\n";
+    std::cout << "no errors detected in " << testName << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                                       start)
+                     .count()
+              << " microseconds)" << '\n';
   } else {
     std::cout << number_of_failed_cases << " error/s detected in " << testName
               << ".\n";
