@@ -20,7 +20,7 @@ add_whole_same_length:
   push   r12
   call   strlen
   lea    rcx, [rax - 1]
-  xor    r11, r11
+  xor    r11d, r11d
   xor    r10b, r10b
 .loop_1:
   mov    r12b, byte [rdi + rcx]
@@ -47,7 +47,7 @@ add_whole_same_length:
   mov    byte [rdx + r11], 49
   inc    rax
 .after_if_3:
-  xor    r11, r11
+  xor    r11d, r11d
   mov    rcx, rax
   shr    rcx, 1
 .loop_2:
