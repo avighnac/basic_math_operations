@@ -3,6 +3,19 @@ extern strlen
 section .text
 global add_whole
 add_whole:
+  ; Input:
+  ;   - char *a -> rdi
+  ;   - char *b -> rsi
+  ;   - char *res -> rdx
+
+  ; Registers used:
+  ;   - rax
+  ;   - rcx
+  ;   - rdi
+  ;   - rsi
+  ;   - r8
+  ;   - r9
+
   push   rbx              ; The only callee-saved register to preserve.
   push   rdi              ; Preserving rdi since it's gonna have to be overwritten.
   call   strlen
