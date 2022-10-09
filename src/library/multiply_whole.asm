@@ -21,37 +21,34 @@ _multiply_whole:
   ;   - r13
   ;   - r14
   ;   - r15
-
-  push   rbx
+  
+  push   rbx                 ; Push used callee-saved registers.
   push   r12
   push   r13
   push   r14
   push   r15
-  mov    byte [rdx], 48
-  xor    r10b, r10b
-  xor    r14, r14
-  push   rcx
-  call   strlen
-  pop    rcx
-  push   rax
-  push   rdi
-  push   rcx
-  mov    rdi, rsi
-  call   strlen
-  mov    rbx, rax
-  pop    rcx
-  pop    rdi
-  pop    rax
-  dec    rbx
+  mov    r9, rdi             ; Move char* a to r9.
+  mov    r10, rcx            ; Save rcx since strlen() doesn't preserve it.
+  call   strlen              ; rax = strlen(a)
+  mov    rbx, rax            ; Save rax in order to prevent it from being overwritten.
+  mov    rdi, rsi            ; strlen's first argument is now b.
+  call   strlen              ; Call strlen with b.
+  dec    rax
+  xchg   rax, rbx            ; rbx = strlen(b) - 1
+  mov    rdi, r9             ; Restore rdi.
+  mov    rcx, r10            ; Restore rcx.
+  xor    r10d, r10d          ; r10b is the carry.
+  mov    byte [rdx], '0'     ; Set the first character of the result string to '0'
+  xor    r14d, r14d          ; Set r14 to 0.
 .loop_1:
   xor    r13, r13
-  lea    r9, [rax - 1]
+  mov    r9, rax
 .loop_2:
-  mov    r15b, 10
-  mov    r11b, byte [rsi + rbx]
-  sub    r11b, 48
-  mov    r12b, byte [rdi + r9]
-  sub    r12b, 48
+  mov    r15d, 10
+  mov    r11b, byte [rsi+rbx]
+  sub    r11b, '0'
+  mov    r12b, byte [rdi+r9-1]
+  sub    r12b, '0'
   push   rax
   push   rbx
   push   rcx
@@ -64,8 +61,8 @@ _multiply_whole:
   pop    rbx
   pop    rax
   add    r11b, r10b
-  push   rax ; please optimize this
-  push   rdx ; move input somewhere else
+  push   rax
+  push   rdx
   push   rcx
   push   rbx
   mov    ax, 0
@@ -75,19 +72,17 @@ _multiply_whole:
   pop    rcx
   mov    r10b, al
   mov    al, ah
-  mov    byte [rcx + r13], al
-  add    byte [rcx + r13], 48
+  mov    byte [rcx+r13], al
+  add    byte [rcx+r13], '0'
   pop    rdx
   pop    rax
   inc    r13
-  mov    r11, r9
   dec    r9
-  cmp    r11, 0
-  jg     .loop_2
+  jnz    .loop_2
   cmp    r10b, 0
   jle    .after_if_1
-  mov    byte [rcx + r13], r10b
-  add    byte [rcx + r13], 48
+  mov    byte [rcx+r13], r10b
+  add    byte [rcx+r13], '0'
   xor    r10b, r10b
   inc    r13
 .after_if_1:
@@ -103,11 +98,11 @@ _multiply_whole:
   mov    r9, r13
   shr    r9, 1
 .loop_3:
-  mov    al, byte [rcx + r11]
-  lea    r15, [rcx + r13 - 1]
+  mov    al, byte [rcx+r11]
+  lea    r15, [rcx+r13-1]
   sub    r15, r11
   mov    r12b, byte [r15]
-  mov    byte [rcx + r11], r12b
+  mov    byte [rcx+r11], r12b
   mov    byte [r15], al
   inc    r11
   cmp    r11, r9
@@ -117,13 +112,13 @@ _multiply_whole:
   test   r14, r14
   jle    .after_loop_4
 .loop_4:
-  mov    byte [rcx + r13], 48
+  mov    byte [rcx+r13], '0'
   inc    r13
   inc    r11
   cmp    r11, r14
   js     .loop_4
 .after_loop_4:
-  mov    byte [rcx + r13], 0
+  mov    byte [rcx+r13], 0
   push   rdi
   push   rsi
   push   rdx
@@ -133,19 +128,7 @@ _multiply_whole:
   push   rax
   push   rcx
   push   r8
-  push   r9
-  push   r10
-  push   r11
-  push   r12
-  push   r13
-  push   r14
   call   add_whole
-  pop    r14
-  pop    r13
-  pop    r12
-  pop    r11
-  pop    r10
-  pop    r9
   pop    r8
   pop    rcx
   pop    rax
@@ -163,31 +146,27 @@ _multiply_whole:
   pop    rcx
   pop    rax
 .loop_5:
-  mov    r15b, byte [r8 + r11]
-  mov    byte [rdx + r11], r15b
+  mov    r15b, byte [r8+r11]
+  mov    byte [rdx+r11], r15b
   inc    r11
   cmp    r11, r9
   js     .loop_5
-  mov    byte [rdx + r9], 0
+  mov    byte [rdx+r9], 0
   xor    r11, r11
 .loop_6:
-  mov    byte [rcx + r11], 0
-  mov    byte [r8 + r11], 0
+  mov    byte [rcx+r11], 0
+  mov    byte [r8+r11], 0
   inc    r11
   cmp    r11, r13
   js     .loop_6
   inc    r14
   mov    r15, rbx
   dec    rbx
-  cmp    r15, 0
+  test   r15, r15
   jg     .loop_1
-  push   rdi
-  push   rcx
   mov    rdi, rdx
   call   strlen
-  pop    rcx
-  pop    rdi
-  mov    byte [rdx + rax], 0
+  mov    byte [rdx+rax], 0
   pop    r15
   pop    r14
   pop    r13
