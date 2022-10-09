@@ -67,4 +67,14 @@ bmo_function_start void divide_whole_with_remainder(const char *numerator,
                                                     const char *denominator,
                                                     char *quotient,
                                                     char *remainder);
+
+/// @brief Divides the first argument by the second argument with 'accuracy'
+/// decimal places. Stores the quotient in the third argument.
+/// @param numerator The whole non-negative numerator of the division.
+/// @param denominator The while non-negative denominator of the division.
+/// @param quotient The quotient of the division.
+/// @param accuracy The number of decimal places to calculate to.
+bmo_function_start void divide_whole(const char *numerator,
+                                     const char *denominator, char *quotient,
+                                     unsigned long accuracy);
 #endif
