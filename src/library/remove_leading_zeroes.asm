@@ -79,7 +79,7 @@ remove_leading_zeroes_inplace:
   lea    rcx, [rax + 1]
   pop    rdi
   pop    rax
-  xor    r8, r8
+  xor    r8d, r8d
 .loop_2:
   mov    dl, byte [rax + r8]
   mov    byte [rdi + r8], dl
