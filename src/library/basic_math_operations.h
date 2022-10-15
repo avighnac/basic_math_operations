@@ -24,6 +24,14 @@ bmo_function_start void add_whole(const char *a, const char *b, char *res);
 /// stored.
 bmo_function_start void add_whole_same_length(const char *a, const char *b,
                                               char *res);
+/// @brief Adds the first two arguments and stores the result in the third
+/// argument. Allocate enough space for the buffer where the addition result
+/// will be stored.
+/// @param a The first non-negative rational number represented as a decimal.
+/// @param b The second non-negative rational number represented as a decimal.
+/// @param res Where the result of the addition of `a` and `b` will be stored.
+/// @return
+bmo_function_start void add(const char *a, const char *b, char *res);
 
 /// @brief Subtracts the second argument from the first argument and stores the
 /// result in the third argument. Allocate enough space for the buffer (third
