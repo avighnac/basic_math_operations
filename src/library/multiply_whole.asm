@@ -39,20 +39,19 @@ _multiply_whole:
   mov    rcx, r10              ; Restore rcx.
   xor    r10d, r10d            ; r10b is the carry.
   mov    byte [rdx], '0'       ; Set the default value of the result string to '0'.
-  xor    r14d, r14d            ; Set r14 to 0.
+  xor    r14d, r14d            ; The number of leading zeroes to add.
 .loop_1:
   lea    r13, [rax+1]          ; r13 = strlen(a) + 1
-  add    rcx, rax              ; rcx = &a[strlen(a)] (we're gonna have a carry 84% of the time)
+  add    rcx, rax              ; rcx = &a[strlen(a)]
   mov    r9, rax               ; r9 = strlen(a)
   mov    r15d, 10              ; The number we're dividing by.
   push   rax                   ; Save rax since we use it for mul and div later.
 .loop_2:
-  mov    r11b, byte [rsi+rbx]  ; r11b is a byte of char *b
+  movzx  r11d, byte [rsi+rbx]  ; r11b is a byte of char *b
   sub    r11b, '0'
-  mov    r12b, byte [rdi+r9-1] ; r12b is a byte of char *a
-  sub    r12b, '0'
-  movzx  eax, r11b
-  mul    r12b
+  movzx  eax, byte [rdi+r9-1]  ; al is a byte of char *a
+  sub    al, '0'
+  mul    r11b
   mov    r11b, al              ; r11b is the multiplication of char *a and char *b.
   add    r11b, r10b            ; Add carry.
   push   rdx
