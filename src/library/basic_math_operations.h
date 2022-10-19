@@ -50,6 +50,15 @@ bmo_function_start void subtract_whole(const char *a, const char *b, char *res);
 bmo_function_start void subtract_whole_same_length(const char *a, const char *b,
                                                    char *res);
 
+/// @brief Subtracts the second argument from the first argument and stores the
+/// result in the third argument. Allocate enough space for the third argument
+/// using calloc().
+/// @param a The first non-negative rational number represented as a decimal.
+/// @param b The second non-negative rational number represented as a decimal.
+/// @param res Where a - b will be stored.
+/// @return This is a void function: it does not return anything.
+bmo_function_start void subtract(const char *a, const char *b, char *res);
+
 /// @brief Multiplies the first argument with the second argument and stores the
 /// result in the third argument. Allocate enough space for the buffer (third
 /// argument) using calloc.
@@ -67,6 +76,7 @@ bmo_function_start void multiply(const char *a, const char *b, char *res);
 
 /// @brief Divides the first argument by the second argument. Stores the
 /// quotient in the third argument and the remainder in the fourth argument.
+/// This function is undefined when the denominator is 0.
 /// @param numerator The whole non-negative numerator of the division.
 /// @param denominator The while non-negative denominator of the division.
 /// @param quotient The quotient of the division.
@@ -77,7 +87,8 @@ bmo_function_start void divide_whole_with_remainder(const char *numerator,
                                                     char *remainder);
 
 /// @brief Divides the first argument by the second argument with 'accuracy'
-/// decimal places. Stores the quotient in the third argument.
+/// decimal places. Stores the quotient in the third argument. This function is
+/// undefined when the denominator is 0.
 /// @param numerator The whole non-negative numerator of the division.
 /// @param denominator The while non-negative denominator of the division.
 /// @param quotient The quotient of the division.
@@ -85,4 +96,15 @@ bmo_function_start void divide_whole_with_remainder(const char *numerator,
 bmo_function_start void divide_whole(const char *numerator,
                                      const char *denominator, char *quotient,
                                      unsigned long accuracy);
+
+/// @brief Divides the first argument by the second argument with 'accuracy'
+/// decimal places. Stores the quotient in the third argument. This function is
+/// undefined when the denominator is 0.
+/// @param numerator The non-negative numerator represented as a decimal.
+/// @param denominator The positive denominator represented as a decimal.
+/// @param quotient The quotient of the division.
+/// @param accuracy The minimum number of decimal places to calculate to.
+/// @return This is a void function: it does not return anything.
+bmo_function_start void divide(const char *numerator, const char *denominator,
+                               char *quotient, unsigned long accuracy);
 #endif

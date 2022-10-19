@@ -66,6 +66,65 @@ void add(const char *a, const char *b, char *res) {
 
 extern void subtract_whole(const char *a, const char *b, char *res);
 extern void subtract_whole_same_length(const char *a, const char *b, char *res);
+void subtract(const char *a, const char *b, char *res) {
+  extern size_t strlen(const char *str);
+  size_t a_len = strlen(a), b_len = strlen(b);
+  size_t max_len = a_len;
+  if (b_len > a_len)
+    max_len = b_len;
+
+  char *new_a = (char *)calloc(max_len + 1, 1);
+  char *new_b = (char *)calloc(max_len + 1, 1);
+
+  size_t ptr1 = 0, ptr2 = 0;
+  int n1 = 0, n2 = 0;
+  unsigned int flag = 0;
+  for (size_t i = 0; i < a_len; i++) {
+    if (flag)
+      n1++;
+    if (a[i] == '.')
+      flag = 1;
+    else
+      new_a[ptr1++] = a[i];
+  }
+
+  flag = 0;
+  ptr2 = 0;
+  for (size_t i = 0; i < b_len; i++) {
+    if (flag)
+      n2++;
+    if (b[i] == '.')
+      flag = 1;
+    else
+      new_b[ptr2++] = b[i];
+  }
+
+  if (n1 == 0 && n2 == 0) {
+    subtract_whole(a, b, res);
+    return;
+  }
+
+  int displacement = n1;
+  if (n1 < n2) {
+    displacement = n2;
+    for (int i = 0; i < n2 - n1; i++)
+      new_a[ptr1++] = '0';
+  } else if (n2 < n1) {
+    displacement = n1;
+    for (int i = 0; i < n1 - n2; i++)
+      new_b[ptr2++] = '0';
+  }
+  subtract_whole(new_a, new_b, res);
+
+  size_t reslength = strlen(res);
+  for (size_t i = 0; i < displacement; i++)
+    res[reslength - i] = res[reslength - i - 1];
+  if (displacement)
+    res[reslength - displacement] = '.';
+
+  free(new_a);
+  free(new_b);
+}
 
 extern void _multiply_whole(const char *a, const char *b, char *res, char *buf1,
                             char *buf2);
@@ -139,7 +198,6 @@ void divide_whole_with_remainder(const char *numerator, const char *denominator,
     remainder[i] = rem[i];
   free(buffer);
 }
-
 void divide_whole(const char *numerator, const char *denominator,
                   char *quotient, size_t accuracy) {
   extern size_t strlen(const char *str);
@@ -166,4 +224,49 @@ void divide_whole(const char *numerator, const char *denominator,
 
   free(buffer);
   free(modified_numerator);
+}
+void divide(const char *numerator, const char *denominator, char *quotient,
+            size_t accuracy) {
+  extern size_t strlen(const char *str);
+  size_t numerator_length = strlen(numerator);
+  size_t denominator_length = strlen(denominator);
+  size_t max_length = numerator_length;
+  if (denominator_length > numerator_length)
+    max_length = denominator_length;
+  char *numerator_copy = (char *)calloc(max_length + 1, 1);
+  char *denominator_copy = (char *)calloc(max_length + 1, 1);
+
+  size_t ptr1 = 0, ptr2 = 0;
+  int n1 = 0, n2 = 0;
+  unsigned int flag = 0;
+  for (size_t i = 0; i < numerator_length; i++) {
+    if (flag)
+      n1++;
+    if (numerator[i] == '.')
+      flag = 1;
+    else
+      numerator_copy[ptr1++] = numerator[i];
+  }
+
+  flag = 0;
+  ptr2 = 0;
+  for (size_t i = 0; i < denominator_length; i++) {
+    if (flag)
+      n2++;
+    if (denominator[i] == '.')
+      flag = 1;
+    else
+      denominator_copy[ptr2++] = denominator[i];
+  }
+
+  if (n2 < n1)
+    for (size_t i = 0; i < n1 - n2; i++)
+      denominator_copy[ptr2++] = '0';
+  if (n1 < n2)
+    for (size_t i = 0; i < n2 - n1; i++)
+      numerator_copy[ptr1++] = '0';
+
+  divide_whole(numerator_copy, denominator_copy, quotient, accuracy);
+  free(numerator_copy);
+  free(denominator_copy);
 }
