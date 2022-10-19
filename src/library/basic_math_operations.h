@@ -26,11 +26,20 @@ bmo_function_start void add_whole_same_length(const char *a, const char *b,
                                               char *res);
 /// @brief Adds the first two arguments and stores the result in the third
 /// argument. Allocate enough space for the buffer where the addition result
-/// will be stored.
-/// @param a The first non-negative rational number represented as a decimal.
-/// @param b The second non-negative rational number represented as a decimal.
+/// will be stored. (use add() for all rational numbers)
+/// @param a The first non-negative rational number as a decimal.
+/// @param b The second non-negative rational number as a decimal.
 /// @param res Where the result of the addition of `a` and `b` will be stored.
 /// @return
+bmo_function_start void addp(const char *a, const char *b, char *res);
+
+/// @brief Adds the first two arguments and stores the result in the third
+/// argument. Allocate enough space for the buffer where the addition result
+/// will be stored.
+/// @param a The first rational number as a decimal.
+/// @param b The second rational number as a decimal.
+/// @param res Where a + b will be stored.
+/// @return This is a void function: it does not return anything.
 bmo_function_start void add(const char *a, const char *b, char *res);
 
 /// @brief Subtracts the second argument from the first argument and stores the
@@ -52,9 +61,18 @@ bmo_function_start void subtract_whole_same_length(const char *a, const char *b,
 
 /// @brief Subtracts the second argument from the first argument and stores the
 /// result in the third argument. Allocate enough space for the third argument
+/// using calloc(). (use subtract() for all rational numbers)
+/// @param a The first non-negative rational number as a decimal.
+/// @param b The second non-negative rational number as a decimal.
+/// @param res Where a - b will be stored.
+/// @return This is a void function: it does not return anything.
+bmo_function_start void subtractp(const char *a, const char *b, char *res);
+
+/// @brief Subtracts the second argument from the first argument and stores the
+/// result in the third argument. Allocate enough space for the third argument
 /// using calloc().
-/// @param a The first non-negative rational number represented as a decimal.
-/// @param b The second non-negative rational number represented as a decimal.
+/// @param a The first rational number as a decimal.
+/// @param b The second rational number as a decimal.
 /// @param res Where a - b will be stored.
 /// @return This is a void function: it does not return anything.
 bmo_function_start void subtract(const char *a, const char *b, char *res);
@@ -67,10 +85,17 @@ bmo_function_start void subtract(const char *a, const char *b, char *res);
 /// @param res Where a * b will be stored.
 bmo_function_start void multiply_whole(const char *a, const char *b, char *res);
 
-/// @brief Multiplies the first rational argument with the second rational
+/// @brief Multiplies the first argument with the second
 /// argument and stores the result in the third argument.
 /// @param a The first non-negative rational number as a decimal.
 /// @param b The first non-negative rational number as a decimal.
+/// @param res Where a * b will be stored.
+bmo_function_start void multiplyp(const char *a, const char *b, char *res);
+
+/// @brief Multiplies the first argument with the second
+/// argument and stores the result in the third argument.
+/// @param a The first rational number as a decimal.
+/// @param b The first rational number as a decimal.
 /// @param res Where a * b will be stored.
 bmo_function_start void multiply(const char *a, const char *b, char *res);
 
@@ -100,8 +125,19 @@ bmo_function_start void divide_whole(const char *numerator,
 /// @brief Divides the first argument by the second argument with 'accuracy'
 /// decimal places. Stores the quotient in the third argument. This function is
 /// undefined when the denominator is 0.
-/// @param numerator The non-negative numerator represented as a decimal.
-/// @param denominator The positive denominator represented as a decimal.
+/// @param numerator The non-negative numerator as a decimal.
+/// @param denominator The positive denominator as a decimal.
+/// @param quotient The quotient of the division.
+/// @param accuracy The minimum number of decimal places to calculate to.
+/// @return This is a void function: it does not return anything.
+bmo_function_start void dividep(const char *numerator, const char *denominator,
+                                char *quotient, unsigned long accuracy);
+
+/// @brief Divides the first argument by the second argument with 'accuracy'
+/// decimal places. Stores the quotient in the third argument. This function is
+/// undefined when the denominator is 0.
+/// @param numerator The numerator as a decimal.
+/// @param denominator The nonzero denominator as a decimal.
 /// @param quotient The quotient of the division.
 /// @param accuracy The minimum number of decimal places to calculate to.
 /// @return This is a void function: it does not return anything.
