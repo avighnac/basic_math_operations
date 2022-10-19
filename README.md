@@ -89,6 +89,7 @@ Multiplication:
 - `multiply(...)` multiplies two rational numbers.
 
 Division:
+All division functions divide the first argument by the second argument.
 - `divide_whole_with_remainder(...)` performs modular division on the input.
 - `divide_whole()` divides two non-negative integers.
 - `dividep()` divides two non-negative rational numbers.
