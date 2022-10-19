@@ -4,7 +4,7 @@
 
 extern void add_whole(const char *a, const char *b, char *res);
 extern void add_whole_same_length(const char *a, const char *b, char *res);
-void add(const char *a, const char *b, char *res) {
+void addp(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
   size_t a_len = strlen(a), b_len = strlen(b);
   size_t max_len = a_len;
@@ -63,10 +63,36 @@ void add(const char *a, const char *b, char *res) {
   free(new_a);
   free(new_b);
 }
+void add(const char *a, const char *b, char *res) {
+  if (a[0] != '-' && b[0] != '-') {
+    addp(a, b, res);
+    return;
+  }
+  if (a[0] == '-' && b[0] != '-') {
+    const char *a_new = a + 1;
+    subtractp(b, a_new, res);
+    return;
+  }
+  if (a[0] != '-' && b[0] == '-') {
+    const char *b_new = b + 1;
+    subtractp(a, b_new, res);
+    return;
+  }
+  if (a[0] == '-' && b[0] == '-') {
+    extern size_t strlen(const char *);
+    const char *a_new = a + 1;
+    const char *b_new = b + 1;
+    addp(a_new, b_new, res);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
+}
 
 extern void subtract_whole(const char *a, const char *b, char *res);
 extern void subtract_whole_same_length(const char *a, const char *b, char *res);
-void subtract(const char *a, const char *b, char *res) {
+void subtractp(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
   size_t a_len = strlen(a), b_len = strlen(b);
   size_t max_len = a_len;
@@ -125,10 +151,36 @@ void subtract(const char *a, const char *b, char *res) {
   free(new_a);
   free(new_b);
 }
+void subtract(const char *a, const char *b, char *res) {
+  if (a[0] != '-' && b[0] != '-') {
+    subtractp(a, b, res);
+    return;
+  }
+  if (a[0] == '-' && b[0] != '-') {
+    extern size_t strlen(const char *);
+    const char *new_a = a + 1;
+    addp(new_a, b, res);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
+  if (a[0] != '-' && b[0] == '-') {
+    const char *new_b = b + 1;
+    addp(a, new_b, res);
+    return;
+  }
+  if (a[0] == '-' && b[0] == '-') {
+    const char *new_b = b + 1;
+    const char *new_a = a + 1;
+    subtractp(new_b, new_a, res);
+    return;
+  }
+}
 
 extern void _multiply_whole(const char *a, const char *b, char *res, char *buf1,
                             char *buf2);
-void multiply(const char *a, const char *b, char *res) {
+void multiplyp(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
   size_t a_length = strlen(a);
   size_t b_length = strlen(b);
@@ -175,6 +227,35 @@ void multiply(const char *a, const char *b, char *res) {
   free(buf2);
   free(a_copy);
   free(b_copy);
+}
+void multiply(const char *a, const char *b, char *res) {
+  if (a[0] != '-' && b[0] != '-') {
+    multiplyp(a, b, res);
+    return;
+  }
+  if (a[0] == '-' && b[0] == '-') {
+    const char *a_new = a + 1;
+    const char *b_new = b + 1;
+    multiplyp(a_new, b_new, res);
+    return;
+  }
+  extern size_t strlen(const char *);
+  if (a[0] == '-' && b[0] != '-') {
+    const char *a_new = a + 1;
+    multiplyp(a_new, b, res);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
+  if (a[0] != '-' && b[0] == '-') {
+    const char *b_new = b + 1;
+    multiplyp(a, b_new, res);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
 }
 
 extern char *_divide_whole_with_remainder(const char *numerator,
@@ -225,8 +306,8 @@ void divide_whole(const char *numerator, const char *denominator,
   free(buffer);
   free(modified_numerator);
 }
-void divide(const char *numerator, const char *denominator, char *quotient,
-            size_t accuracy) {
+void dividep(const char *numerator, const char *denominator, char *quotient,
+             size_t accuracy) {
   extern size_t strlen(const char *str);
   size_t numerator_length = strlen(numerator);
   size_t denominator_length = strlen(denominator);
@@ -269,4 +350,35 @@ void divide(const char *numerator, const char *denominator, char *quotient,
   divide_whole(numerator_copy, denominator_copy, quotient, accuracy);
   free(numerator_copy);
   free(denominator_copy);
+}
+void divide(const char *a, const char *b, char *res, size_t accuracy) {
+  // a is the numerator and b is the denominator
+  // I've used different names to shorten the code
+  if (a[0] != '-' && b[0] != '-') {
+    dividep(a, b, res, accuracy);
+    return;
+  }
+  if (a[0] == '-' && b[0] == '-') {
+    const char *new_a = a + 1;
+    const char *new_b = b + 1;
+    dividep(new_a, new_b, res, accuracy);
+    return;
+  }
+  extern size_t strlen(const char *);
+  if (a[0] == '-' && b[0] != '-') {
+    const char *new_a = a + 1;
+    dividep(new_a, b, res, accuracy);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
+  if (a[0] != '-' && b[0] == '-') {
+    const char *new_b = b + 1;
+    dividep(a, new_b, res, accuracy);
+    for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
+      res[i + 1] = res[i];
+    res[0] = '-';
+    return;
+  }
 }
