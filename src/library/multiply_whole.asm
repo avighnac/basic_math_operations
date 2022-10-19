@@ -59,15 +59,15 @@ _multiply_whole:
   div    r15b
   mov    r10b, al              ; carry = r11b / 10
   mov    al, ah
-  mov    byte [rcx], al
-  add    byte [rcx], '0'       ; Add the remainder to the result string.
+  add    eax, '0'
+  mov    byte [rcx], al        ; Add the remainder to the result string.
   pop    rdx
   dec    rcx
   dec    r9
   jnz    .loop_2               ; Loop r9 times.
-  mov    byte [rcx], r10b      ; Add the final carry (might be 0)
-  add    byte [rcx], '0'       ; to the string.
-  xor    r10b, r10b            ; Reset carry.
+  add    r10d, '0'
+  mov    byte [rcx], r10b      ; Add the final carry (might be 0) to the string.
+  xor    r10d, r10d            ; Reset carry.
   xor    r11d, r11d            ; r11 = 0
   test   r14, r14
   jle    .after_loop_3         ; if r14 <= 0 then skip loop_3
