@@ -1,6 +1,62 @@
 #include "basic_math_operations.h"
-#include <assert.h>
 #include <stdlib.h>
+
+static void remove_zeroes(char *number) {
+  char *firstPointer = number;
+  extern size_t strlen(const char *);
+  unsigned char negative = number[0] == '-';
+  if (negative) {
+    number++; // we restore this later
+  }
+  size_t numberLength = strlen(number);
+  char *originalPointer = number;
+  while (*number == '0') {
+    number++;
+    if (*number == '.') {
+      number--;
+      break;
+    }
+  }
+  if (number - originalPointer == numberLength) // if all were '0'
+    number--;
+  numberLength = strlen(number);
+
+  unsigned char decimal = 0;
+  for (size_t i = 0; i < numberLength; i++) {
+    if (number[i] == '.') {
+      decimal = 1;
+      break;
+    }
+  }
+  if (decimal) {
+    size_t to_remove = 0;
+    for (size_t i = numberLength - 1; i + 1 > 0; i--) {
+      if (number[i] != '0')
+        break;
+      to_remove++;
+    }
+    number[numberLength - to_remove] = '\0';
+    if (number[numberLength - to_remove - 1] == '.') // to avoid stuff like "0."
+      number[numberLength - to_remove - 1] = '\0';
+  }
+
+  if (negative)
+    number--; // restore the negative sign
+
+  char *temp = (char *)calloc(numberLength + 1, 1);
+  char *origTemp = temp;
+  while (*number != 0) {
+    *temp = *number;
+    number++;
+    temp++;
+  }
+  while (*origTemp != 0) {
+    *originalPointer = *origTemp;
+    origTemp++;
+    originalPointer++;
+  }
+  *originalPointer = '\0';
+}
 
 extern void add_whole(const char *a, const char *b, char *res);
 extern void add_whole_same_length(const char *a, const char *b, char *res);
@@ -66,17 +122,14 @@ void addp(const char *a, const char *b, char *res) {
 void add(const char *a, const char *b, char *res) {
   if (a[0] != '-' && b[0] != '-') {
     addp(a, b, res);
-    return;
   }
   if (a[0] == '-' && b[0] != '-') {
     const char *a_new = a + 1;
     subtractp(b, a_new, res);
-    return;
   }
   if (a[0] != '-' && b[0] == '-') {
     const char *b_new = b + 1;
     subtractp(a, b_new, res);
-    return;
   }
   if (a[0] == '-' && b[0] == '-') {
     extern size_t strlen(const char *);
@@ -86,8 +139,9 @@ void add(const char *a, const char *b, char *res) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
+
+  remove_zeroes(res);
 }
 
 extern void subtract_whole(const char *a, const char *b, char *res);
@@ -154,7 +208,6 @@ void subtractp(const char *a, const char *b, char *res) {
 void subtract(const char *a, const char *b, char *res) {
   if (a[0] != '-' && b[0] != '-') {
     subtractp(a, b, res);
-    return;
   }
   if (a[0] == '-' && b[0] != '-') {
     extern size_t strlen(const char *);
@@ -163,19 +216,18 @@ void subtract(const char *a, const char *b, char *res) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
   if (a[0] != '-' && b[0] == '-') {
     const char *new_b = b + 1;
     addp(a, new_b, res);
-    return;
   }
   if (a[0] == '-' && b[0] == '-') {
     const char *new_b = b + 1;
     const char *new_a = a + 1;
     subtractp(new_b, new_a, res);
-    return;
   }
+
+  remove_zeroes(res);
 }
 
 extern void _multiply_whole(const char *a, const char *b, char *res, char *buf1,
@@ -231,13 +283,11 @@ void multiplyp(const char *a, const char *b, char *res) {
 void multiply(const char *a, const char *b, char *res) {
   if (a[0] != '-' && b[0] != '-') {
     multiplyp(a, b, res);
-    return;
   }
   if (a[0] == '-' && b[0] == '-') {
     const char *a_new = a + 1;
     const char *b_new = b + 1;
     multiplyp(a_new, b_new, res);
-    return;
   }
   extern size_t strlen(const char *);
   if (a[0] == '-' && b[0] != '-') {
@@ -246,7 +296,6 @@ void multiply(const char *a, const char *b, char *res) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
   if (a[0] != '-' && b[0] == '-') {
     const char *b_new = b + 1;
@@ -254,8 +303,9 @@ void multiply(const char *a, const char *b, char *res) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
+
+  remove_zeroes(res);
 }
 
 extern char *_divide_whole_with_remainder(const char *numerator,
@@ -356,13 +406,11 @@ void divide(const char *a, const char *b, char *res, size_t accuracy) {
   // I've used different names to shorten the code
   if (a[0] != '-' && b[0] != '-') {
     dividep(a, b, res, accuracy);
-    return;
   }
   if (a[0] == '-' && b[0] == '-') {
     const char *new_a = a + 1;
     const char *new_b = b + 1;
     dividep(new_a, new_b, res, accuracy);
-    return;
   }
   extern size_t strlen(const char *);
   if (a[0] == '-' && b[0] != '-') {
@@ -371,7 +419,6 @@ void divide(const char *a, const char *b, char *res, size_t accuracy) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
   if (a[0] != '-' && b[0] == '-') {
     const char *new_b = b + 1;
@@ -379,6 +426,7 @@ void divide(const char *a, const char *b, char *res, size_t accuracy) {
     for (size_t i = strlen(res) - 1; i + 1 > 0; i--)
       res[i + 1] = res[i];
     res[0] = '-';
-    return;
   }
+
+  remove_zeroes(res);
 }
