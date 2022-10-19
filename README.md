@@ -71,26 +71,26 @@ I don't know if this needs to be said, but the functions higher up in each of th
 Detailed information for each of these functions can be found in the `basic_math_operations.h` file. This is just a brief.
 
 Addition:
-- `add_whole_same_length(...)` adds two non-negative integers of the same length.
-- `add_whole(...)` adds two non-negative integers.
-- `addp(...)` adds two non-negative rational numbers.
-- `add(...)` adds two rational numbers.
+- `add_whole_same_length()` adds two non-negative integers of the same length.
+- `add_whole()` adds two non-negative integers.
+- `addp()` adds two non-negative rational numbers.
+- `add()` adds two rational numbers.
 
 Subtraction:
 All subtract functions can return a negative number, but only some can take negative numbers as input. All of them also subtract the second argument from the first argument.
-- `subtract_whole_same_length(...)` subtracts two non-negative integers of the same length.
-- `subtract_whole(...)` subtracts two non-negative integers.
-- `subtractp(...)` subtracts two non-negative rational numbers.
-- `subtract(...)` subtracts two rational numbers.
+- `subtract_whole_same_length()` subtracts two non-negative integers of the same length.
+- `subtract_whole()` subtracts two non-negative integers.
+- `subtractp()` subtracts two non-negative rational numbers.
+- `subtract()` subtracts two rational numbers.
 
 Multiplication:
-- `multiply_whole(...)` multiplies two non-negative integers.
-- `multiplyp(...)` multiplies two non-negative rational numbers.
-- `multiply(...)` multiplies two rational numbers.
+- `multiply_whole()` multiplies two non-negative integers.
+- `multiplyp()` multiplies two non-negative rational numbers.
+- `multiply()` multiplies two rational numbers.
 
 Division:
 All division functions divide the first argument by the second argument.
-- `divide_whole_with_remainder(...)` performs modular division on the input.
-- `divide_whole(...)` divides two non-negative integers.
-- `dividep(...)` divides two non-negative rational numbers.
-- `divide(...)` divides two rational numbers.
+- `divide_whole_with_remainder()` performs modular division on the input.
+- `divide_whole()` divides two non-negative integers.
+- `dividep()` divides two non-negative rational numbers.
+- `divide()` divides two rational numbers.
