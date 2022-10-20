@@ -2,6 +2,7 @@
 #include <chrono>
 #include <iostream>
 #include <stdlib.h>
+#include <string.h>
 #include <string>
 #include <vector>
 
@@ -73,6 +74,44 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
     }
     free(quotient);
     free(remainder);
+  }
+  auto end = std::chrono::high_resolution_clock::now();
+
+  if (!number_of_failed_cases) {
+    std::cout << "no errors detected in " << testName << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                                       start)
+                     .count()
+              << " microseconds)" << '\n';
+  } else {
+    std::cout << number_of_failed_cases << " error/s detected in " << testName
+              << ".\n";
+  }
+
+  return number_of_failed_cases;
+}
+
+int test_rlz(void (*rlz)(char *), std::vector<std::string> input,
+             std::vector<std::string> expected, std::string functionName,
+             std::string testName) {
+  int number_tests = expected.size();
+  int number_of_failed_cases = 0;
+
+  std::cout << "Running " << number_tests << " test cases for " << testName
+            << ".\n";
+  auto start = std::chrono::high_resolution_clock::now();
+  for (size_t i = 0; i < number_tests; i++) {
+    char *number = (char *)calloc(input[i].length() + 1, 1);
+    strcpy(number, input[i].c_str());
+    rlz(number);
+    if (std::string(number) != expected[i]) {
+      std::cout << "error in \"" << testName << "\": check " << functionName
+                << "(\"" << input[i] << "\") == \"" << expected[i]
+                << "\" failed\n";
+      std::cout << "actual: \"" << number << "\"\n";
+      number_of_failed_cases++;
+    }
+    free(number);
   }
   auto end = std::chrono::high_resolution_clock::now();
 
@@ -300,6 +339,15 @@ int main() {
 
   number_of_failed_cases += test_div(divide_whole_with_remainder, input,
                                      expected_div, functionName, testName);
+
+  functionName = "remove_zeroes";
+  testName = "remove_zeroes_unit_tests";
+  std::vector<std::string> input_rlz = {
+      "001", "1", "0000", "000000.0000000", "-1.0", "-1", "00.32300"};
+  expected = {"1", "1", "0", "0", "-1", "-1", "0.323"};
+
+  number_of_failed_cases +=
+      test_rlz(remove_zeroes, input_rlz, expected, functionName, testName);
 
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +

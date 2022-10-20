@@ -1,7 +1,7 @@
 #include "basic_math_operations.h"
 #include <stdlib.h>
 
-static void remove_zeroes(char *number) {
+void remove_zeroes(char *number) {
   char *firstPointer = number;
   extern size_t strlen(const char *);
   unsigned char negative = number[0] == '-';
@@ -40,8 +40,10 @@ static void remove_zeroes(char *number) {
       number[numberLength - to_remove - 1] = '\0';
   }
 
-  if (negative)
+  if (negative) {
     number--; // restore the negative sign
+    numberLength++;
+  }
 
   char *temp = (char *)calloc(numberLength + 1, 1);
   char *origTemp = temp;
@@ -51,11 +53,11 @@ static void remove_zeroes(char *number) {
     temp++;
   }
   while (*origTemp != 0) {
-    *originalPointer = *origTemp;
+    *firstPointer = *origTemp;
     origTemp++;
-    originalPointer++;
+    firstPointer++;
   }
-  *originalPointer = '\0';
+  *firstPointer = '\0';
 }
 
 extern void add_whole(const char *a, const char *b, char *res);

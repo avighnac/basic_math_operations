@@ -143,4 +143,9 @@ bmo_function_start void dividep(const char *numerator, const char *denominator,
 /// @return This is a void function: it does not return anything.
 bmo_function_start void divide(const char *numerator, const char *denominator,
                                char *quotient, unsigned long accuracy);
+
+/// @brief Removes excess leading and trailing zeroes from a number.
+/// @param number The number you want to remove zeroes from. The number is
+/// overwritten.
+bmo_function_start void remove_zeroes(char *number);
 #endif
