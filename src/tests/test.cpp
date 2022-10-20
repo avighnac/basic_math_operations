@@ -129,6 +129,45 @@ int test_rlz(void (*rlz)(char *), std::vector<std::string> input,
   return number_of_failed_cases;
 }
 
+int test_mdiv(void (*divide)(const char *, const char *, char *, size_t),
+              std::vector<std::pair<std::string, std::string>> input,
+              std::vector<std::string> expected, std::string functionName,
+              std::string testName) {
+  int number_tests = expected.size();
+  int number_of_failed_cases = 0;
+
+  std::cout << "Running " << number_tests << " test cases for " << testName
+            << ".\n";
+  auto start = std::chrono::high_resolution_clock::now();
+  for (size_t i = 0; i < number_tests; i++) {
+    char *answer = (char *)calloc(
+        input[i].first.length() + input[i].second.length() + 21, 1);
+    divide(input[i].first.c_str(), input[i].second.c_str(), answer, 20);
+    if (std::string(answer) != expected[i]) {
+      std::cout << "error in \"" << testName << "\": check " << functionName
+                << "(\"" << input[i].first << "\", \"" << input[i].second
+                << "\") == \"" << expected[i] << "\" failed\n";
+      std::cout << "actual: \"" << answer << "\"\n";
+      number_of_failed_cases++;
+    }
+    free(answer);
+  }
+  auto end = std::chrono::high_resolution_clock::now();
+
+  if (!number_of_failed_cases) {
+    std::cout << "no errors detected in " << testName << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::microseconds>(end -
+                                                                       start)
+                     .count()
+              << " microseconds)" << '\n';
+  } else {
+    std::cout << number_of_failed_cases << " error/s detected in " << testName
+              << ".\n";
+  }
+
+  return number_of_failed_cases;
+}
+
 int main() {
   std::vector<std::pair<std::string, std::string>> input;
   std::vector<std::string> expected;
@@ -348,6 +387,14 @@ int main() {
 
   number_of_failed_cases +=
       test_rlz(remove_zeroes, input_rlz, expected, functionName, testName);
+
+  functionName = "divide";
+  testName = "divide_unit_tests";
+  input = {{"123", "456"}};
+  expected = {"0.26973684210526315789"};
+
+  number_of_failed_cases +=
+      test_mdiv(divide, input, expected, functionName, testName);
 
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
