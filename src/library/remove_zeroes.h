@@ -44,6 +44,7 @@ void remove_zeroes(char *number) {
 
   if (negative) {
     number--; // restore the negative sign
+    number[0] = '-';
     numberLength++;
   }
 
