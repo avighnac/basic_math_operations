@@ -396,6 +396,14 @@ int main() {
   number_of_failed_cases +=
       test_mdiv(divide, input, expected, functionName, testName);
 
+  functionName = "subtract";
+  testName = "subtract_unit_tests";
+  input = {{"12", "13"}};
+  expected = {"-1"};
+
+  number_of_failed_cases =
+      test_add_mul_sub(subtract, input, expected, functionName, testName);
+
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
                              " test/s failed.");
