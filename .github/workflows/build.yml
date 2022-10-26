@@ -48,3 +48,4 @@ jobs:
         files: |
           build/src/library/libbasic_math_operations.a
           src/library/basic_math_operations.h
+          src/library/basic_math_operations.hpp

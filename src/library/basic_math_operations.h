@@ -1,5 +1,5 @@
-#ifndef basic_math_operations
-#define basic_math_operations
+#ifndef _basic_math_operations_
+#define _basic_math_operations_
 
 #if defined(__cplusplus)
 #define bmo_function_start extern "C"
