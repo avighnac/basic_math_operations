@@ -11,9 +11,9 @@ namespace basic_math_operations {
 /// @param b The second rational number to add as a decimal.
 /// @return The addition of the first two arguments.
 std::string add(std::string a, std::string b) {
-  char *additionResult =
-      (char *)calloc(std::max(a.length(), b.length()) + 2,
-                     1); // for the null byte and potential '-' sign
+  char *additionResult = (char *)calloc(
+      std::max(a.length(), b.length()) + 3,
+      1); // for the null byte, potential '-' sign, and addition carry
   ::add(a.c_str(), b.c_str(), additionResult);
   std::string answer = std::string(additionResult);
   free(additionResult);
@@ -25,7 +25,7 @@ std::string add(std::string a, std::string b) {
 /// @param b The rational number to subtract as a decimal.
 /// @return a - b, the result of the subtraction.
 std::string subtract(std::string a, std::string b) {
-  char *subtractionResult = (char *)calloc(std::max(a.length(), b.length()) + 2,
+  char *subtractionResult = (char *)calloc(std::max(a.length(), b.length()) + 3,
                                            1); // same reason as above
   ::subtract(a.c_str(), b.c_str(), subtractionResult);
   std::string answer = std::string(subtractionResult);
@@ -38,7 +38,7 @@ std::string subtract(std::string a, std::string b) {
 /// @param b The second rational number as a decimal to multiply.
 /// @return The product of a and b.
 std::string multiply(std::string a, std::string b) {
-  char *product = (char *)calloc(a.length() + b.length() + 2, 1);
+  char *product = (char *)calloc(a.length() + b.length() + 3, 1);
   ::multiply(a.c_str(), b.c_str(), product);
   std::string answer = std::string(product);
   free(product);
@@ -57,7 +57,7 @@ std::string divide(std::string numerator, std::string denominator,
   if (denominator.length() > numerator.length())
     lengthDiff = denominator.length() - numerator.length();
   char *quotient =
-      (char *)calloc(lengthDiff + accuracy + 4,
+      (char *)calloc(lengthDiff + accuracy + 5,
                      1); // 2 for the potential negative signs in the inputs,
                          // and 2 for the same reasons mentioned above.
   ::divide(numerator.c_str(), denominator.c_str(), quotient, accuracy);
@@ -78,7 +78,7 @@ std::string mod(std::string numerator, std::string denominator) {
   if (denominator.length() > numerator.length())
     lengthDiff = denominator.length() - numerator.length();
   char *quotient = (char *)calloc(
-      lengthDiff + 4, 1); // 2 for the potential negative signs in the inputs,
+      lengthDiff + 5, 1); // 2 for the potential negative signs in the inputs,
                           // and 2 for the same reasons mentioned above.
   char *remainder =
       (char *)calloc(std::max(numerator.length(), denominator.length()) + 1, 1);
