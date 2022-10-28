@@ -12,7 +12,7 @@ namespace basic_math_operations {
 /// @return The addition of the first two arguments.
 std::string add(std::string a, std::string b) {
   char *additionResult = (char *)calloc(
-      std::max(a.length(), b.length()) + 3,
+      a.length() + b.length() + 3,
       1); // for the null byte, potential '-' sign, and addition carry
   ::add(a.c_str(), b.c_str(), additionResult);
   std::string answer = std::string(additionResult);
@@ -25,8 +25,8 @@ std::string add(std::string a, std::string b) {
 /// @param b The rational number to subtract as a decimal.
 /// @return a - b, the result of the subtraction.
 std::string subtract(std::string a, std::string b) {
-  char *subtractionResult = (char *)calloc(std::max(a.length(), b.length()) + 3,
-                                           1); // same reason as above
+  char *subtractionResult =
+      (char *)calloc(a.length() + b.length() + 3, 1); // same reason as above
   ::subtract(a.c_str(), b.c_str(), subtractionResult);
   std::string answer = std::string(subtractionResult);
   free(subtractionResult);
