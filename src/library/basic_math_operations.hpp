@@ -53,11 +53,8 @@ std::string multiply(std::string a, std::string b) {
 /// @return a / b, the result of a divided by b.
 std::string divide(std::string numerator, std::string denominator,
                    size_t accuracy = 10) {
-  size_t lengthDiff = numerator.length() - denominator.length();
-  if (denominator.length() > numerator.length())
-    lengthDiff = denominator.length() - numerator.length();
   char *quotient =
-      (char *)calloc(lengthDiff + accuracy + 5,
+      (char *)calloc(numerator.length() + denominator.length() + accuracy + 3,
                      1); // 2 for the potential negative signs in the inputs,
                          // and 2 for the same reasons mentioned above.
   ::divide(numerator.c_str(), denominator.c_str(), quotient, accuracy);
@@ -74,12 +71,10 @@ std::string divide(std::string numerator, std::string denominator,
 /// @return a % b, the remainder of the division of [numerator] and
 /// [denominator].
 std::string mod(std::string numerator, std::string denominator) {
-  size_t lengthDiff = numerator.length() - denominator.length();
-  if (denominator.length() > numerator.length())
-    lengthDiff = denominator.length() - numerator.length();
-  char *quotient = (char *)calloc(
-      lengthDiff + 5, 1); // 2 for the potential negative signs in the inputs,
-                          // and 2 for the same reasons mentioned above.
+  char *quotient =
+      (char *)calloc(numerator.length() + denominator.length() + 3, 1);
+  // 2 for the potential negative signs in the inputs,
+  // and 2 for the same reasons mentioned above.
   char *remainder =
       (char *)calloc(std::max(numerator.length(), denominator.length()) + 1, 1);
   divide_whole_with_remainder(numerator.c_str(), denominator.c_str(), quotient,
