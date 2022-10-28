@@ -7,12 +7,9 @@ extern void add_whole_same_length(const char *a, const char *b, char *res);
 void addp(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
   size_t a_len = strlen(a), b_len = strlen(b);
-  size_t max_len = a_len;
-  if (b_len > a_len)
-    max_len = b_len;
 
-  char *new_a = (char *)calloc(max_len + 2, 1);
-  char *new_b = (char *)calloc(max_len + 2, 1);
+  char *new_a = (char *)calloc(a_len + b_len + 2, 1);
+  char *new_b = (char *)calloc(a_len + b_len + 2, 1);
 
   size_t ptr1 = 0, ptr2 = 0;
   int n1 = 0, n2 = 0;
@@ -95,12 +92,9 @@ extern void subtract_whole_same_length(const char *a, const char *b, char *res);
 void subtractp(const char *a, const char *b, char *res) {
   extern size_t strlen(const char *str);
   size_t a_len = strlen(a), b_len = strlen(b);
-  size_t max_len = a_len;
-  if (b_len > a_len)
-    max_len = b_len;
 
-  char *new_a = (char *)calloc(max_len + 1, 1);
-  char *new_b = (char *)calloc(max_len + 1, 1);
+  char *new_a = (char *)calloc(a_len + b_len + 2, 1);
+  char *new_b = (char *)calloc(a_len + b_len + 2, 1);
 
   size_t ptr1 = 0, ptr2 = 0;
   int n1 = 0, n2 = 0;
@@ -127,6 +121,8 @@ void subtractp(const char *a, const char *b, char *res) {
 
   if (n1 == 0 && n2 == 0) {
     subtract_whole(a, b, res);
+    free(new_a);
+    free(new_b);
     return;
   }
 
