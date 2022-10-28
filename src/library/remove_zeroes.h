@@ -50,6 +50,7 @@ void remove_zeroes(char *number) {
 
   char *temp = (char *)calloc(numberLength + 1, 1);
   char *origTemp = temp;
+  char *realOrigTemp = temp;
   while (*number != 0) {
     *temp = *number;
     number++;
@@ -61,6 +62,7 @@ void remove_zeroes(char *number) {
     firstPointer++;
   }
   *firstPointer = '\0';
+  free(realOrigTemp);
 }
 
 #endif
