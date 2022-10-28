@@ -11,8 +11,8 @@ void addp(const char *a, const char *b, char *res) {
   if (b_len > a_len)
     max_len = b_len;
 
-  char *new_a = (char *)calloc(max_len + 1, 1);
-  char *new_b = (char *)calloc(max_len + 1, 1);
+  char *new_a = (char *)calloc(max_len + 2, 1);
+  char *new_b = (char *)calloc(max_len + 2, 1);
 
   size_t ptr1 = 0, ptr2 = 0;
   int n1 = 0, n2 = 0;
@@ -39,6 +39,8 @@ void addp(const char *a, const char *b, char *res) {
 
   if (n1 == 0 && n2 == 0) {
     add_whole(a, b, res);
+    free(new_a);
+    free(new_b);
     return;
   }
 
