@@ -309,6 +309,7 @@ void dividep(const char *numerator, const char *denominator, char *quotient,
   size_t max_length = numerator_length;
   if (denominator_length > numerator_length)
     max_length = denominator_length;
+  max_length += accuracy;
   char *numerator_copy = (char *)calloc(max_length + 1, 1);
   char *denominator_copy = (char *)calloc(max_length + 1, 1);
 
