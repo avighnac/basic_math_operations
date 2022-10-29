@@ -75,6 +75,9 @@ jobs:
         path: build/src/library/libbasic_math_operations-windows.a
 
   release:
+    needs:
+      - make-linux
+      - make-windows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
