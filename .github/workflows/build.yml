@@ -9,8 +9,8 @@ on:
     - cron: '18 13 * * 6'
 
 jobs:
-  analyze:
-    name: Make libbasic_math_operations.a
+  make-linux:
+    name: Make libbasic_math_operations-linux.a
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -51,8 +51,8 @@ jobs:
           src/library/basic_math_operations.h
           src/library/basic_math_operations.hpp
 
-  analyze:
-    name: Make libbasic_math_operations.a
+  make-windows:
+    name: Make libbasic_math_operations-windows.a
     runs-on: windows-latest
     permissions:
       actions: write
