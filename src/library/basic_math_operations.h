@@ -1,6 +1,8 @@
 #ifndef _basic_math_operations_
 #define _basic_math_operations_
 
+#include <stddef.h>
+
 #if defined(__cplusplus)
 #define bmo_function_start extern "C"
 #else
@@ -120,7 +122,7 @@ bmo_function_start void divide_whole_with_remainder(const char *numerator,
 /// @param accuracy The number of decimal places to calculate to.
 bmo_function_start void divide_whole(const char *numerator,
                                      const char *denominator, char *quotient,
-                                     unsigned long accuracy);
+                                     size_t accuracy);
 
 /// @brief Divides the first argument by the second argument with 'accuracy'
 /// decimal places. Stores the quotient in the third argument. This function is
@@ -131,7 +133,7 @@ bmo_function_start void divide_whole(const char *numerator,
 /// @param accuracy The minimum number of decimal places to calculate to.
 /// @return This is a void function: it does not return anything.
 bmo_function_start void dividep(const char *numerator, const char *denominator,
-                                char *quotient, unsigned long accuracy);
+                                char *quotient, size_t accuracy);
 
 /// @brief Divides the first argument by the second argument with 'accuracy'
 /// decimal places. Stores the quotient in the third argument. This function is
@@ -142,7 +144,7 @@ bmo_function_start void dividep(const char *numerator, const char *denominator,
 /// @param accuracy The minimum number of decimal places to calculate to.
 /// @return This is a void function: it does not return anything.
 bmo_function_start void divide(const char *numerator, const char *denominator,
-                               char *quotient, unsigned long accuracy);
+                               char *quotient, size_t accuracy);
 
 /// @brief Removes excess leading and trailing zeroes from a number.
 /// @param number The number you want to remove zeroes from. The number is
