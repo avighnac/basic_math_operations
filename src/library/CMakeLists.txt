@@ -34,13 +34,13 @@ add_library(
     windows/remove_leading_zeroes.asm
 
     windows/add_whole.asm
-    windows/add_whole_same_length.asm
+    linux/add_whole_same_length.asm
 
     windows/subtract_whole.asm
-    windows/subtract_whole_same_length.asm
+    linux/subtract_whole_same_length.asm
 
     windows/multiply_whole.asm
 
-    windows/divide_whole_with_remainder.asm
+    linux/divide_whole_with_remainder.asm
 )
 endif (WIN32)
