@@ -1,6 +1,7 @@
-#include <algorithm>
 #include "color.hpp"
+#include "get_current_directory.hpp"
 #include "get_terminal_size.hpp"
+#include <algorithm>
 #include <basic_math_operations.h>
 #include <chrono>
 #include <fstream>
@@ -9,7 +10,6 @@
 #include <string.h>
 #include <string>
 #include <vector>
-#include "get_current_directory.hpp"
 
 int test_add_mul_sub(void (*function)(const char *, const char *, char *),
                      std::vector<std::pair<std::string, std::string>> input,
@@ -444,8 +444,11 @@ int main() {
   std::replace(currentDir.begin(), currentDir.end(), '\\', '/');
   if (currentDir.find("build") != std::string::npos)
     currentDir = currentDir.substr(0, currentDir.find("build"));
+  if (currentDir.back() != '/')
+    currentDir.push_back('/');
 
-  std::ifstream expectedFile(currentDir + "src/tests/tests/add_whole/expected.txt");
+  std::ifstream expectedFile(currentDir +
+                             "src/tests/tests/add_whole/expected.txt");
   std::ifstream inputFile(currentDir + "src/tests/tests/add_whole/input.txt");
 
   bool failed_tests = false;
@@ -482,7 +485,7 @@ int main() {
       std::cout << color("Actual  : ", "Red") << res << '\n';
       free(res);
       failed_tests = true;
-      break;
+      throw std::runtime_error("add_whole.asm failed a test.");
     }
     free(res);
   }
