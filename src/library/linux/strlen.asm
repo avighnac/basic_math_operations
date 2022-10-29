@@ -7,7 +7,7 @@ strlen:
   ; Registers used:
   ;   - rcx
 
-  xor    rcx, rcx
+  xor    ecx, ecx
   mov    rax, -1
 .loop:
   inc    rax
