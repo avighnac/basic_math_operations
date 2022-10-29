@@ -33,6 +33,7 @@ jobs:
     - run: |
         cmake --no-warn-unused-cli -DENABLE_TESTS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
         cmake --build build --config Release --target all -j 10 --
+        mv build/src/library/libbasic_math_operations.a build/src/library/libbasic_math_operations-linux.a
     - name: Declare github short hash.
       id: vars
       shell: bash
@@ -46,6 +47,52 @@ jobs:
         tag_name: ${{ steps.vars.outputs.sha_short }}
         generate_release_notes: true
         files: |
-          build/src/library/libbasic_math_operations.a
+          build/src/library/libbasic_math_operations-linux.a
+          src/library/basic_math_operations.h
+          src/library/basic_math_operations.hpp
+
+  analyze:
+    name: Make libbasic_math_operations.a
+    runs-on: windows-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -S . -B build -G "MinGW Makefiles"
+        cmake --build build --config Release --target all -j 10 --
+        ren build/src/library/libbasic_math_operations.a build/src/library/libbasic_math_operations-windows.a
+    - name: Declare github short hash.
+      id: vars
+      shell: bash
+      run: |
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Create release and upload artifacts.
+      uses: softprops/action-gh-release@v1
+      with:
+        name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
+        body: Automatic release ${{ steps.vars.outputs.sha_short }}.
+        tag_name: ${{ steps.vars.outputs.sha_short }}
+        generate_release_notes: true
+        files: |
+          build/src/library/libbasic_math_operations-windows.a
           src/library/basic_math_operations.h
           src/library/basic_math_operations.hpp
