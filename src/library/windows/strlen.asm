@@ -5,13 +5,13 @@ strlen:
   ;   - char *str -> rcx
 
   ; Registers used:
-  ;   - rdx
+  ;   - r11
 
-  xor    edx, edx
+  xor    r11d, r11d
   mov    rax, -1
 .loop:
   inc    rax
-  mov    dl, byte[rcx + rax]
-  test   dl, dl
+  mov    r11b, byte[rcx + rax]
+  test   r11b, r11b
   jnz    .loop
   ret
