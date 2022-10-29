@@ -14,6 +14,7 @@ _multiply_whole:
   ; Registers used:
   ;   - rax
   ;   - rbx
+  ;   - r10
   ;   - r11
   ;   - r12
   ;   - r13
