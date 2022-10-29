@@ -41,6 +41,6 @@ add_library(
 
     windows/multiply_whole.asm
 
-    linux/divide_whole_with_remainder.asm
+    windows/divide_whole_with_remainder.asm
 )
 endif (WIN32)
