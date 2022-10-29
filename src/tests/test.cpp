@@ -429,7 +429,7 @@ int main() {
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
                              " test/s failed.");
 
-  int width, height;
+  int width = 10, height = 10;
   get_terminal_size(width, height);
   std::cout << "\n" << std::string(width, '=') << "\n\n";
 
@@ -497,5 +497,57 @@ int main() {
     std::cout << color("All tests for ", "Green")
               << color("add_whole.asm", "Red") << color(" passed in ", "Green")
               << time << color("\u00b5s!\n", "Magenta");
+  }
+
+  std::cout << "\n";
+  std::cout << "Running 10,000 tests for " << color("subtract_whole.asm", "Red")
+            << ".\n";
+
+  time = 0;
+  expectedFile.open(currentDir + "src/tests/tests/subtract_whole/expected.txt");
+  inputFile.open(currentDir + "src/tests/tests/subtract_whole/input.txt");
+
+  if (!expectedFile || !inputFile) {
+    std::cout << "Couldn't open test files!\n";
+    std::cout << currentDir << "\n";
+    return 0;
+  }
+
+  for (auto i = 0; i < 10000; i++) {
+    std::string firstInput, secondInput, Expected;
+    inputFile >> firstInput >> secondInput;
+    expectedFile >> Expected;
+
+    char *res =
+        (char *)calloc(firstInput.length() + secondInput.length() + 2, 1);
+    auto start = std::chrono::high_resolution_clock::now();
+    subtract_whole(firstInput.c_str(), secondInput.c_str(), res);
+    auto end = std::chrono::high_resolution_clock::now();
+    remove_zeroes(res);
+    time += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+                .count() *
+            1e-3;
+    if (std::string(res) != Expected) {
+      std::cout << color("Error: subtract_whole(", "Red") << "\"" << firstInput
+                << "\", \"" << secondInput << "\"" << color(") failed.", "Red")
+                << "\n";
+      std::cout << color("Expected: ", "Red") << Expected << '\n';
+      std::cout << color("Actual  : ", "Red") << res << '\n';
+      free(res);
+      failed_tests = true;
+      throw std::runtime_error("subtract_whole.asm failed a test.");
+    }
+
+    free(res);
+  }
+
+  expectedFile.close();
+  inputFile.close();
+
+  if (!failed_tests) {
+    std::cout << color("All tests for ", "Green")
+              << color("subtract_whole.asm", "Red")
+              << color(" passed in ", "Green") << time
+              << color("\u00b5s!\n", "Magenta");
   }
 }
