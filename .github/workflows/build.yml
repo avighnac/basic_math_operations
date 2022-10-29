@@ -34,22 +34,10 @@ jobs:
         cmake --no-warn-unused-cli -DENABLE_TESTS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
         cmake --build build --config Release --target all -j 10 --
         mv build/src/library/libbasic_math_operations.a build/src/library/libbasic_math_operations-linux.a
-    - name: Declare github short hash.
-      id: vars
-      shell: bash
-      run: |
-        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: Create release and upload artifacts.
-      uses: softprops/action-gh-release@v1
+    - uses: actions/upload-artifact@v3
       with:
-        name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
-        body: Automatic release ${{ steps.vars.outputs.sha_short }}.
-        tag_name: ${{ steps.vars.outputs.sha_short }}
-        generate_release_notes: true
-        files: |
-          build/src/library/libbasic_math_operations-linux.a
-          src/library/basic_math_operations.h
-          src/library/basic_math_operations.hpp
+        name: linux-build
+        path: build/src/library/libbasic_math_operations-linux.a
 
   make-windows:
     name: Make libbasic_math_operations-windows.a
@@ -79,20 +67,52 @@ jobs:
     - run: |
         cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -S . -B build -G "MinGW Makefiles"
         cmake --build build --config Release --target all -j 10 --
-        ren build/src/library/libbasic_math_operations.a build/src/library/libbasic_math_operations-windows.a
-    - name: Declare github short hash.
-      id: vars
-      shell: bash
-      run: |
-        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: Create release and upload artifacts.
-      uses: softprops/action-gh-release@v1
+        cd  "build/src/library"
+        ren libbasic_math_operations.a libbasic_math_operations-windows.a
+    - uses: actions/upload-artifact@v3
       with:
-        name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
-        body: Automatic release ${{ steps.vars.outputs.sha_short }}.
-        tag_name: ${{ steps.vars.outputs.sha_short }}
-        generate_release_notes: true
-        files: |
-          build/src/library/libbasic_math_operations-windows.a
-          src/library/basic_math_operations.h
-          src/library/basic_math_operations.hpp
+        name: windows-build
+        path: build/src/library/libbasic_math_operations-windows.a
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Download all git history and tags
+      - name: Declare github short hash.
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: dist/artifacts
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.sha_short }}
+          release_name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
+          draft: false
+          prerelease: false
+      - name: Upload asset for Linux.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/libbasic_math_operations-linux.a
+          asset_name: libbasic_math_operations-linux.a
+      - name: Upload asset for Windows.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/libbasic_math_operations-windows.a
+          asset_name: libbasic_math_operations-windows.a
