@@ -83,10 +83,10 @@ subtract_whole:
   mov    r9b, 1
 .after_if_3:
   push   rcx
-  push   r9
+  push   r11
   mov    rcx, r8
   call   strlen
-  pop    r9
+  pop    r11
   pop    rcx
   test   r9b, r9b
   jz     .ret

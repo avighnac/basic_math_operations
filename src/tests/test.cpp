@@ -1,10 +1,15 @@
+#include <algorithm>
+#include "color.hpp"
+#include "get_terminal_size.hpp"
 #include <basic_math_operations.h>
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <vector>
+#include "get_current_directory.hpp"
 
 int test_add_mul_sub(void (*function)(const char *, const char *, char *),
                      std::vector<std::pair<std::string, std::string>> input,
@@ -13,17 +18,18 @@ int test_add_mul_sub(void (*function)(const char *, const char *, char *),
   int number_tests = expected.size();
   int number_of_failed_cases = 0;
 
-  std::cout << "Running " << number_tests << " test cases for " << testName
-            << ".\n";
+  std::cout << "Running " << color(std::to_string(number_tests), "Magenta")
+            << " test cases for " << color(testName, "Cyan") << ".\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *answer = (char *)calloc(
         input[i].first.length() + input[i].second.length() + 1, 1);
     function(input[i].first.c_str(), input[i].second.c_str(), answer);
     if (std::string(answer) != expected[i]) {
-      std::cout << "error in \"" << testName << "\": check " << functionName
-                << "(\"" << input[i].first << "\", \"" << input[i].second
-                << "\") == \"" << expected[i] << "\" failed\n";
+      std::cout << "error in \"" << color(testName, "Cyan") << "\": check "
+                << functionName << "(\"" << input[i].first << "\", \""
+                << input[i].second << "\") == \"" << expected[i]
+                << "\" failed\n";
       std::cout << "actual: \"" << answer << "\"\n";
       number_of_failed_cases++;
     }
@@ -32,14 +38,16 @@ int test_add_mul_sub(void (*function)(const char *, const char *, char *),
   auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ". (finished in "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                                       start)
-                     .count()
-              << " microseconds)" << '\n';
+    std::cout << color("No errors detected", "Green") << " in "
+              << color(testName, "Yellow") << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(end -
+                                                                      start)
+                         .count() *
+                     1e-3
+              << " \u00b5s)" << '\n';
   } else {
-    std::cout << number_of_failed_cases << " error/s detected in " << testName
-              << ".\n";
+    std::cout << number_of_failed_cases << " error/s detected in "
+              << color(testName, "Cyan") << ".\n";
   }
 
   return number_of_failed_cases;
@@ -52,8 +60,8 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
   int number_tests = expected.size();
   int number_of_failed_cases = 0;
 
-  std::cout << "Running " << number_tests << " test cases for " << testName
-            << ".\n";
+  std::cout << "Running " << color(std::to_string(number_tests), "Magenta")
+            << " test cases for " << color(testName, "Cyan") << ".\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *quotient = (char *)calloc(
@@ -64,10 +72,10 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
                 remainder);
     if (std::string(quotient) != expected[i].first ||
         std::string(remainder) != expected[i].second) {
-      std::cout << "error in \"" << testName << "\": check " << functionName
-                << "(\"" << input[i].first << "\", \"" << input[i].second
-                << "\") == (\"" << expected[i].first << "\", \""
-                << expected[i].second << "\") failed\n";
+      std::cout << "error in \"" << color(testName, "Cyan") << "\": check "
+                << functionName << "(\"" << input[i].first << "\", \""
+                << input[i].second << "\") == (\"" << expected[i].first
+                << "\", \"" << expected[i].second << "\") failed\n";
       std::cout << "actual: (\"" << quotient << "\", \"" << remainder
                 << "\")\n";
       number_of_failed_cases++;
@@ -78,14 +86,16 @@ int test_div(void (*divide_func)(const char *, const char *, char *, char *),
   auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ". (finished in "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                                       start)
-                     .count()
-              << " microseconds)" << '\n';
+    std::cout << color("No errors detected", "Green") << " in "
+              << color(testName, "Yellow") << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(end -
+                                                                      start)
+                         .count() *
+                     1e-3
+              << " \u00b5s)" << '\n';
   } else {
-    std::cout << number_of_failed_cases << " error/s detected in " << testName
-              << ".\n";
+    std::cout << number_of_failed_cases << " error/s detected in "
+              << color(testName, "Cyan") << ".\n";
   }
 
   return number_of_failed_cases;
@@ -97,17 +107,17 @@ int test_rlz(void (*rlz)(char *), std::vector<std::string> input,
   int number_tests = expected.size();
   int number_of_failed_cases = 0;
 
-  std::cout << "Running " << number_tests << " test cases for " << testName
-            << ".\n";
+  std::cout << "Running " << color(std::to_string(number_tests), "Magenta")
+            << " test cases for " << color(testName, "Cyan") << ".\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *number = (char *)calloc(input[i].length() + 1, 1);
     strcpy(number, input[i].c_str());
     rlz(number);
     if (std::string(number) != expected[i]) {
-      std::cout << "error in \"" << testName << "\": check " << functionName
-                << "(\"" << input[i] << "\") == \"" << expected[i]
-                << "\" failed\n";
+      std::cout << "error in \"" << color(testName, "Cyan") << "\": check "
+                << functionName << "(\"" << input[i] << "\") == \""
+                << expected[i] << "\" failed\n";
       std::cout << "actual: \"" << number << "\"\n";
       number_of_failed_cases++;
     }
@@ -116,14 +126,16 @@ int test_rlz(void (*rlz)(char *), std::vector<std::string> input,
   auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ". (finished in "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                                       start)
-                     .count()
-              << " microseconds)" << '\n';
+    std::cout << color("No errors detected", "Green") << " in "
+              << color(testName, "Yellow") << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(end -
+                                                                      start)
+                         .count() *
+                     1e-3
+              << " \u00b5s)" << '\n';
   } else {
-    std::cout << number_of_failed_cases << " error/s detected in " << testName
-              << ".\n";
+    std::cout << number_of_failed_cases << " error/s detected in "
+              << color(testName, "Cyan") << ".\n";
   }
 
   return number_of_failed_cases;
@@ -136,17 +148,18 @@ int test_mdiv(void (*divide)(const char *, const char *, char *, size_t),
   int number_tests = expected.size();
   int number_of_failed_cases = 0;
 
-  std::cout << "Running " << number_tests << " test cases for " << testName
-            << ".\n";
+  std::cout << "Running " << color(std::to_string(number_tests), "Magenta")
+            << " test cases for " << color(testName, "Cyan") << ".\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 0; i < number_tests; i++) {
     char *answer = (char *)calloc(
         input[i].first.length() + input[i].second.length() + 21, 1);
     divide(input[i].first.c_str(), input[i].second.c_str(), answer, 20);
     if (std::string(answer) != expected[i]) {
-      std::cout << "error in \"" << testName << "\": check " << functionName
-                << "(\"" << input[i].first << "\", \"" << input[i].second
-                << "\") == \"" << expected[i] << "\" failed\n";
+      std::cout << "error in \"" << color(testName, "Cyan") << "\": check "
+                << functionName << "(\"" << input[i].first << "\", \""
+                << input[i].second << "\") == \"" << expected[i]
+                << "\" failed\n";
       std::cout << "actual: \"" << answer << "\"\n";
       number_of_failed_cases++;
     }
@@ -155,14 +168,16 @@ int test_mdiv(void (*divide)(const char *, const char *, char *, size_t),
   auto end = std::chrono::high_resolution_clock::now();
 
   if (!number_of_failed_cases) {
-    std::cout << "no errors detected in " << testName << ". (finished in "
-              << std::chrono::duration_cast<std::chrono::microseconds>(end -
-                                                                       start)
-                     .count()
-              << " microseconds)" << '\n';
+    std::cout << color("No errors detected", "Green") << " in "
+              << color(testName, "Yellow") << ". (finished in "
+              << std::chrono::duration_cast<std::chrono::nanoseconds>(end -
+                                                                      start)
+                         .count() *
+                     1e-3
+              << " \u00b5s)" << '\n';
   } else {
-    std::cout << number_of_failed_cases << " error/s detected in " << testName
-              << ".\n";
+    std::cout << number_of_failed_cases << " error/s detected in "
+              << color(testName, "Cyan") << ".\n";
   }
 
   return number_of_failed_cases;
@@ -394,9 +409,10 @@ int main() {
   testName = "divide_unit_tests";
   input = {{"123", "456"},
            {"2619.995643649944960380551432833049", "1307674368000"},
-           {"7482.9695578286078013428929473144712489", "355687428096000"}};
+           {"7482.9695578286078013428929473144712489", "355687428096000"},
+           {"1", "3628800"}};
   expected = {"0.26973684210526315789", "0.00000000200355356636",
-              "0.00000000002103804904"};
+              "0.00000000002103804904", "0.00000027557319223985"};
 
   number_of_failed_cases +=
       test_mdiv(divide, input, expected, functionName, testName);
@@ -412,4 +428,71 @@ int main() {
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
                              " test/s failed.");
+
+  int width, height;
+  get_terminal_size(width, height);
+  std::cout << "\n" << std::string(width, '=') << "\n\n";
+
+  input.clear();
+  expected.clear();
+
+  std::cout << "Running " << color("rigourous tests ... ", "Red") << "\n\n";
+  std::cout << "Running 10,000 tests for " << color("add_whole.asm", "Red")
+            << ".\n";
+
+  std::string currentDir = get_current_directory();
+  std::replace(currentDir.begin(), currentDir.end(), '\\', '/');
+  if (currentDir.find("build") != std::string::npos)
+    currentDir = currentDir.substr(0, currentDir.find("build"));
+
+  std::ifstream expectedFile(currentDir + "src/tests/tests/add_whole/expected.txt");
+  std::ifstream inputFile(currentDir + "src/tests/tests/add_whole/input.txt");
+
+  bool failed_tests = false;
+  double time = 0;
+
+  if (!expectedFile || !inputFile) {
+    std::cout << "Couldn't open test files!\n";
+    std::cout << currentDir << "\n";
+    return 0;
+  }
+
+  for (auto i = 0; i < 10000; i++) {
+    std::string firstInput;
+    std::string secondInput;
+    std::string Expected;
+
+    inputFile >> firstInput;
+    inputFile >> secondInput;
+    expectedFile >> Expected;
+
+    char *res =
+        (char *)calloc(firstInput.length() + secondInput.length() + 1, 1);
+    auto start = std::chrono::high_resolution_clock::now();
+    add_whole(firstInput.c_str(), secondInput.c_str(), res);
+    auto end = std::chrono::high_resolution_clock::now();
+    time += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+                .count() *
+            1e-3;
+    if (std::string(res) != Expected) {
+      std::cout << color("Error: add_whole(", "Red") << "\"" << firstInput
+                << "\", \"" << secondInput << "\"" << color(") failed.", "Red")
+                << "\n";
+      std::cout << color("Expected: ", "Red") << Expected << '\n';
+      std::cout << color("Actual  : ", "Red") << res << '\n';
+      free(res);
+      failed_tests = true;
+      break;
+    }
+    free(res);
+  }
+
+  expectedFile.close();
+  inputFile.close();
+
+  if (!failed_tests) {
+    std::cout << color("All tests for ", "Green")
+              << color("add_whole.asm", "Red") << color(" passed in ", "Green")
+              << time << color("\u00b5s!\n", "Magenta");
+  }
 }

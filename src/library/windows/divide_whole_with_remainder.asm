@@ -20,6 +20,7 @@ _divide_whole_with_remainder:
   ; Registers used:
   ;   - rax
   ;   - rbx
+  ;   - r10
   ;   - r11
   ;   - rdi
   ;   - rsi
@@ -82,16 +83,16 @@ _divide_whole_with_remainder:
   mov    r12, r9
   mov    r9, r10
   add    r10, r12
-  push   r10
-  push   r10
-  push   r10
-  push   r10
   push   r10 ; Passing the 5th argument via stack
+  push   r9
+  push   r8
+  push   rdx
+  push   rcx 
   call   _multiply_whole
-  pop    r10
-  pop    r10
-  pop    r10
-  pop    r10
+  pop    rcx
+  pop    rdx
+  pop    r8
+  pop    r9
   pop    r10
   mov    rcx, r8
   call   strlen
@@ -313,7 +314,13 @@ _divide_whole_with_remainder:
   mov   rdx, r10
   lea   r8, [r9*2]
   add   r8, r10
+  push  r12
+  push  r13
+  push  r14
   call  subtract_whole ; check push and pop of regs
+  pop   r14
+  pop   r13
+  pop   r12
   mov   rcx, r8
   call  strlen
   mov   rdi, rax
@@ -348,7 +355,7 @@ _divide_whole_with_remainder:
   jmp   .after_add_else_1
 .add_whole_else_1:
   mov   r12b, byte [rcx+rsi+1]
-  mov   byte [r10 + r13], r12b
+  mov   byte [r10+r13], r12b
 .after_add_else_1:
   lea   r12, [r9*3]
   add   r12, rdi
