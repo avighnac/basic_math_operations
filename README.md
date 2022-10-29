@@ -1,5 +1,5 @@
 # basic_math_operations
-A biginteger library for Linux written in assembly and C.
+A biginteger library for both Windows and Linux written in assembly and C.
 
 Have you ever wanted to add, subtract, or multiply huge numbers but your calculator or favourite programming language only gives you an approximation?
 
@@ -69,6 +69,8 @@ This is *important*. When allocating memory for the result buffer, **use `calloc
 I don't know if this needs to be said, but the functions higher up in each of their respective sections are *usually* faster than their lower counterparts. If you know that two numbers will have the same length, using the specialized function will be faster.
 
 Detailed information for each of these functions can be found in the `basic_math_operations.h` file. This is just a brief.
+
+(Note that the windows version of this library doesn't have functions to add and subtract numbers of the same length as of now. Calling these functions on windows will **certainly cause your application to throw a segmentation fault**.)
 
 Addition:
 - `add_whole_same_length()` adds two non-negative integers of the same length.

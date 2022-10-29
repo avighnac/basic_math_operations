@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 
-/// @brief Recalibrated for C++.
+/// @brief Wrapper for C++.
 namespace basic_math_operations {
 /// @brief Adds the first two arguments and returns the result.
 /// @param a The first rational number to add as a decimal.
