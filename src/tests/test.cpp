@@ -612,4 +612,68 @@ int main() {
               << color(" passed in ", "Green") << time
               << color("\u00b5s!\n", "Magenta");
   }
+
+  std::cout << "\n";
+  std::cout << "Running 10,000 tests for "
+            << color("divide_whole_with_remainder.asm", "Red") << ".\n";
+
+  time = 0;
+  expectedFile.open(currentDir + "src/tests/basic_math_operations_tests/"
+                                 "divide_whole_with_remainder/expected.txt");
+  inputFile.open(currentDir + "src/tests/basic_math_operations_tests/"
+                              "divide_whole_with_remainder/input.txt");
+
+  if (!expectedFile || !inputFile) {
+    std::cout << "Couldn't open test files!\n";
+    std::cout << currentDir << "\n";
+    return 0;
+  }
+
+  for (auto i = 0; i < 10000; i++) {
+    std::string firstInput, secondInput, firstExpected, secondExpected;
+    inputFile >> firstInput >> secondInput;
+    expectedFile >> firstExpected >> secondExpected;
+
+    char *quotient =
+        (char *)calloc(firstInput.length() + secondInput.length() + 2, 1);
+    char *remainder =
+        (char *)calloc(firstInput.length() + secondInput.length() + 2, 1);
+    auto start = std::chrono::high_resolution_clock::now();
+    divide_whole_with_remainder(firstInput.c_str(), secondInput.c_str(),
+                                quotient, remainder);
+    auto end = std::chrono::high_resolution_clock::now();
+    remove_zeroes(quotient);
+    remove_zeroes(remainder);
+    time += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start)
+                .count() *
+            1e-3;
+    if (std::string(quotient) != firstExpected ||
+        std::string(remainder) != secondExpected) {
+      std::cout << color("Error: divide_whole_with_remainder(", "Red") << "\""
+                << firstInput << "\", \"" << secondInput << "\""
+                << color(") failed.", "Red") << "\n";
+      std::cout << color("Expected: ", "Red") << firstExpected << ", "
+                << secondExpected << "\n";
+      std::cout << color("Actual  : ", "Red") << quotient << ", " << remainder
+                << "\n";
+      free(quotient);
+      free(remainder);
+      failed_tests = true;
+      throw std::runtime_error(
+          "divide_whole_with_remainder.asm failed a test.");
+    }
+
+    free(quotient);
+    free(remainder);
+  }
+
+  expectedFile.close();
+  inputFile.close();
+
+  if (!failed_tests) {
+    std::cout << color("All tests for ", "Green")
+              << color("divide_whole_with_remainder.asm", "Red")
+              << color(" passed in ", "Green") << time
+              << color("\u00b5s!\n", "Magenta");
+  }
 }
