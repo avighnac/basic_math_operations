@@ -447,9 +447,11 @@ int main() {
   if (currentDir.back() != '/')
     currentDir.push_back('/');
 
-  std::ifstream expectedFile(currentDir +
-                             "src/tests/tests/add_whole/expected.txt");
-  std::ifstream inputFile(currentDir + "src/tests/tests/add_whole/input.txt");
+  std::ifstream expectedFile(
+      currentDir +
+      "src/tests/basic_math_operations_tests/add_whole/expected.txt");
+  std::ifstream inputFile(
+      currentDir + "src/tests/basic_math_operations_tests/add_whole/input.txt");
 
   bool failed_tests = false;
   double time = 0;
@@ -504,8 +506,12 @@ int main() {
             << ".\n";
 
   time = 0;
-  expectedFile.open(currentDir + "src/tests/tests/subtract_whole/expected.txt");
-  inputFile.open(currentDir + "src/tests/tests/subtract_whole/input.txt");
+  expectedFile.open(
+      currentDir +
+      "src/tests/basic_math_operations_tests/subtract_whole/expected.txt");
+  inputFile.open(
+      currentDir +
+      "src/tests/basic_math_operations_tests/subtract_whole/input.txt");
 
   if (!expectedFile || !inputFile) {
     std::cout << "Couldn't open test files!\n";
@@ -556,8 +562,12 @@ int main() {
             << ".\n";
 
   time = 0;
-  expectedFile.open(currentDir + "src/tests/tests/multiply_whole/expected.txt");
-  inputFile.open(currentDir + "src/tests/tests/multiply_whole/input.txt");
+  expectedFile.open(
+      currentDir +
+      "src/tests/basic_math_operations_tests/multiply_whole/expected.txt");
+  inputFile.open(
+      currentDir +
+      "src/tests/basic_math_operations_tests/multiply_whole/input.txt");
 
   if (!expectedFile || !inputFile) {
     std::cout << "Couldn't open test files!\n";
