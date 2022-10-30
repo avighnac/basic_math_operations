@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-linux:
-    name: Make test.cpp.
+    name: Make test.cpp for linux.
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -37,8 +37,8 @@ jobs:
         chmod +x build/src/tests/tests
         ./build/src/tests/tests
 
-test-windows:
-    name: Make test.cpp.
+  test-windows:
+    name: Make test.cpp for windows.
     runs-on: windows-latest
     permissions:
       actions: write
