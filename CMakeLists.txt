@@ -1,6 +1,6 @@
 project(basic_math_operations C)
 
-option(ENABLE_TESTS "Build tests" ON)
+option(ENABLE_TESTS "Build tests" OFF)
 option(BENCHMARK "Benchmark" OFF)
 
 add_subdirectory(src/library)
