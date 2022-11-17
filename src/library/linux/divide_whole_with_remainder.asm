@@ -45,7 +45,7 @@ _divide_whole_with_remainder:
   pop    rcx
   pop    rdi
   pop    rax
-  xor    r9, r9
+  xor    r9d, r9d
   lea    r14, [rbx*9]
   add    r14, rbx
   lea    r15, [rcx*5]
@@ -109,7 +109,7 @@ _divide_whole_with_remainder:
   pop    rdx
   pop    rax
   lea    r10, [rbx+r11]
-  xor    r13, r13
+  xor    r13d, r13d
 .loop_2:
   dec    r10
   lea    r12, [rcx*5]
@@ -122,7 +122,7 @@ _divide_whole_with_remainder:
   add    r10, r11
   mov    byte [r8+r10], 48
 .after_if_1:
-  xor    r10, r10
+  xor    r10d, r10d
 .loop_3:
   mov    byte [r8+r10], 0
   lea    r11, [r10+rcx] ; potential optimization
@@ -139,12 +139,12 @@ _divide_whole_with_remainder:
   add   r10, r8
   mov   byte [r10], r9b
   mov   byte [r10+1], 0
-  xor   r11, r11
+  xor   r11d, r11d
 .loop_4:
-  xor   r9, r9
+  xor   r9d, r9d
   mov   byte [r8+r15+2], r9b
 .loop_5:
-  xor   r10, r10
+  xor   r10d, r10d
 .loop_6:
   lea   r12, [rcx*2]
   add   r12, r10
@@ -198,7 +198,7 @@ _divide_whole_with_remainder:
   pop   rdx
   pop   rsi
   pop   rdi
-  xor   r10, r10
+  xor   r10d, r10d
 .loop_7:
   lea   r13, [rcx*4]
   add   r13, r10
@@ -214,7 +214,7 @@ _divide_whole_with_remainder:
   cmp   byte [r8+r12], 2DH
   jz    .after_loop_5
   mov   byte [r8+r15+2], r9b
-  xor   r10, r10
+  xor   r10d, r10d
 .loop_8:
   mov   byte [r8+r10], 0
   inc   r10
@@ -236,7 +236,7 @@ _divide_whole_with_remainder:
   pop   rcx
   pop   rdi
   pop   rax
-  xor   r10, r10
+  xor   r10d, r10d
 .loop_9:
   lea   r13, [rcx*5]
   add   r13, r10
@@ -256,7 +256,7 @@ _divide_whole_with_remainder:
   cmp   r9, 10
   js    .loop_5
 .after_loop_5:
-  xor   r10, r10
+  xor   r10d, r10d
 .loop_10:
   lea   r12, [rcx*2]
   add   r12, r10
@@ -295,7 +295,7 @@ _divide_whole_with_remainder:
   pop   rdx
   pop   rsi
   pop   rdi
-  xor   r12, r12
+  xor   r12d, r12d
 .loop_11:
   lea   r13, [rcx*2]
   add   r13, r12
