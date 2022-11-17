@@ -28,34 +28,33 @@ _divide_whole_with_remainder:
   ;   - r14
   ;   - r15
 
-  push   rbx
+  push   rbx               ; Pushing callee-saved registers.
   push   r12
   push   r13
   push   r14
   push   r15
   push   rcx
-  call   strlen
+  call   strlen            ; rax = strlen(numerator)
   pop    rcx
   push   rax
   push   rdi
   push   rcx
   mov    rdi, rsi
   call   strlen
-  mov    rbx, rax
+  mov    rbx, rax          ; rbx = strlen(denominator)
   pop    rcx
   pop    rdi
   pop    rax
   xor    r9d, r9d
-  lea    r14, [rbx*9]
-  add    r14, rbx
-  lea    r15, [rcx*5]
-  add    r15, r14
-  add    r15, 20
-.loop_1:
+  lea    r14, [rbx*9] 
+  add    r14, rbx          ; r14 = 10 strlen(denominator)
+  lea    r15, [rcx*5+20]
+  add    r15, r14          ; r15 = 5 (strlen(numerator) + strlen(denominator)) + 10 strlen(denominator) + 30
+.loop_1: ; Generating the multiplication table.
   mov    byte [r8+r15], r9b
-  add    byte [r8+r15], 48
-  push   rdi
-  push   rdx
+  add    byte [r8+r15], 48 ; numbers from 0 to 9 to multiply by
+  push   rdi               ; We need to push some registers
+  push   rdx               ; to prepare for a call to _multiply_whole
   push   rcx
   push   r8
   push   rax
@@ -66,25 +65,25 @@ _divide_whole_with_remainder:
   push   r13
   push   r14
   push   r15
-  lea    rdi, [r8+r15]
-  lea    rdx, [rcx*5]
+  lea    rdi, [r8+r15]     ; The first number to multiply by, the denominator is already in rsi.
+  lea    rdx, [rcx*5]      ; Where the multiplication table will be stored.
   add    rdx, r8
-  lea    r10, [rbx+2]
+  lea    r10, [rbx+2]      ; r10 = strlen(denominator) + 2
   push   rax
   push   rdx
   mov    rax, r9
   mul    r10
-  mov    r11, rax
+  mov    r11, rax          ; r11 = number (from 0 to 9) * (strlen(denominator) + 2)
   pop    rdx
   pop    rax
   add    rdx, r11
   mov    r12, rcx
   mov    rcx, r8
   add    r8, r12
-  call   _multiply_whole
+  call   _multiply_whole   ; Multiply the numbers
   mov    rdi, rdx
-  call   strlen
-  lea    r11, [rax-1]
+  call   strlen            ; Get the length of the multiplication result.
+  lea    r11, [rax-1]      ; r11 = strlen(mul_res) - 1
   pop    r15
   pop    r14
   pop    r13
@@ -98,7 +97,7 @@ _divide_whole_with_remainder:
   pop    rdx
   pop    rdi
   cmp    r11, rbx
-  jge    .after_if_1
+  jge    .after_if_1       ; if (strlen(mul_res) - 1 >= strlen(denominator)) goto after_if_1
   lea    r11, [rbx+2]
   mov    r12, r11
   push   rax
