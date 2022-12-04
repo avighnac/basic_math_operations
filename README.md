@@ -28,7 +28,7 @@ int main() {
 
 And that too with blazing fast speeds! Most of the heavy-lifting of these algorithms is written in x86 assembly in order to maximize its efficiency.
 
-Downloading and using this library is as simple as including the header file (`basic_math_operations.h`), and linking the `libbasic_math_operations.a` file using `-L. -lbasic_math_operations`. Of course, it works with both C and C++, but is primarily _meant_ to be a C library (you'd have to use C-styled strings even in C++).
+Downloading and using this library is as simple as including the header file (`basic_math_operations.h` or `basic_math_operations.hpp`), and linking the `libbasic_math_operations.a` file using `-L. -lbasic_math_operations`.
 
 # Compilation
 Here's a full example of compiling a program made with `basic_math_operations`.
@@ -64,13 +64,13 @@ Compile this with `gcc main.c -L. -lbasic_math_operations -o filename.out`. Make
 # Features
 This library has functions that can add, subtract, multiply, and divide with arbitrary precision.
 
-This is *important*. When allocating memory for the result buffer, **use `calloc()` and not `malloc()`** (for `calloc`, you can use malloc syntax, just add `1` as it's second argument). Some functions may malfunction and result in **undefined behaviour** if you use `malloc()` instead of `calloc()`.
+When allocating memory for the result buffer, use `calloc()` and not `malloc()` (for `calloc`, you can use malloc syntax, just add `1` as it's second argument). This is because `calloc()` zeroes the allocated memory for you: you could also use `malloc()` and zero the memory yourself.
 
-I don't know if this needs to be said, but the functions higher up in each of their respective sections are *usually* faster than their lower counterparts. If you know that two numbers will have the same length, using the specialized function will be faster.
+The functions higher up in each of their respective sections are *usually* faster than their lower counterparts. If you know that two numbers will have the same length, using the specialized function will be faster.
 
 Detailed information for each of these functions can be found in the `basic_math_operations.h` file. This is just a brief.
 
-(Note that the windows version of this library doesn't have functions to add and subtract numbers of the same length as of now. Calling these functions on windows will **certainly cause your application to throw a segmentation fault**.)
+(Note that the windows version of this library doesn't have functions to add and subtract numbers of the same length as of now. Calling these functions on windows will certainly cause your application to throw a segmentation fault.)
 
 Addition:
 - `add_whole_same_length()` adds two non-negative integers of the same length.
