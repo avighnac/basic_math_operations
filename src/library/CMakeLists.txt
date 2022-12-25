@@ -18,9 +18,12 @@ add_library(
     linux/subtract_whole.asm
     linux/subtract_whole_same_length.asm
 
-    linux/multiply_whole.asm
+    linux/_multiply_whole.asm
 
     linux/divide_whole_with_remainder.asm
+
+    linux/asmalloc.asm
+    linux/multiply_whole.asm
 )
 endif (UNIX)
 
@@ -39,8 +42,10 @@ add_library(
     windows/subtract_whole.asm
     linux/subtract_whole_same_length.asm
 
-    windows/multiply_whole.asm
+    windows/_multiply_whole.asm
 
     windows/divide_whole_with_remainder.asm
+
+    windows/multiply_whole.c
 )
 endif (WIN32)
