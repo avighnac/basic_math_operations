@@ -24,6 +24,7 @@ add_library(
 
     linux/asmalloc.asm
     linux/multiply_whole.asm
+    linux/addp.asm
 )
 endif (UNIX)
 
@@ -47,5 +48,6 @@ add_library(
     windows/divide_whole_with_remainder.asm
 
     windows/multiply_whole.c
+    windows/addp.c
 )
 endif (WIN32)
