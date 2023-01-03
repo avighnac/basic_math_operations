@@ -23,8 +23,10 @@ addp:
   ; Align the stack.
   push  rbp
   mov   rbp, rsp
+  sub   rsp, 40 ; Amount of space to allocate on the stack.
 
   ; Push some registers that need to be saved.
+  push  rbx
   push  r12
   push  r13
   push  r14
@@ -258,5 +260,6 @@ addp:
   pop   r14
   pop   r13
   pop   r12
+  pop   rbx
   leave
   ret
