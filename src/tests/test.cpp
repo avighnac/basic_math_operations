@@ -431,6 +431,8 @@ int main() {
 
   int width = 10, height = 10;
   get_terminal_size(width, height);
+  if (width < 0 || width > 1000)
+    width = 15;
   std::cout << "\n" << std::string(width, '=') << "\n\n";
 
   input.clear();
