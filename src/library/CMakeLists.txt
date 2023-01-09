@@ -25,6 +25,8 @@ add_library(
     linux/asmalloc.asm
     linux/multiply_whole.asm
     cross-platform/addp.c
+
+    cross-platform/increment_whole.c
 )
 endif (UNIX)
 
@@ -49,5 +51,7 @@ add_library(
 
     cross-platform/multiply_whole.c
     cross-platform/addp.c
+
+    cross-platform/increment_whole.c
 )
 endif (WIN32)
