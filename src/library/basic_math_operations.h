@@ -150,4 +150,11 @@ bmo_function_start void divide(const char *numerator, const char *denominator,
 /// @param number The number you want to remove zeroes from. The number is
 /// overwritten.
 bmo_function_start void remove_zeroes(char *number);
+
+/// @brief Increments a number in place. If there isn't enough space (999) to
+/// increment it, then it reallocates the buffer.
+/// @param number The number you want to increment.
+/// @return This function increments the number in place; there is no return
+/// value.
+bmo_function_start void increment_whole(char **number_in);
 #endif
