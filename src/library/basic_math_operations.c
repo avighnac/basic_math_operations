@@ -319,3 +319,5 @@ void divide(const char *a, const char *b, char *res, size_t accuracy) {
 
   remove_zeroes(res);
 }
+
+extern void increment_whole(char **number_in);
