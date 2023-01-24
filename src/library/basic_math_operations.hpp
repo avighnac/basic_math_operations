@@ -84,4 +84,43 @@ std::string mod(std::string numerator, std::string denominator) {
   free(remainder);
   return answer;
 }
+
+// constant that controls division accuracy
+size_t DIVISION_ACCURACY = 10;
+
+// BMONum
+class BMONum {
+public:
+  std::string number = "0";
+
+  BMONum();
+  BMONum(std::string number) { this->number = number; }
+  BMONum(const char *number) { this->number = number; }
+
+  BMONum operator+(BMONum n) {
+    BMONum answer;
+    answer.number = add(number, n.number);
+    return answer;
+  }
+  BMONum operator-(BMONum n) {
+    BMONum answer;
+    answer.number = subtract(number, n.number);
+    return answer;
+  }
+  BMONum operator*(BMONum n) {
+    BMONum answer;
+    answer.number = multiply(number, n.number);
+    return answer;
+  }
+  BMONum operator/(BMONum n) {
+    BMONum answer;
+    answer.number = divide(number, n.number, DIVISION_ACCURACY);
+    return answer;
+  }
+  BMONum operator%(BMONum n) {
+    BMONum answer;
+    answer.number = mod(number, n.number);
+    return answer;
+  }
+};
 } // namespace basic_math_operations
