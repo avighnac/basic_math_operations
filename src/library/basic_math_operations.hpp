@@ -91,9 +91,9 @@ size_t DIVISION_ACCURACY = 10;
 // BMONum
 class BMONum {
 public:
-  std::string number = "0";
+  std::string number;
 
-  BMONum();
+  BMONum() { number = "0"; }
   BMONum(std::string number) { this->number = number; }
   BMONum(const char *number) { this->number = number; }
 
@@ -121,6 +121,25 @@ public:
     BMONum answer;
     answer.number = mod(number, n.number);
     return answer;
+  }
+
+  bool operator<(BMONum n) {
+    // return true if this < n, else false
+    // this < n ==> this - n < 0
+
+    std::string difference = subtract(number, n.number);
+    return difference[0] == '-';
+  }
+  bool operator>(BMONum n) {
+    // return true if this > n, else false
+    // this > n ==> n < this
+
+    return n < *this;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const BMONum &n) {
+    os << n.number;
+    return os;
   }
 };
 } // namespace basic_math_operations
