@@ -1,9 +1,9 @@
-cd linux
+cd linux || exit
 for file in *.asm
 do
   yasm -g dwarf2 -f elf64 $file
 done
-mv *.o ../
+mv ./*.o ../
 cd ..
 gcc basic_math_operations.c -O3 -c
 
@@ -15,4 +15,4 @@ do
 done
 
 g++ ../tests/test.cpp $v -I.
-rm *.o
+rm ./*.o
