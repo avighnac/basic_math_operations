@@ -14,6 +14,7 @@ add_library(
 
     linux/add_whole.asm
     linux/add_whole_same_length.asm
+    cross-platform/add.c
 
     linux/subtract_whole.asm
     linux/subtract_whole_same_length.asm
@@ -41,6 +42,7 @@ add_library(
 
     windows/add_whole.asm
     linux/add_whole_same_length.asm
+    cross-platform/add.c
 
     windows/subtract_whole.asm
     linux/subtract_whole_same_length.asm
