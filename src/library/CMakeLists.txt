@@ -20,14 +20,23 @@ add_library(
 
     linux/subtract_whole.asm
     linux/subtract_whole_same_length.asm
+    cross-platform/subtractp.c
+    cross-platform/subtract.c
 
     linux/_multiply_whole.asm
+    cross-platform/multiplyp.c
+    cross-platform/multiply.c
 
     linux/divide_whole_with_remainder.asm
+    cross-platform/divide_whole_with_remainder.c
+    cross-platform/divide_whole.c
+    cross-platform/dividep.c
+    cross-platform/divide.c
 
     linux/asmalloc.asm
     linux/multiply_whole.asm
     cross-platform/addp.c
+    remove_zeroes.c
 
     cross-platform/increment_whole.c
 )
@@ -48,13 +57,22 @@ add_library(
 
     windows/subtract_whole.asm
     linux/subtract_whole_same_length.asm
+    cross-platform/subtractp.c
+    cross-platform/subtract.c
 
     windows/_multiply_whole.asm
+    cross-platform/multiplyp.c
+    cross-platform/multiply.c
 
     windows/divide_whole_with_remainder.asm
+    cross-platform/divide_whole_with_remainder.c
+    cross-platform/divide_whole.c
+    cross-platform/dividep.c
+    cross-platform/divide.c
 
     cross-platform/multiply_whole.c
     cross-platform/addp.c
+    remove_zeroes.c
 
     cross-platform/increment_whole.c
 )
