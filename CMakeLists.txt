@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.22)
+
 project(basic_math_operations C)
 
 option(ENABLE_TESTS "Build tests" OFF)
