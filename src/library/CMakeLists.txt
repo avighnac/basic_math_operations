@@ -10,34 +10,34 @@ set(sources_linux
 
 basic_math_operations.c
 
-    linux/strlen_asm.asm
-    linux/remove_leading_zeroes.asm
+linux/strlen_asm.asm
+linux/remove_leading_zeroes.asm
 
-    linux/add_whole.asm
-    linux/add_whole_same_length.asm
-    cross-platform/add.c
+linux/add_whole.asm
+linux/add_whole_same_length.asm
+cross-platform/add.c
 
-    linux/subtract_whole.asm
-    linux/subtract_whole_same_length.asm
-    cross-platform/subtractp.c
-    cross-platform/subtract.c
+linux/subtract_whole.asm
+linux/subtract_whole_same_length.asm
+cross-platform/subtractp.c
+cross-platform/subtract.c
 
-    linux/_multiply_whole.asm
-    cross-platform/multiplyp.c
-    cross-platform/multiply.c
+linux/_multiply_whole.asm
+cross-platform/multiplyp.c
+cross-platform/multiply.c
 
-    linux/divide_whole_with_remainder.asm
-    cross-platform/divide_whole_with_remainder.c
-    cross-platform/divide_whole.c
-    cross-platform/dividep.c
-    cross-platform/divide.c
+linux/divide_whole_with_remainder.asm
+cross-platform/divide_whole_with_remainder.c
+cross-platform/divide_whole.c
+cross-platform/dividep.c
+cross-platform/divide.c
 
-    linux/asmalloc.asm
-    linux/multiply_whole.asm
-    cross-platform/addp.c
-    remove_zeroes.c
+linux/asmalloc.asm
+linux/multiply_whole.asm
+cross-platform/addp.c
+remove_zeroes.c
 
-    cross-platform/increment_whole.c
+cross-platform/increment_whole.c
 )
 add_library(basic_math_operations STATIC ${sources_linux})
 add_library(basic_math_operations_so SHARED ${sources_linux})
