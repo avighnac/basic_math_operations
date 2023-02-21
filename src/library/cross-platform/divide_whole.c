@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
 extern char *_divide_whole_with_remainder(const char *numerator,
                                           const char *denominator,
                                           char *quotient, size_t bufferSize,
@@ -8,6 +9,11 @@ extern char *_divide_whole_with_remainder(const char *numerator,
 
 void divide_whole(const char *numerator, const char *denominator,
                   char *quotient, size_t accuracy) {
+=======
+void divide_whole(const char *numerator, const char *denominator,
+                  char *quotient, size_t accuracy) {
+  extern size_t strlen(const char *str);
+>>>>>>> two/main
 
   size_t numerator_length = strlen(numerator);
   size_t denominator_length = strlen(denominator);

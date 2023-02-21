@@ -2,6 +2,10 @@
 
 void remove_zeroes(char *number) {
   char *firstPointer = number;
+<<<<<<< HEAD
+=======
+  extern size_t strlen(const char *);
+>>>>>>> two/main
   unsigned char negative = number[0] == '-';
   if (negative) {
     number++; // we restore this later
