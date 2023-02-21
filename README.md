@@ -1,5 +1,5 @@
 # basic_math_operations
-A biginteger library for both Windows and Linux written in assembly and C.
+A biginteger library for both Windows and Linux written in Assembly and C that can be used in C++, C, and Python.
 
 Have you ever wanted to add, subtract, or multiply huge numbers but your calculator or favourite programming language only gives you an approximation?
 
@@ -7,6 +7,19 @@ For example, let's say you wanted to, for some reason, multiply `387261987198787
 
 Here's how simple it becomes with basic_math_operations.
 
+## Python
+```
+import basic_math_operations as bmo
+
+a = '387261987198787123479468764398'
+b = '1897346897629873468761342'
+
+res = bmo.multiply(a, b)
+
+print(res)
+```
+
+## C
 ```c
 #include "basic_math_operations.h"
 #include <stdio.h>
@@ -30,8 +43,22 @@ And that too with blazing fast speeds! Most of the heavy-lifting of these algori
 
 Downloading and using this library is as simple as including the header file (`basic_math_operations.h` or `basic_math_operations.hpp`), and linking the `libbasic_math_operations.a` file using `-L. -lbasic_math_operations`.
 
+# Installation
+Note: This section only applies to Python.
+To install the module `basic_math_operations`, clone the repository, and build the library with CMake. Next, run the `setup.py` file. Here are all the commands you will need to run (for Windows, just don't sudo the last command).
+
+```shell
+cmake -S src -B build
+cd build
+make
+cd ../src/python-module
+sudo python3 setup.py install
+```
+
+And you're done! Now you'll be able to import the library into your Python programs using this line: `import basic_math_operations`.
+
 # Compilation
-Here's a full example of compiling a program made with `basic_math_operations`.
+Here's a full example of compiling a program made using `basic_math_operations`.
 # C
 main.c:
 ```c
