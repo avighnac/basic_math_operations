@@ -136,6 +136,12 @@ public:
 
     return n < *this;
   }
+  bool operator==(BMONum n) {
+    return number == n.number;
+  }
+  bool operator>=(BMONum n) {
+    return *this > n || *this == n;
+  }
 
   friend std::ostream &operator<<(std::ostream &os, const BMONum &n) {
     os << n.number;
