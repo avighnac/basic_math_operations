@@ -1,4 +1,4 @@
-extern strlen
+extern strlen_asm
 
 section .text
 global add_whole
@@ -18,15 +18,15 @@ add_whole:
 
   push   rbx              ; The only callee-saved register to preserve.
   push   rdi              ; Preserving rdi since it's gonna have to be overwritten.
-  call   strlen
-  mov    ebx, eax         ; ebx = strlen(a)
-  mov    rdi, rsi         ; To prepare another call to strlen.
-  call   strlen           ; eax = strlen(b)
+  call   strlen_asm wrt ..plt
+  mov    ebx, eax         ; ebx = strlen_asm(a)
+  mov    rdi, rsi         ; To prepare another call to strlen_asm.
+  call   strlen_asm wrt ..plt ; eax = strlen_asm(b)
   pop    rdi              ; Restoring rdi.
   cmp    ebx, eax
   jae    .no_swap
   xchg   rdi, rsi         ; Make rdi refer to the longer input.
-  xchg   ebx, eax         ; Make ebx refer to the longer strlen().
+  xchg   ebx, eax         ; Make ebx refer to the longer strlen_asm().
 .no_swap:
   mov    ecx, eax         ; ecx now has the length of the shorter string.
   lea    r8, [rdi+rbx]    ; r8 points at the terminating zero of the longer input.

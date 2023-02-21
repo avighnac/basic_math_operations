@@ -1,6 +1,6 @@
 extern  add_whole
 extern  asmalloc
-extern  strlen
+extern  strlen_asm
 
 ; This header file still has bugs, for example 3.14^3.14 in arithmetica does not 
 ; produce the correct result because of addp.asm.
@@ -45,11 +45,11 @@ addp:
   ; Store the lengths of a (rdi) and b (rsi)
   ; in [rbp-8] and [rbp-16] respectively.
   ; Also, store sum+1 in r14
-  call  strlen
+  call  strlen_asm
   mov   [rbp-8], rax
   lea   r14, [rax+1]
   mov   rdi, r13
-  call  strlen
+  call  strlen_asm
   add   r14, rax
   mov   [rbp-16], rax
 
@@ -228,7 +228,7 @@ addp:
   ; since it's never used again (in its
   ; old context) ahead this point.
   mov   rax, r15
-  call  strlen
+  call  strlen_asm
   mov   r8, rax
 
   xor   ebx, ebx ; i = 0

@@ -1,4 +1,4 @@
-extern strlen
+extern strlen_asm
 
 section .text
 global subtract_whole_same_length
@@ -7,7 +7,7 @@ subtract_whole_same_length:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
   ;   - char *res -> rdx, will contain a - b
-  ; strlen(a) has to be equal to strlen(b)
+  ; strlen_asm(a) has to be equal to strlen_asm(b)
 
   ; Registers used:
   ;   - rax
@@ -17,7 +17,7 @@ subtract_whole_same_length:
   ;   - r10
   ;   - r11
 
-  call   strlen
+  call   strlen_asm wrt ..plt
   xor    cl, cl
   lea    r8, [rax - 1]
 .loop_1:
@@ -59,7 +59,7 @@ subtract_whole_same_length:
   push   rdi
   push   rcx
   mov    rdi, rdx
-  call   strlen
+  call   strlen_asm wrt ..plt
   pop    rcx
   pop    rdi
   test   cl, cl
@@ -88,4 +88,4 @@ subtract_whole_same_length:
   test   r9, r9
   jg     .loop_3
   mov    byte [rdx], 2DH
-.ret: ret
+.ret:    ret
