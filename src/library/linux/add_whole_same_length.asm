@@ -1,4 +1,4 @@
-extern strlen
+extern strlen_asm
 
 section .text
 global add_whole_same_length
@@ -18,7 +18,7 @@ add_whole_same_length:
   ;   - r12
 
   push   r12
-  call   strlen
+  call   strlen_asm wrt ..plt
   lea    rcx, [rax - 1]
   xor    r11d, r11d
   xor    r10b, r10b

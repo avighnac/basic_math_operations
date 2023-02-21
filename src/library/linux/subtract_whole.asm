@@ -1,4 +1,4 @@
-extern strlen
+extern strlen_asm
 
 section .text
 global subtract_whole
@@ -20,11 +20,11 @@ subtract_whole:
 
   push   rbx
   push   r12
-  call   strlen
+  call   strlen_asm wrt ..plt
   mov    r10, rax
   push   rdi
   mov    rdi, rsi
-  call   strlen
+  call   strlen_asm wrt ..plt
   mov    r8, rax
   pop    rdi
   mov    rax, r10
@@ -83,7 +83,7 @@ subtract_whole:
   push   rdi
   push   rcx
   mov    rdi, rdx
-  call   strlen
+  call   strlen_asm wrt ..plt
   pop    rcx
   pop    rdi
   test   cl, cl
