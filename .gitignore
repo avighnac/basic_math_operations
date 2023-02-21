@@ -2,3 +2,4 @@ build/
 *.out
 *.exe
 .vscode/
+src/python-module/build/
