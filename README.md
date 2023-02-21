@@ -8,7 +8,7 @@ For example, let's say you wanted to, for some reason, multiply `387261987198787
 Here's how simple it becomes with basic_math_operations.
 
 ## Python
-```
+```py
 import basic_math_operations as bmo
 
 a = '387261987198787123479468764398'
