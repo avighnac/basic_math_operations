@@ -1,5 +1,5 @@
 extern add_whole
-extern strlen
+extern strlen_asm
 
 section .text
 global _multiply_whole
@@ -7,7 +7,7 @@ _multiply_whole:
   ; Input:
   ;   - char *a    -> rdi
   ;   - char *b    -> rsi
-  ;   - char *res  -> rdx  (allocate strlen(a) + strlen(b) + 1 (for null terminator) bytes)
+  ;   - char *res  -> rdx  (allocate strlen_asm(a) + strlen_asm(b) + 1 (for null terminator) bytes)
   ;   - char *buf1 -> rcx  (temporary buffer for program to use)
   ;   - char *buf2 -> r8   (both buf1 and buf2 have the same length as res)
 
@@ -28,22 +28,22 @@ _multiply_whole:
   push   r14
   push   r15
   mov    r9, rdi               ; Move char* a to r9.
-  mov    r10, rcx              ; Save rcx since strlen() doesn't preserve it.
-  call   strlen                ; rax = strlen(a)
+  mov    r10, rcx              ; Save rcx since strlen_asm() doesn't preserve it.
+  call   strlen_asm wrt ..plt      ; rax = strlen_asm(a)
   mov    rbx, rax              ; Save rax in order to prevent it from being overwritten.
-  mov    rdi, rsi              ; strlen's first argument is now b.
-  call   strlen                ; Call strlen with b.
+  mov    rdi, rsi              ; strlen_asm's first argument is now b.
+  call   strlen_asm wrt ..plt      ; Call strlen_asm with b.
   dec    rax
-  xchg   rax, rbx              ; rbx = strlen(b) - 1
+  xchg   rax, rbx              ; rbx = strlen_asm(b) - 1
   mov    rdi, r9               ; Restore rdi.
   mov    rcx, r10              ; Restore rcx.
   xor    r10d, r10d            ; r10b is the carry.
   mov    byte [rdx], '0'       ; Set the default value of the result string to '0'.
   xor    r14d, r14d            ; The number of leading zeroes to add.
 .loop_1:
-  lea    r13, [rax+1]          ; r13 = strlen(a) + 1
-  add    rcx, rax              ; rcx = &a[strlen(a)]
-  mov    r9, rax               ; r9 = strlen(a)
+  lea    r13, [rax+1]          ; r13 = strlen_asm(a) + 1
+  add    rcx, rax              ; rcx = &a[strlen_asm(a)]
+  mov    r9, rax               ; r9 = strlen_asm(a)
   mov    r15d, 10              ; The number we're dividing by.
   push   rax                   ; Save rax since we use it for mul and div later.
 .loop_2:
@@ -87,13 +87,13 @@ _multiply_whole:
   mov    rsi, rcx              ; param2 = rcx (char *buf1)
   mov    rdx, r8               ; param3 = r8 (char *buf2)
   mov    r15, r8               ; Saving the r8 register.
-  call   add_whole             ; buf2 = add_whole(res, buf1) (this doesn't actually return anything)
+  call   add_whole wrt ..plt   ; buf2 = add_whole(res, buf1) (this doesn't actually return anything)
   mov    r8, r15               ; Restoring the r8 register.
   pop    rdx
   pop    rsi
   xor    r11d, r11d
   mov    rdi, r8
-  call   strlen                ; r9 = strlen(buf2) (length of the addition result)
+  call   strlen_asm wrt ..plt                ; r9 = strlen_asm(buf2) (length of the addition result)
   mov    r9, rax
   pop    rdi
   pop    rcx
@@ -118,7 +118,7 @@ _multiply_whole:
   test   r15, r15
   jg     .loop_1
   mov    rdi, rdx
-  call   strlen
+  call   strlen_asm wrt ..plt
   mov    byte [rdx+rax], 0
   pop    r15
   pop    r14

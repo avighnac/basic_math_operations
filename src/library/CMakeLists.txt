@@ -6,12 +6,11 @@ enable_language(ASM_NASM)
 enable_language(C)
 
 if (UNIX)
-add_library(
-    basic_math_operations
+set(sources_linux
 
-    basic_math_operations.c
+basic_math_operations.c
 
-    linux/strlen.asm
+    linux/strlen_asm.asm
     linux/remove_leading_zeroes.asm
 
     linux/add_whole.asm
@@ -40,6 +39,9 @@ add_library(
 
     cross-platform/increment_whole.c
 )
+add_library(basic_math_operations STATIC ${sources_linux})
+add_library(basic_math_operations_so SHARED ${sources_linux})
+set_target_properties(basic_math_operations_so PROPERTIES OUTPUT_NAME basic_math_operations)
 endif (UNIX)
 
 if (WIN32)

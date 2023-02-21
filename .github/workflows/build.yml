@@ -1,4 +1,4 @@
-name: "Make libbasic_math_operations.a"
+name: "Make libbasic_math_operations."
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   make-linux:
-    name: Make libbasic_math_operations-linux.a
+    name: Make libbasic_math_operations for Linux.
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -33,11 +33,16 @@ jobs:
     - run: |
         cmake --no-warn-unused-cli -DENABLE_TESTS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
         cmake --build build --config Release --target all -j 10 --
-        mv build/src/library/libbasic_math_operations.a build/src/library/libbasic_math_operations-linux.a
+        mkdir linux-build
+        mv build/src/library/libbasic_math_operations.a linux-build/libbasic_math_operations-linux.a
+        mv build/src/library/libbasic_math_operations.so linux-build/libbasic_math_operations-linux.so
+        cp src/library/basic_math_operations.h linux-build/basic_math_operations.h
+        cp src/library/basic_math_operations.hpp linux-build/basic_math_operations.hpp
+        zip -r libbasic_math_operations-linux.zip linux-build
     - uses: actions/upload-artifact@v3
       with:
         name: linux-build
-        path: build/src/library/libbasic_math_operations-linux.a
+        path: libbasic_math_operations-linux.zip
 
   make-windows:
     name: Make libbasic_math_operations-windows.a
@@ -109,9 +114,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/linux-build/libbasic_math_operations-linux.a
-          asset_name: libbasic_math_operations-linux.a
-          asset_content_type: application/octet-stream
+          asset_path: dist/artifacts/linux-build/libbasic_math_operations-linux.zip
+          asset_name: libbasic_math_operations-linux.zip
+          asset_content_type: application/zip
       - name: Upload asset for Windows.
         uses: actions/upload-release-asset@v1
         env:
