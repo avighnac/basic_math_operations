@@ -38,11 +38,12 @@ jobs:
         mv build/src/library/libbasic_math_operations.so linux-build/libbasic_math_operations.so
         cp src/library/basic_math_operations.h linux-build/basic_math_operations.h
         cp src/library/basic_math_operations.hpp linux-build/basic_math_operations.hpp
-        zip -r libbasic_math_operations-linux.zip linux-build
+        cd linux-build
+        zip -r libbasic_math_operations-linux.zip ./
     - uses: actions/upload-artifact@v3
       with:
         name: linux-build
-        path: libbasic_math_operations-linux.zip
+        path: linux-build/libbasic_math_operations-linux.zip
 
   make-windows:
     name: Make libbasic_math_operations-windows.a
