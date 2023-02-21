@@ -54,11 +54,11 @@ add_library(
     windows/remove_leading_zeroes.asm
 
     windows/add_whole.asm
-    linux/add_whole_same_length.asm
+    windows/add_whole_same_length.asm
     cross-platform/add.c
 
     windows/subtract_whole.asm
-    linux/subtract_whole_same_length.asm
+    windows/subtract_whole_same_length.asm
     cross-platform/subtractp.c
     cross-platform/subtract.c
 
