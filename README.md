@@ -51,7 +51,7 @@ To install the module `basic_math_operations`, clone the repository, and build t
 cmake -S . -B build
 cd build
 make
-cd ../src/python-module
+cd ../
 sudo python3 setup.py install
 ```
 
