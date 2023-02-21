@@ -48,7 +48,7 @@ Note: This section only applies to Python.
 To install the module `basic_math_operations`, clone the repository, and build the library with CMake. Next, run the `setup.py` file. Here are all the commands you will need to run (for Windows, just don't sudo the last command).
 
 ```shell
-cmake -S src -B build
+cmake -S . -B build
 cd build
 make
 cd ../src/python-module
