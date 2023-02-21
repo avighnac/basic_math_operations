@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 build/
 *.out
 *.exe
@@ -8,10 +7,3 @@ src/python-module/dist/
 src/python-module/*.egg-info/
 *.egg-info/
 wheels.sh
-=======
-build/
-*.out
-*.exe
-.vscode/
-src/python-module/build/
->>>>>>> two/main
