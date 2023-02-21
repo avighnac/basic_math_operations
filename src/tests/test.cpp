@@ -500,7 +500,7 @@ int main() {
   if (!failed_tests) {
     std::cout << color("All tests for ", "Green")
               << color("add_whole.asm", "Red") << color(" passed in ", "Green")
-              << time << color("\u00b5s!\n", "Magenta");
+              << time << color(" \u00b5s!\n", "Magenta");
   }
 
   std::cout << "\n";
@@ -556,7 +556,7 @@ int main() {
     std::cout << color("All tests for ", "Green")
               << color("subtract_whole.asm", "Red")
               << color(" passed in ", "Green") << time
-              << color("\u00b5s!\n", "Magenta");
+              << color(" \u00b5s!\n", "Magenta");
   }
 
   std::cout << "\n";
@@ -612,7 +612,7 @@ int main() {
     std::cout << color("All tests for ", "Green")
               << color("multiply_whole.asm", "Red")
               << color(" passed in ", "Green") << time
-              << color("\u00b5s!\n", "Magenta");
+              << color(" \u00b5s!\n", "Magenta");
   }
 
   std::cout << "\n";
@@ -676,6 +676,6 @@ int main() {
     std::cout << color("All tests for ", "Green")
               << color("divide_whole_with_remainder.asm", "Red")
               << color(" passed in ", "Green") << time
-              << color("\u00b5s!\n", "Magenta");
+              << color(" \u00b5s!\n", "Magenta");
   }
 }
