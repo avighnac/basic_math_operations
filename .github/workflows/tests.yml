@@ -1,0 +1,70 @@
+name: "Test basic_math_operations."
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '18 13 * * 6'
+
+jobs:
+  test-linux:
+    name: Make test.cpp for linux.
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        git submodule update --init --recursive
+        cmake --no-warn-unused-cli -DENABLE_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
+        cmake --build build --config Release --target all -j 10 --
+        chmod +x build/src/tests/tests
+        ./build/src/tests/tests
+
+  test-windows:
+    name: Make test.cpp for windows.
+    runs-on: windows-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        git submodule update --init --recursive
+        cmake --no-warn-unused-cli -DENABLE_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -S . -B build -G "MinGW Makefiles"
+        cmake --build build --config Release --target all -j 10 --
+        cd "build/src/tests"
+        ./tests.exe
