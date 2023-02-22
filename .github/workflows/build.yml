@@ -275,7 +275,10 @@ jobs:
           rm -rf dist/artifacts
           echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Run Twine
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} dist/*
+          twine upload --verbose dist/*
           
           
