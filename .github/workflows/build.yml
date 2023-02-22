@@ -184,8 +184,8 @@ jobs:
           asset_content_type: application/octet-stream
       - name: Get Linux and Windows wheel name
         run: |
-          LINUX_WHEEL = $(ls linux-whl/*.whl)
-          WIN_WHEEL = $(ls windows-whl/*.whl)
+          LINUX_WHEEL = $(ls dist/artifacts/linux-whl/*.whl)
+          WIN_WHEEL = $(ls dist/artifacts/windows-whl/*.whl)
       - name: Upload wheel for Linux.
         uses: actions/upload-release-asset@v1
         env:
