@@ -43,6 +43,8 @@ setup(
     setup_requires=['wheel'],
     include_package_data=True,
     packages=['src/python-module'],
+    package_data={
+        'src/python-module': ['src/python-module/libbasic_math_operations.a', 'src/python-module/version.txt']},
     data_files=[
         ('src/python-module', ['src/python-module/libbasic_math_operations.a', 'src/python-module/version.txt'])],
 )

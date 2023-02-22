@@ -284,10 +284,9 @@ jobs:
           sudo apt-get install rename -y
           python -m pip install twine
           python setup.py sdist --formats=gztar
-          rm -rf dist/artifacts/windows-build dist/artifacts/linux-build
-          mv dist/artifacts/windows-whl/* dist/
-          mv dist/artifacts/linux-whl/* dist/
-          rm -rf dist/artifacts
+          mkdir -p build/dist/ && mv dist/artifacts build/dist
+          mv build/dist/artifacts/windows-whl/* dist/
+          mv build/dist/artifacts/linux-whl/* dist/
           echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Run Twine
         env:
