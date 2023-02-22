@@ -115,7 +115,6 @@ jobs:
           path: dist/artifacts
       - name: Move version info
         run: |
-          del "version.txt" /f /q 2>nul
           move dist/artifacts/version-info/version.txt version.txt
       - name: Set up Python
         uses: actions/setup-python@v3
