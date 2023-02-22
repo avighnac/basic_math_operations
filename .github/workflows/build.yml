@@ -79,11 +79,67 @@ jobs:
       with:
         name: windows-build
         path: build/src/library/libbasic_math_operations-windows.a
-
+  make-wheel-windows:
+    needs:
+      - make-windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel 
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: dist/artifacts
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-whl
+          path: dist/libbasic_math_operations-cp38-cp38-win_amd64.whl
+  make-wheel-linux:
+    needs:
+      - make-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel 
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: dist/artifacts
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-whl
+          path: dist/libbasic_math_operations-cp38-cp38-linux_x86_64.whl
+      
   release:
     needs:
       - make-linux
       - make-windows
+      - make-wheel-windows
+      - make-wheel-linux
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -127,3 +183,22 @@ jobs:
           asset_path: dist/artifacts/windows-build/libbasic_math_operations-windows.a
           asset_name: libbasic_math_operations-windows.a
           asset_content_type: application/octet-stream
+      - name: Upload wheel for Linux.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/linux-whl/libbasic_math_operations-cp38-cp38-linux_x86_64.whl
+          asset_name: libbasic_math_operations-cp38-cp38-linux_x86_64.whl
+          asset_content_type: application/octet-stream
+      - name: Upload wheel for Windows.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/windows-whl/libbasic_math_operations-cp38-cp38-win_amd64.whl
+          asset_name: libbasic_math_operations-cp38-cp38-win_amd64.whl
+          asset_content_type: application/octet-stream
+  
