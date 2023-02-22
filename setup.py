@@ -47,10 +47,12 @@ basic_math_operations_module = Extension(
     extra_objects=[library_path]
 )
 
+with open('version.txt', 'r') as f:
+    version = f.read()
 
 setup(
     name="basic_math_operations",
-    version="1.0.0",
+    version=version,
     description="Biginteger library written in assembly and C.",
     author="avighnac",
     author_email="avighnakc@gmail.com",
