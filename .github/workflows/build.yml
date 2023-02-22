@@ -127,7 +127,7 @@ jobs:
           python setup.py bdist_wheel
           pip3 install auditwheel
           auditwheel repair dist/*.whl --plat manylinux2014_x86_64
-          rm *linux_x86_64.whl
+          rm dist/*linux_x86_64.whl
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
