@@ -55,5 +55,7 @@ setup(
     author="avighnac",
     author_email="avighnakc@gmail.com",
     ext_modules=[basic_math_operations_module],
-    setup_requires=['wheel']
+    setup_requires=['wheel'],
+    include_package_data = True,
+    packages = ['src/python-module'],
 )
