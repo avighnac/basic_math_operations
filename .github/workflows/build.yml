@@ -7,6 +7,26 @@ on:
     - cron: '18 13 * * 6'
 
 jobs:
+  determine_version:
+    name: Determine the major.minor.patch version.
+    runs-on: ubuntu-latest
+    permissions:
+        actions: write
+        contents: write
+        security-events: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Git Version
+      id: version
+      uses: codacy/git-version@2.7.1
+    - name: Use the version
+      run: |
+        echo ${{ steps.version.outputs.version }} > version.txt
+        echo ${{ steps.version.outputs.version }}
+
   make-linux:
     name: Make libbasic_math_operations for Linux.
     runs-on: ubuntu-latest
@@ -236,8 +256,6 @@ jobs:
           mv dist/artifacts/linux-whl/* dist/
           rm -rf dist/artifacts
           echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "version=$(cat version.txt)" >> $GITHUB_ENV
-          rename 's/${{ env.version }}/${{ env.hash }}/' dist/*
       - name: Run Twine
         run: |
           twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} dist/*
