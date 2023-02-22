@@ -62,10 +62,14 @@ with open('version.txt' if os.path.exists('version.txt') else 'src/python-module
     version = f.read()
     version.replace('\n', '')
 
-with zipfile.ZipFile('dist/artifacts/linux-build/libbasic_math_operations-linux.zip', 'r') as zfile:
-    zfile.extract('libbasic_math_operations.a')
-shutil.copy("libbasic_math_operations.a",
-            "src/python-module/libbasic_math_operations.a")
+if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zip')):
+    with zipfile.ZipFile('dist/artifacts/linux-build/libbasic_math_operations-linux.zip', 'r') as zfile:
+        zfile.extract('libbasic_math_operations.a')
+    shutil.copy("libbasic_math_operations.a",
+                "src/python-module/libbasic_math_operations.a")
+if (os.path.exists('dist/artifacts/version-info/version.txt')):
+    shutil.copy("dist/artifacts/version-info/version.txt",
+                "src/python-module/version.txt")
 
 
 setup(
@@ -79,7 +83,8 @@ setup(
     include_package_data=True,
     packages=['src/python-module'],
     data_files=[
-        ('src/python-module', ['src/python-module/libbasic_math_operations.a'])],
+        ('src/python-module', ['src/python-module/libbasic_math_operations.a', 'src/python-module/version.txt'])],
 )
 
 os.remove('src/python-module/libbasic_math_operations.a')
+os.remove('src/python-module/version.txt')
