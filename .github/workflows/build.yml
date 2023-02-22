@@ -25,6 +25,8 @@ jobs:
     - name: Use the version
       run: |
         echo ${{ steps.version.outputs.version }} > version.txt
+        g++ src/python-module/fix-version.cpp -O3
+        ./a.out version.txt
         echo ${{ steps.version.outputs.version }}
     - uses: actions/upload-artifact@v3
       with:
@@ -150,6 +152,8 @@ jobs:
       - name: Use the version
         run: |
           echo ${{ steps.version.outputs.version }} > version.txt
+          g++ src/python-module/fix-version.cpp -O3
+          ./a.out version.txt
           echo ${{ steps.version.outputs.version }}
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -273,6 +277,8 @@ jobs:
       - name: Use the version
         run: |
           echo ${{ steps.version.outputs.version }} > version.txt
+          g++ src/python-module/fix-version.cpp -O3
+          ./a.out version.txt
           echo ${{ steps.version.outputs.version }}
       - name: Install Twine and create SDIST
         run: |
