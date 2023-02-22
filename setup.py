@@ -7,6 +7,7 @@ from zipfile import ZipFile
 
     
 module_name = 'basic_math_operations'
+version = '1.0.0'
 
 library_path = glob.glob("**/*.a", recursive=True)
 def check_for_zip():
