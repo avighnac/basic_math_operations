@@ -89,7 +89,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.8'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -105,7 +105,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-whl
-          path: dist/*.whl
+          path: dist/libbasic_math_operations-cp38-cp38-win_amd64.whl
   make-wheel-linux:
     needs:
       - make-linux
@@ -116,7 +116,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.8'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -132,7 +132,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-whl
-          path: dist/*.whl
+          path: dist/libbasic_math_operations-cp38-cp38-linux_x86_64.whl
       
   release:
     needs:
@@ -189,7 +189,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/linux-whl/*.whl
+          asset_path: dist/artifacts/linux-whl/libbasic_math_operations-cp38-cp38-linux_x86_64.whl
           asset_name: libbasic_math_operations-cp38-cp38-linux_x86_64.whl
           asset_content_type: application/octet-stream
       - name: Upload wheel for Windows.
@@ -198,7 +198,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/windows-whl/*.whl
+          asset_path: dist/artifacts/windows-whl/libbasic_math_operations-cp38-cp38-win_amd64.whl
           asset_name: libbasic_math_operations-cp38-cp38-win_amd64.whl
           asset_content_type: application/octet-stream
   
