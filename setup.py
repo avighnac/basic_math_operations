@@ -58,7 +58,7 @@ basic_math_operations_module = Extension(
     extra_objects=[library_path]
 )
 
-with open('version.txt', 'r') as f:
+with open('version.txt' if os.path.exists('version.txt') else 'src/python-module/version.txt', 'r') as f:
     version = f.read()
     version.replace('\n', '')
 
