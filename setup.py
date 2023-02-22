@@ -18,7 +18,7 @@ def check_for_zip():
     zipFile = ZipFile(zip_path[0])
     try:
         zipFile.extract("libbasic_math_operations.a")
-    except:
+    except Exception:
         print("\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
         sys.exit(1)
     library_path = "libbasic_math_operations.a"
