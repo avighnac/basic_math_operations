@@ -2,6 +2,7 @@ import setuptools
 import os
 from distutils.core import Extension, setup
 import glob
+import shutil
 import sys
 from zipfile import ZipFile
 
@@ -60,6 +61,14 @@ with open('version.txt', 'r') as f:
     version = f.read()
     version.replace('\n', '')
 
+if os.name != 'nt':
+    shutil.copy("build/src/library/libbasic_math_operations.a",
+                "src/python-module/libbasic_math_operations.a")
+else:
+    shutil.copy("build/src/library/libbasic_math_operations.lib",
+                "src/python-module/libbasic_math_operations.lib")
+
+
 setup(
     name="basic_math_operations",
     version=version,
@@ -70,4 +79,8 @@ setup(
     setup_requires=['wheel'],
     include_package_data=True,
     packages=['src/python-module'],
+    data_files=[
+        ('src/python-module', ['src/python-module/libbasic_math_operations.a'])],
 )
+
+os.remove('src/python-module/libbasic_math_operations.a')
