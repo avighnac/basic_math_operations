@@ -233,6 +233,6 @@ jobs:
           rm -rf dist/artifacts
       - name: Run Twine
         run: |
-          twine upload -u ${{ secrets.pypi_username }} -p ${{ secrets.pypi_password }}
+          twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
           
           
