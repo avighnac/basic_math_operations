@@ -11,12 +11,12 @@ from zipfile import ZipFile
 module_name = 'basic_math_operations'
 version = '1.0.0'
 
-if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zip')):
+if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zip') and os.name != 'nt'):
     with zipfile.ZipFile('dist/artifacts/linux-build/libbasic_math_operations-linux.zip', 'r') as zfile:
         zfile.extract('libbasic_math_operations.a')
     shutil.copy("libbasic_math_operations.a",
                 "src/python-module/libbasic_math_operations.a")
-elif (os.path.exists('dist/artifacts/windows-build/libbasic_math_operations-windows.a')):
+if (os.path.exists('dist/artifacts/windows-build/libbasic_math_operations-windows.a') and os.name == 'nt'):
     shutil.copy("dist/artifacts/windows-build/libbasic_math_operations-windows.a",
                 "src/python-module/libbasic_math_operations.a")
 if (os.path.exists('dist/artifacts/version-info/version.txt')):
