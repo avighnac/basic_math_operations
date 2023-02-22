@@ -184,8 +184,11 @@ jobs:
           asset_content_type: application/octet-stream
       - name: Get Linux and Windows wheel name
         run: |
-          echo "LINUX_WHEEL=$(ls dist/artifacts/linux-whl/*.whl)" >> $GITHUB_ENV
-          echo "WIN_WHEEL=$(ls dist/artifacts/windows-whl/*.whl)" >> $GITHUB_ENV
+          cd dist/artifacts/linux-whl/
+          echo "LINUX_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../windows-whl/
+          echo "WIN_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../..
       - name: Upload wheel for Linux.
         uses: actions/upload-release-asset@v1
         env:
