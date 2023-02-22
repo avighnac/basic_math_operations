@@ -26,6 +26,10 @@ jobs:
       run: |
         echo ${{ steps.version.outputs.version }} > version.txt
         echo ${{ steps.version.outputs.version }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: version-info
+        path: version.txt
 
   make-linux:
     name: Make libbasic_math_operations for Linux.
@@ -103,15 +107,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
         with:
-          fetch-depth: 0
-      - name: Git Version
-        id: version
-        uses: codacy/git-version@2.7.1
-      - name: Use the version
-        run: |
-          echo ${{ steps.version.outputs.version }} > version.txt
-          echo ${{ steps.version.outputs.version }}
+          path: dist/artifacts
+      - name: Move version info
+        run:
+          move dist/artifacts/version-info/version.txt version.txt
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
