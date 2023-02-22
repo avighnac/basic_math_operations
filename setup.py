@@ -1,3 +1,4 @@
+import zipfile
 import setuptools
 import os
 from distutils.core import Extension, setup
@@ -61,12 +62,10 @@ with open('version.txt', 'r') as f:
     version = f.read()
     version.replace('\n', '')
 
-if os.name != 'nt':
-    shutil.copy("build/src/library/libbasic_math_operations.a",
-                "src/python-module/libbasic_math_operations.a")
-else:
-    shutil.copy("build/src/library/libbasic_math_operations.lib",
-                "src/python-module/libbasic_math_operations.lib")
+with zipfile.ZipFile('dist/artifacts/linux-build/libbasic_math_operations-linux.zip', 'r') as zfile:
+    zfile.extract('libbasic_math_operations.a')
+shutil.copy("libbasic_math_operations.a",
+            "src/python-module/libbasic_math_operations.a")
 
 
 setup(
