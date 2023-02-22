@@ -228,6 +228,7 @@ jobs:
           python-version: '3.8.x'
       - name: Install Twine and create SDIST
         run: |
+          sudo apt-get install rename -y
           python -m pip install twine
           python setup.py sdist --formats=gztar
           rm -rf dist/artifacts/windows-build dist/artifacts/linux-build
