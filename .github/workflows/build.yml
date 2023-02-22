@@ -2,7 +2,7 @@ name: "Make libbasic_math_operations."
 
 on:
   push:
-    branches: [ main, patch-3 ]
+    branches: [ main, 14-automatic-pip-installs-do-not-work ]
   schedule:
     - cron: '18 13 * * 6'
 
