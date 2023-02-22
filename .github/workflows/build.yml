@@ -112,7 +112,7 @@ jobs:
         with:
           path: dist/artifacts
       - name: Move version info
-        run:
+        run: |
           del version.txt
           move dist/artifacts/version-info/version.txt version.txt
       - name: Set up Python
