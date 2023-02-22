@@ -2,13 +2,35 @@ name: "Make libbasic_math_operations."
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main, patch-3 ]
   schedule:
     - cron: '18 13 * * 6'
 
 jobs:
+  determine_version:
+    name: Determine the major.minor.patch version.
+    runs-on: ubuntu-latest
+    permissions:
+        actions: write
+        contents: write
+        security-events: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Git Version
+      id: version
+      uses: codacy/git-version@2.7.1
+    - name: Use the version
+      run: |
+        echo ${{ steps.version.outputs.version }} > version.txt
+        echo ${{ steps.version.outputs.version }}
+    - uses: actions/upload-artifact@v3
+      with:
+        name: version-info
+        path: version.txt
+
   make-linux:
     name: Make libbasic_math_operations for Linux.
     runs-on: ubuntu-latest
@@ -85,10 +107,18 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: dist/artifacts
+      - name: Move version info
+        run: |
+          del version.txt
+          move dist/artifacts/version-info/version.txt version.txt
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8'
+          python-version: '3.8.x'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -112,10 +142,19 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }} > version.txt
+          echo ${{ steps.version.outputs.version }}
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8'
+          python-version: '3.8.x'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -127,11 +166,14 @@ jobs:
       - name: Build wheel
         run: |
           python setup.py bdist_wheel
+          pip3 install auditwheel
+          auditwheel repair dist/*.whl --plat manylinux2014_x86_64
+          rm dist/*linux_x86_64.whl
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: linux-whl
-          path: dist/*.whl
+          path: wheelhouse/*.whl
       
   release:
     needs:
@@ -182,13 +224,21 @@ jobs:
           asset_path: dist/artifacts/windows-build/libbasic_math_operations-windows.a
           asset_name: libbasic_math_operations-windows.a
           asset_content_type: application/octet-stream
+      - name: Get Linux and Windows wheel name
+        run: |
+          cd dist/artifacts/linux-whl/
+          echo "LINUX_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../windows-whl/
+          echo "WIN_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../..
       - name: Upload wheel for Linux.
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/linux-whl/*.whl
+          asset_path: dist/artifacts/linux-whl/${{ env.LINUX_WHEEL }}
+          asset_name: ${{ env.LINUX_WHEEL }}
           asset_content_type: application/octet-stream
       - name: Upload wheel for Windows.
         uses: actions/upload-release-asset@v1
@@ -196,6 +246,49 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/windows-whl/*.whl
+          asset_path: dist/artifacts/windows-whl/${{ env.WIN_WHEEL }}
+          asset_name: ${{ env.WIN_WHEEL }}
           asset_content_type: application/octet-stream
-  
+  pypi-upload:
+    needs:
+      - make-wheel-windows
+      - make-wheel-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: dist/artifacts
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8.x'
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }} > version.txt
+          echo ${{ steps.version.outputs.version }}
+      - name: Install Twine and create SDIST
+        run: |
+          sudo apt-get install rename -y
+          python -m pip install twine
+          python setup.py sdist --formats=gztar
+          rm -rf dist/artifacts/windows-build dist/artifacts/linux-build
+          mv dist/artifacts/windows-whl/* dist/
+          mv dist/artifacts/linux-whl/* dist/
+          rm -rf dist/artifacts
+          echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Run Twine
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          twine upload --verbose dist/*
+          
+          

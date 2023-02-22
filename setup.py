@@ -7,6 +7,7 @@ from zipfile import ZipFile
 
     
 module_name = 'basic_math_operations'
+version = '1.0.0'
 
 library_path = glob.glob("**/*.a", recursive=True)
 def check_for_zip():
@@ -47,13 +48,19 @@ basic_math_operations_module = Extension(
     extra_objects=[library_path]
 )
 
+with open('version.txt', 'r') as f:
+    version = f.read()
+    version.replace('\n', '')
+    version = version.split("-",1)[0]
 
 setup(
     name="basic_math_operations",
-    version="1.0.0",
+    version=version,
     description="Biginteger library written in assembly and C.",
     author="avighnac",
     author_email="avighnakc@gmail.com",
     ext_modules=[basic_math_operations_module],
-    setup_requires=['wheel']
+    setup_requires=['wheel'],
+    include_package_data = True,
+    packages = ['src/python-module'],
 )
