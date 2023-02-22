@@ -72,9 +72,9 @@ int main() {
   char* b = (char *)calloc(1024, 1);
   char* res = (char *)calloc(1100, 1);
   printf("Enter the first number: ");
-  scanf("%s", a);
+  scanf("%1023s", a);
   printf("Enter the second number: ");
-  scanf("%s", b);
+  scanf("%1023s", b);
 
   divide(a, b, res, 40);
 
