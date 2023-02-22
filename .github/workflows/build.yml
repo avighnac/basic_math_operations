@@ -228,6 +228,7 @@ jobs:
           python -m pip install twine
           python setup.py sdist --formats=gztar,zip
           rm -rf dist/artifacts/windows_build dist/artifacts/linux_build
+          ls dist/artifacts/windows_whl
           mv dist/artifacts/windows_whl/* dist/
           mv dist/artifacts/linux_whl/* dist/
           rm -rf dist/artifacts
