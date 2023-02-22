@@ -267,6 +267,13 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: '3.8.x'
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }} > version.txt
+          echo ${{ steps.version.outputs.version }}
       - name: Install Twine and create SDIST
         run: |
           sudo apt-get install rename -y
