@@ -49,6 +49,7 @@ basic_math_operations_module = Extension(
 
 with open('version.txt', 'r') as f:
     version = f.read()
+    version.replace('\n', '')
 
 setup(
     name="basic_math_operations",
