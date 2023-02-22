@@ -5,41 +5,49 @@ import glob
 import sys
 from zipfile import ZipFile
 
-    
+
 module_name = 'basic_math_operations'
 version = '1.0.0'
 
 library_path = glob.glob("**/*.a", recursive=True)
+
+
 def check_for_zip():
     global library_path
-    zip_path = [i for i in glob.glob("**/*.zip", recursive=True) if "basic_math_operations" in i]
+    zip_path = [i for i in glob.glob(
+        "**/*.zip", recursive=True) if "basic_math_operations" in i]
     if not zip_path:
-        print("\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
+        print(
+            "\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
         sys.exit(1)
     zipFile = ZipFile(zip_path[0])
     try:
         zipFile.extract("libbasic_math_operations.a")
     except Exception:
-        print("\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
+        print(
+            "\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
         sys.exit(1)
     library_path = "libbasic_math_operations.a"
+
+
 if os.name == 'nt':
     library_path_win = glob.glob("**/*.lib", recursive=True)
-    library_path = [i for i in library_path if i.endswith(("libbasic_math_operations.a", "libbasic_math_operations-windows.a"))]
+    library_path = [i for i in library_path if i.endswith(
+        ("libbasic_math_operations.a", "libbasic_math_operations-windows.a"))]
     if not library_path_win and not library_path:
-        print("\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
+        print(
+            "\u001b[30mERROR!\u001b[0m You need to compile the library first", file=sys.stderr)
         sys.exit(1)
     library_path = library_path_win[0] if library_path_win else library_path[0]
 elif not library_path:
     check_for_zip()
 else:
-    library_path = [i for i in library_path if i.endswith(("libbasic_math_operations.a", "libbasic_math_operations-linux.a"))]
+    library_path = [i for i in library_path if i.endswith(
+        ("libbasic_math_operations.a", "libbasic_math_operations-linux.a"))]
     if not library_path:
         check_for_zip()
     else:
         library_path = library_path[0]
-        
-    
 
 
 basic_math_operations_module = Extension(
@@ -51,7 +59,6 @@ basic_math_operations_module = Extension(
 with open('version.txt', 'r') as f:
     version = f.read()
     version.replace('\n', '')
-    version = version.split("-",1)[0]
 
 setup(
     name="basic_math_operations",
@@ -61,6 +68,6 @@ setup(
     author_email="avighnakc@gmail.com",
     ext_modules=[basic_math_operations_module],
     setup_requires=['wheel'],
-    include_package_data = True,
-    packages = ['src/python-module'],
+    include_package_data=True,
+    packages=['src/python-module'],
 )
