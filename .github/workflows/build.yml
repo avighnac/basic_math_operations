@@ -132,7 +132,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-whl
-          path: dist/*.whl
+          path: wheelhouse/*.whl
       
   release:
     needs:
