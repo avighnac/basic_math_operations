@@ -241,6 +241,7 @@ int main() {
 
   input.emplace_back("0", "95");
   input.emplace_back("25", "81");
+  input.emplace_back("10", "10");
 
   expected = {"0",
               "0",
@@ -262,7 +263,8 @@ int main() {
               "1298346912346712642136723491227770059222083772680843268608460735"
               "92198471",
               "-95",
-              "-56"};
+              "-56",
+              "0"};
 
   number_of_failed_cases +=
       test_add_mul_sub(subtract_whole, input, expected, functionName, testName);
