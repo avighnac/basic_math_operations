@@ -184,16 +184,16 @@ jobs:
           asset_content_type: application/octet-stream
       - name: Get Linux and Windows wheel name
         run: |
-          LINUX_WHEEL=$(ls dist/artifacts/linux-whl/*.whl)
-          WIN_WHEEL=$(ls dist/artifacts/windows-whl/*.whl)
+          echo "LINUX_WHEEL=$(ls dist/artifacts/linux-whl/*.whl)" >> $GITHUB_ENV
+          echo "WIN_WHEEL=$(ls dist/artifacts/windows-whl/*.whl)" >> $GITHUB_ENV
       - name: Upload wheel for Linux.
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/linux-whl/$LINUX_WHEEL
-          asset_name: $LINUX_WHEEL
+          asset_path: dist/artifacts/linux-whl/${{ env.LINUX_WHEEL }}
+          asset_name: ${{ env.LINUX_WHEEL }}
           asset_content_type: application/octet-stream
       - name: Upload wheel for Windows.
         uses: actions/upload-release-asset@v1
@@ -201,7 +201,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/artifacts/windows-whl/$WIN_WHEEL
-          asset_name: $WIN_WHEEL
+          asset_path: dist/artifacts/windows-whl/${{ env.WIN_WHEEL }}
+          asset_name: ${{ env.WIN_WHEEL }}
           asset_content_type: application/octet-stream
   
