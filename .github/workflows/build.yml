@@ -2,7 +2,7 @@ name: "Make libbasic_math_operations."
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, patch-3 ]
   schedule:
     - cron: '18 13 * * 6'
 
