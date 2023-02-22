@@ -234,6 +234,9 @@ jobs:
           mv dist/artifacts/windows-whl/* dist/
           mv dist/artifacts/linux-whl/* dist/
           rm -rf dist/artifacts
+          echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "version=$(grep "version=" setup.py | sed "s/    version=\"//;s/\",//")" >> $GITHUB_ENV
+          rename 's/${{ env.version }}/${{ env.hash }}/' dist/*
       - name: Run Twine
         run: |
           twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} dist/*
