@@ -16,10 +16,8 @@ if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zi
         zfile.extract('libbasic_math_operations.a')
     shutil.copy("libbasic_math_operations.a",
                 "src/python-module/libbasic_math_operations.a")
-elif (os.path.exists('dist/artifacts/windows-build/libbasic_math_operations-windows.zip')):
-    with zipfile.ZipFile('dist/artifacts/windows-build/libbasic_math_operations-windows.zip', 'r') as zfile:
-        zfile.extract('libbasic_math_operations.a')
-    shutil.copy("libbasic_math_operations.a",
+elif (os.path.exists('dist/artifacts/windows-build/libbasic_math_operations-windows.a')):
+    shutil.copy("dist/artifacts/windows-build/libbasic_math_operations-windows.a",
                 "src/python-module/libbasic_math_operations.a")
 if (os.path.exists('dist/artifacts/version-info/version.txt')):
     shutil.copy("dist/artifacts/version-info/version.txt",
@@ -32,7 +30,7 @@ with open('version.txt' if os.path.exists('version.txt') else 'src/python-module
 basic_math_operations_module = Extension(
     module_name,
     sources=['src/python-module/module.c'],
-    extra_objects=['libbasic_math_operations.a']
+    extra_objects=['src/python-module/libbasic_math_operations.a']
 )
 
 setup(
