@@ -4,11 +4,13 @@ project(basic_math_operations C)
 
 enable_language(ASM_NASM)
 enable_language(C)
+enable_language(CXX)
 
 if (UNIX)
 set(sources_linux
 
 basic_math_operations.c
+basic_math_operations.cpp
 
 linux/strlen_asm.asm
 linux/remove_leading_zeroes.asm
@@ -49,6 +51,7 @@ add_library(
     basic_math_operations
 
     basic_math_operations.c
+    basic_math_operations.cpp
 
     windows/strlen.asm
     windows/remove_leading_zeroes.asm
