@@ -254,6 +254,7 @@ jobs:
   pypi-upload:
     needs:
       - make-wheel-linux
+      - make-wheel-windows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
