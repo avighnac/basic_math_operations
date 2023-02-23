@@ -44,7 +44,7 @@ std::string divide(std::string numerator, std::string denominator,
 std::string mod(std::string numerator, std::string denominator);
 
 // constant that controls division accuracy
-extern size_t DIVISION_ACCURACY;
+inline size_t DIVISION_ACCURACY = 10;
 
 // BMONum
 class BMONum {
