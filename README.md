@@ -45,15 +45,7 @@ Downloading and using this library is as simple as including the header file (`b
 
 # Installation
 Note: This section only applies to Python.
-To install the module `basic_math_operations`, clone the repository, and build the library with CMake. Next, run the `setup.py` file. Here are all the commands you will need to run (for Windows, just don't sudo the last command).
-
-```shell
-cmake -S . -B build
-cd build
-make
-cd ../
-sudo python3 setup.py install
-```
+To install the module `basic_math_operations`, you can use pip (for Python >= 3.10). You can also manually install it from [here](https://pypi.org/project/basic-math-operations/) if that doesn't work for you.
 
 And you're done! Now you'll be able to import the library into your Python programs using this line: `import basic_math_operations`.
 
@@ -70,11 +62,12 @@ main.c:
 int main() {
   char* a = (char *)calloc(1024, 1);
   char* b = (char *)calloc(1024, 1);
-  char* res = (char *)calloc(1100, 1);
   printf("Enter the first number: ");
   scanf("%1023s", a);
   printf("Enter the second number: ");
   scanf("%1023s", b);
+
+  char* res = (char *)calloc(strlen(a) + strlen(b) + 43, 1);
 
   divide(a, b, res, 40);
 

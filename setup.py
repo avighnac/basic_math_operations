@@ -11,6 +11,9 @@ from zipfile import ZipFile
 module_name = 'basic_math_operations'
 version = '1.0.0'
 
+# Print current directory
+print("Current directory: " + os.getcwd())
+
 if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zip') and os.name != 'nt'):
     with zipfile.ZipFile('dist/artifacts/linux-build/libbasic_math_operations-linux.zip', 'r') as zfile:
         zfile.extract('libbasic_math_operations.a')
@@ -19,9 +22,8 @@ if (os.path.exists('dist/artifacts/linux-build/libbasic_math_operations-linux.zi
 if (os.path.exists('dist/artifacts/windows-build/libbasic_math_operations-windows.a') and os.name == 'nt'):
     shutil.copy("dist/artifacts/windows-build/libbasic_math_operations-windows.a",
                 "src/python-module/libbasic_math_operations.a")
-if (os.path.exists('dist/artifacts/version-info/version.txt')):
-    shutil.copy("dist/artifacts/version-info/version.txt",
-                "src/python-module/version.txt")
+shutil.copy("dist/artifacts/version-info/version.txt",
+        "src/python-module/version.txt")
 
 with open('version.txt' if os.path.exists('version.txt') else 'src/python-module/version.txt', 'r') as f:
     version = f.read()
