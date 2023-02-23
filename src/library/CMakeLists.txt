@@ -26,7 +26,7 @@ linux/_multiply_whole.asm
 cross-platform/multiplyp.c
 cross-platform/multiply.c
 
-linux/divide_whole_with_remainder.asm
+linux/_divide_whole_with_remainder.asm
 cross-platform/divide_whole_with_remainder.c
 cross-platform/divide_whole.c
 cross-platform/dividep.c
@@ -34,7 +34,7 @@ cross-platform/divide.c
 
 linux/asmalloc.asm
 linux/multiply_whole.asm
-cross-platform/addp.c
+linux/addp.asm
 remove_zeroes.c
 
 cross-platform/increment_whole.c

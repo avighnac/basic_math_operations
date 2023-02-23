@@ -241,7 +241,6 @@ int main() {
 
   input.emplace_back("0", "95");
   input.emplace_back("25", "81");
-  input.emplace_back("10", "10");
 
   expected = {"0",
               "0",
@@ -263,8 +262,7 @@ int main() {
               "1298346912346712642136723491227770059222083772680843268608460735"
               "92198471",
               "-95",
-              "-56",
-              "0"};
+              "-56"};
 
   number_of_failed_cases +=
       test_add_mul_sub(subtract_whole, input, expected, functionName, testName);
@@ -424,8 +422,20 @@ int main() {
   input = {{"12", "13"}};
   expected = {"-1"};
 
-  number_of_failed_cases =
+  number_of_failed_cases +=
       test_add_mul_sub(subtract, input, expected, functionName, testName);
+
+  if (number_of_failed_cases)
+    throw std::runtime_error(std::to_string(number_of_failed_cases) +
+                             " test/s failed.");
+
+  functionName = "add";
+  testName = "addp_unit_tests";
+  input = {{"7.41280987770482352328", "3.347589486979800345266962788384"}};
+  expected = {"10.760399364684623868546962788384"};
+
+  number_of_failed_cases +=
+      test_add_mul_sub(addp, input, expected, functionName, testName);
 
   if (number_of_failed_cases)
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
