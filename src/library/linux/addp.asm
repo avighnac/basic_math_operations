@@ -45,11 +45,11 @@ addp:
   ; Store the lengths of a (rdi) and b (rsi)
   ; in [rbp-8] and [rbp-16] respectively.
   ; Also, store sum+1 in r14
-  call  strlen_asm
+  call  strlen_asm wrt ..plt
   mov   [rbp-8], rax
   lea   r14, [rax+1]
   mov   rdi, r13
-  call  strlen_asm
+  call  strlen_asm wrt ..plt
   add   r14, rax
   mov   [rbp-16], rax
 
@@ -57,10 +57,10 @@ addp:
   ; Store one memory pointer in [rbp-24],
   ; and the other one in rdx.
   mov   rdi, r14
-  call  asmalloc
+  call  asmalloc wrt ..plt
   mov   [rbp-24], rax
   mov   rdi, r14
-  call  asmalloc
+  call  asmalloc wrt ..plt
   mov   rdx, rax
 
   ; Declare variables ptr1, n1, flag, and i.
@@ -164,7 +164,7 @@ addp:
   mov   rdi, r12
   mov   rsi, r13
   mov   rdx, r15
-  call  add_whole
+  call  add_whole wrt ..plt
 
   jmp   .return
 
@@ -217,7 +217,7 @@ addp:
   mov   rdi, rdx
   mov   rsi, [rbp-24]
   mov   rdx, r15
-  call  add_whole
+  call  add_whole wrt ..plt
   pop   rdx
   pop   rcx
 
@@ -227,8 +227,8 @@ addp:
   ; r8 = reslength. We can reuse this register
   ; since it's never used again (in its
   ; old context) ahead this point.
-  mov   rax, r15
-  call  strlen_asm
+  mov   rdi, r15
+  call  strlen_asm wrt ..plt
   mov   r8, rax
 
   xor   ebx, ebx ; i = 0
