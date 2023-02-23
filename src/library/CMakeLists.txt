@@ -21,7 +21,7 @@ cross-platform/add.c
 
 linux/subtract_whole.asm
 linux/subtract_whole_same_length.asm
-cross-platform/subtractp.c
+linux/subtractp.asm
 cross-platform/subtract.c
 
 linux/_multiply_whole.asm
