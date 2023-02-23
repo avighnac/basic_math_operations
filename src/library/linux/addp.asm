@@ -2,10 +2,6 @@ extern  add_whole
 extern  asmalloc
 extern  strlen_asm
 
-; This header file still has bugs, for example 3.14^3.14 in arithmetica does not 
-; produce the correct result because of addp.asm.
-; This is not being used right now.
-
 section .text
 global  addp
 ; Adds two positive rational numbers; stores the result in `rdx`.
