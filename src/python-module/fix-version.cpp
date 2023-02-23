@@ -9,6 +9,8 @@ int main(int argc, char **argv) {
   std::string version;
   std::getline(in, version);
 
+  bool main = version.find("-main") != std::string::npos;
+
   // 0.0.1-main.116.2397cac
   // Find first occurence of '-'
   version = version.substr(version.find('-') + 1, version.length());
@@ -18,7 +20,11 @@ int main(int argc, char **argv) {
   // 116.2397cac
   std::string patch = version.substr(0, version.find('.'));
 
-  std::string new_version = "0.0." + patch;
+  std::string new_version;
+  if (main) {
+    new_version += "1.0." + patch;
+  } else
+    new_version += "0.0." + patch;
 
   std::cout << new_version << std::endl;
 

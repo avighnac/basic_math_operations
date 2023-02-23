@@ -1,8 +1,8 @@
-name: "Make libbasic_math_operations."
+name: "Make the library, upload to PyPi, and create a release."
 
 on:
   push:
-    branches: [ main, patch-3 ]
+    branches: [ main ]
   schedule:
     - cron: '18 13 * * 6'
 
@@ -68,8 +68,7 @@ jobs:
       with:
         name: linux-build
         path: linux-build/libbasic_math_operations-linux.zip
-
-  make-windows:
+ make-windows:
     name: Make libbasic_math_operations-windows.a
     runs-on: windows-latest
     permissions:
@@ -115,11 +114,11 @@ jobs:
           path: dist/artifacts
       - name: Move version info
         run: |
-          move dist/artifacts/version-info/version.txt version.txt
+          cp dist/artifacts/version-info/version.txt version.txt
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8.x'
+          python-version: '3.10.x'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -157,7 +156,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8.x'
+          python-version: '3.10.x'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -182,8 +181,8 @@ jobs:
     needs:
       - make-linux
       - make-windows
-      - make-wheel-windows
       - make-wheel-linux
+      - make-wheel-windows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -254,7 +253,6 @@ jobs:
           asset_content_type: application/octet-stream
   pypi-upload:
     needs:
-      - make-wheel-windows
       - make-wheel-linux
     runs-on: ubuntu-latest
     steps:
@@ -269,7 +267,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.8.x'
+          python-version: '3.10.x'
       - name: Git Version
         id: version
         uses: codacy/git-version@2.7.1
