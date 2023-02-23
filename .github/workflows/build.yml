@@ -68,7 +68,7 @@ jobs:
       with:
         name: linux-build
         path: linux-build/libbasic_math_operations-linux.zip
- make-windows:
+  make-windows:
     name: Make libbasic_math_operations-windows.a
     runs-on: windows-latest
     permissions:
