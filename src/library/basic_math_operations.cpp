@@ -1,9 +1,5 @@
 #include "basic_math_operations.hpp"
 
-namespace basic_math_operations {
-  size_t DIVISION_ACCURACY = 10;
-}
-
 std::string basic_math_operations::add(std::string a, std::string b) {
   char *additionResult = (char *)calloc(
       a.length() + b.length() + 3,
@@ -31,8 +27,9 @@ std::string basic_math_operations::multiply(std::string a, std::string b) {
   return answer;
 }
 
-std::string basic_math_operations::divide(std::string numerator, std::string denominator,
-                   size_t accuracy) {
+std::string basic_math_operations::divide(std::string numerator,
+                                          std::string denominator,
+                                          size_t accuracy) {
   char *quotient =
       (char *)calloc(numerator.length() + denominator.length() + accuracy + 3,
                      1); // 2 for the potential negative signs in the inputs,
@@ -43,7 +40,8 @@ std::string basic_math_operations::divide(std::string numerator, std::string den
   return answer;
 }
 
-std::string basic_math_operations::mod(std::string numerator, std::string denominator) {
+std::string basic_math_operations::mod(std::string numerator,
+                                       std::string denominator) {
   char *quotient =
       (char *)calloc(numerator.length() + denominator.length() + 3, 1);
   // 2 for the potential negative signs in the inputs,
@@ -58,32 +56,40 @@ std::string basic_math_operations::mod(std::string numerator, std::string denomi
   return answer;
 }
 
-
 basic_math_operations::BMONum::BMONum() { number = "0"; }
-basic_math_operations::BMONum::BMONum(std::string number) { this->number = number; }
-basic_math_operations::BMONum::BMONum(const char *number) { this->number = number; }
+basic_math_operations::BMONum::BMONum(std::string number) {
+  this->number = number;
+}
+basic_math_operations::BMONum::BMONum(const char *number) {
+  this->number = number;
+}
 
-basic_math_operations::BMONum basic_math_operations::BMONum::operator+(BMONum n) {
+basic_math_operations::BMONum
+basic_math_operations::BMONum::operator+(BMONum n) {
   BMONum answer;
   answer.number = add(number, n.number);
   return answer;
 }
-basic_math_operations::BMONum basic_math_operations::BMONum::operator-(BMONum n) {
+basic_math_operations::BMONum
+basic_math_operations::BMONum::operator-(BMONum n) {
   BMONum answer;
   answer.number = subtract(number, n.number);
   return answer;
 }
-basic_math_operations::BMONum basic_math_operations::BMONum::operator*(BMONum n) {
+basic_math_operations::BMONum
+basic_math_operations::BMONum::operator*(BMONum n) {
   BMONum answer;
   answer.number = multiply(number, n.number);
   return answer;
 }
-basic_math_operations::BMONum basic_math_operations::BMONum::operator/(BMONum n) {
+basic_math_operations::BMONum
+basic_math_operations::BMONum::operator/(BMONum n) {
   BMONum answer;
   answer.number = divide(number, n.number, DIVISION_ACCURACY);
   return answer;
 }
-basic_math_operations::BMONum basic_math_operations::BMONum::operator%(BMONum n) {
+basic_math_operations::BMONum
+basic_math_operations::BMONum::operator%(BMONum n) {
   BMONum answer;
   answer.number = mod(number, n.number);
   return answer;
@@ -102,9 +108,11 @@ bool basic_math_operations::BMONum::operator>(basic_math_operations::BMONum n) {
 
   return n < *this;
 }
-bool basic_math_operations::BMONum::operator==(basic_math_operations::BMONum n) {
+bool basic_math_operations::BMONum::operator==(
+    basic_math_operations::BMONum n) {
   return number == n.number;
 }
-bool basic_math_operations::BMONum::operator>=(basic_math_operations::BMONum n) {
+bool basic_math_operations::BMONum::operator>=(
+    basic_math_operations::BMONum n) {
   return *this > n || *this == n;
 }
