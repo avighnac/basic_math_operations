@@ -44,7 +44,7 @@ jobs:
         chmod +x build/src/tests/tests
     - name: Run tests with valgrind.
       run: |
-        valgrind --error-exitcode=1 ./build/src/tests/tests
+        valgrind --error-exitcode=1 --track-origins=yes ./build/src/tests/tests
 
   test-windows:
     name: Make test.cpp for windows.
