@@ -1,6 +1,5 @@
 #include "color.hpp"
 #include "get_current_directory.hpp"
-#include "get_terminal_size.hpp"
 #include <algorithm>
 #include <basic_math_operations.h>
 #include <chrono>
@@ -441,11 +440,7 @@ int main() {
     throw std::runtime_error(std::to_string(number_of_failed_cases) +
                              " test/s failed.");
 
-  int width = 10, height = 10;
-  get_terminal_size(width, height);
-  if (width < 0 || width > 1000)
-    width = 15;
-  std::cout << "\n" << std::string(width, '=') << "\n\n";
+  std::cout << "\n\n" << std::flush;
 
   input.clear();
   expected.clear();
