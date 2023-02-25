@@ -450,7 +450,8 @@ int main() {
   input.clear();
   expected.clear();
 
-  std::cout << "Running " << color("rigourous tests ... ", "Red") << "\n\n";
+  std::cout << "Running " << color("rigourous tests ... ", "Red")
+            << "\nNote: Any tests that fail will be explicitly mentioned.\n\n";
   std::cout << "Running 10,000 tests for " << color("add_whole.asm", "Red")
             << ".\n";
 
@@ -476,7 +477,13 @@ int main() {
     return 0;
   }
 
-  for (auto i = 0; i < 10000; i++) {
+  size_t i = 0;
+
+  for (i = 0; i < 10000; i++) {
+    // If time exceeds 10 seconds, stop the test.
+    if (time > 1e7)
+      break;
+
     std::string firstInput;
     std::string secondInput;
     std::string Expected;
@@ -510,7 +517,7 @@ int main() {
   inputFile.close();
 
   if (!failed_tests) {
-    std::cout << color("All tests for ", "Green")
+    std::cout << color(std::to_string(i) + " tests for ", "Green")
               << color("add_whole.asm", "Red") << color(" passed in ", "Green")
               << time << color(" \u00b5s!\n", "Magenta");
   }
@@ -533,7 +540,10 @@ int main() {
     return 0;
   }
 
-  for (auto i = 0; i < 10000; i++) {
+  for (i = 0; i < 10000; i++) {
+    if (time > 1e7)
+      break;
+
     std::string firstInput, secondInput, Expected;
     inputFile >> firstInput >> secondInput;
     expectedFile >> Expected;
@@ -565,7 +575,7 @@ int main() {
   inputFile.close();
 
   if (!failed_tests) {
-    std::cout << color("All tests for ", "Green")
+    std::cout << color(std::to_string(i) + " tests for ", "Green")
               << color("subtract_whole.asm", "Red")
               << color(" passed in ", "Green") << time
               << color(" \u00b5s!\n", "Magenta");
@@ -589,7 +599,10 @@ int main() {
     return 0;
   }
 
-  for (auto i = 0; i < 10000; i++) {
+  for (i = 0; i < 10000; i++) {
+    if (time > 1e7)
+      break;
+
     std::string firstInput, secondInput, Expected;
     inputFile >> firstInput >> secondInput;
     expectedFile >> Expected;
@@ -621,7 +634,7 @@ int main() {
   inputFile.close();
 
   if (!failed_tests) {
-    std::cout << color("All tests for ", "Green")
+    std::cout << color(std::to_string(i) + " tests for ", "Green")
               << color("multiply_whole.asm", "Red")
               << color(" passed in ", "Green") << time
               << color(" \u00b5s!\n", "Magenta");
@@ -643,7 +656,10 @@ int main() {
     return 0;
   }
 
-  for (auto i = 0; i < 10000; i++) {
+  for (i = 0; i < 10000; i++) {
+    if (time > 1e7)
+      break;
+
     std::string firstInput, secondInput, firstExpected, secondExpected;
     inputFile >> firstInput >> secondInput;
     expectedFile >> firstExpected >> secondExpected;
@@ -685,7 +701,7 @@ int main() {
   inputFile.close();
 
   if (!failed_tests) {
-    std::cout << color("All tests for ", "Green")
+    std::cout << color(std::to_string(i) + " tests for ", "Green")
               << color("divide_whole_with_remainder.asm", "Red")
               << color(" passed in ", "Green") << time
               << color(" \u00b5s!\n", "Magenta");
