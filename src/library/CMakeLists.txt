@@ -36,7 +36,7 @@ cross-platform/divide.c
 
 linux/asmalloc.asm
 linux/multiply_whole.asm
-linux/addp.asm
+cross-platform/addp.c
 remove_zeroes.c
 
 cross-platform/increment_whole.c
