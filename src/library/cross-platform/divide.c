@@ -3,6 +3,9 @@
 void dividep(const char *a, const char *b, char *res, size_t accuracy);
 
 void divide(const char *a, const char *b, char *res, size_t accuracy) {
+  if (a[0] == '\0' || b[0] == '\0')
+    return;
+
   // a is the numerator and b is the denominator
   // I've used different names to shorten the code
   if (a[0] != '-' && b[0] != '-') {
