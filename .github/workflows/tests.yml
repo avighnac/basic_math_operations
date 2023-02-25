@@ -32,10 +32,10 @@ jobs:
         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     - name: Install valgrind.
     - run: |
-      apt-get install valgrind
+        apt-get install valgrind
     - name: Clone tests.
     - run: |
-      git submodule update --init --recursive
+        git submodule update --init --recursive
     - name: Compile tests.
     - run: |
         cmake --no-warn-unused-cli -DENABLE_TESTS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
@@ -43,7 +43,7 @@ jobs:
         chmod +x build/src/tests/tests
     - name: Run tests with valgrind.
     - run: |
-      valgrind ./build/src/tests/tests
+        valgrind ./build/src/tests/tests
 
   test-windows:
     name: Make test.cpp for windows.
