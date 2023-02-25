@@ -6,6 +6,9 @@ extern void addp(const char *a, const char *b, char *res);
 extern void subtractp(const char *a, const char *b, char *res);
 
 void add(const char *a, const char *b, char *res) {
+  if (a[0] == '\0' || b[0] == '\0')
+    return;
+
   if (a[0] != '-' && b[0] != '-') {
     addp(a, b, res);
   }

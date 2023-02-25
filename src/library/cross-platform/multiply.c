@@ -3,6 +3,9 @@
 extern void multiplyp(const char *a, const char *b, char *res);
 
 void multiply(const char *a, const char *b, char *res) {
+  if (a[0] == '\0' || b[0] == '\0')
+    return;
+
   if (a[0] != '-' && b[0] != '-') {
     multiplyp(a, b, res);
   }
