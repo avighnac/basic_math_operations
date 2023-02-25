@@ -32,7 +32,8 @@ jobs:
         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     - name: Install valgrind.
       run: |
-        apt-get install valgrind
+        sudo apt-get update
+        sudo apt-get install valgrind
     - name: Clone tests.
       run: |
         git submodule update --init --recursive
