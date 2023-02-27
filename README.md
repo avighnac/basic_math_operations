@@ -44,10 +44,17 @@ And that too with blazing fast speeds! Most of the heavy-lifting of these algori
 Downloading and using this library is as simple as including the header file (`basic_math_operations.h` or `basic_math_operations.hpp`), and linking the `libbasic_math_operations.a` file using `-L. -lbasic_math_operations`.
 
 # Installation
-Note: This section only applies to Python.
+## Python
 To install the module `basic_math_operations`, you can use pip (for Python >= 3.10). You can also manually install it from [here](https://pypi.org/project/basic-math-operations/) if that doesn't work for you.
 
 And you're done! Now you'll be able to import the library into your Python programs using this line: `import basic_math_operations`.
+
+## C/C++
+If you're on Linux, you'll be able to install this library and copy its headers to `/usr/include` by executing a single shell command.
+
+```shell
+curl -s -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/avighnac/basic_math_operations/contents/install.sh | sudo bash
+```
 
 # Compilation
 Here's a full example of compiling a program made using `basic_math_operations`.
