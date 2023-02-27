@@ -25,7 +25,6 @@ echo "Sucessfully extracted the files."
 
 # Copy the libs to /usr/lib, if they exist then replace them
 cp -r libs/libbasic_math_operations.a /usr/lib/
-cp -r libs/libbasic_math_operations.so /usr/lib/
 # Copy the header files to /usr/include
 cp -r libs/basic_math_operations.h /usr/include/
 cp -r libs/basic_math_operations.hpp /usr/include/
