@@ -30,7 +30,7 @@ int main() {
   char a[] = "387261987198787123479468764398";
   char b[] = "1897346897629873468761342";
   
-  char *res = (char *)calloc(strlen(a) + strlen(b) + 1);
+  char *res = (char *)calloc(strlen(a) + strlen(b) + 1, 1);
   multiply(a, b, res);
   
   printf("%s * %s = %s\n", a, b, res);
