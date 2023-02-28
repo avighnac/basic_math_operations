@@ -4,7 +4,7 @@ set (CMAKE_CXX_STANDARD 17)
 project(basic_math_operations C)
 
 option(ENABLE_TESTS "Build tests" OFF)
-option(BENCHMARK "Benchmark" ON)
+option(BENCHMARK "Benchmark" OFF)
 
 add_subdirectory(src/library)
 
