@@ -1,11 +1,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
+#include "../basic_math_operations.h"
 
 void increment_whole(char **number_in) {
   char *number = *number_in;
   bool carry = true;
-  size_t n = strlen(number);
+  size_t n = strlen_asm(number);
   for (size_t i = 0; i < n; i++) {
     if (number[i] != '9') {
       carry = false;

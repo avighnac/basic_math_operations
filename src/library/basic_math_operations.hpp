@@ -3,6 +3,9 @@
 #include "basic_math_operations.h"
 #include <cstdlib>
 #include <string>
+#ifdef _WIN32
+#include <ostream>
+#endif
 
 /// @brief Wrapper for C++.
 namespace basic_math_operations {
