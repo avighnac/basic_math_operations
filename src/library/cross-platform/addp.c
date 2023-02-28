@@ -1,11 +1,11 @@
 #include <stddef.h>
 #include <stdlib.h>
+#include "../basic_math_operations.h"
 
 extern void add_whole(const char *a, const char *b, char *res);
 
 void addp(const char *a, const char *b, char *res) {
-  extern size_t strlen(const char *str);
-  size_t a_len = strlen(a), b_len = strlen(b);
+  size_t a_len = strlen_asm(a), b_len = strlen_asm(b);
 
   char *new_a = (char *)calloc(a_len + b_len + 2, 1);
   char *new_b = (char *)calloc(a_len + b_len + 2, 1);
@@ -33,7 +33,7 @@ void addp(const char *a, const char *b, char *res) {
       new_b[ptr2++] = b[i];
   }
 
-  if (n1 == 0 && n2 == 0) {
+  if (!(n1 || n2)) {
     add_whole(a, b, res);
     free(new_a);
     free(new_b);
@@ -52,7 +52,7 @@ void addp(const char *a, const char *b, char *res) {
   }
   add_whole(new_a, new_b, res);
 
-  size_t reslength = strlen(res);
+  size_t reslength = strlen_asm(res);
   for (size_t i = 0; i < displacement; i++)
     res[reslength - i] = res[reslength - i - 1];
   if (displacement)

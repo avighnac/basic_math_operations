@@ -1,8 +1,40 @@
-# Check if sudo, if not, exit
+#!/bin/bash
+
+set -e
+
+# Set default command to download archive from
+DOWNLOAD_CMD="wget -q"
+
+# Set default install prefix to /usr
+PREFIX="${PREFIX:-/usr}"
+
+# Check if the user is root
 if [ "$(id -u)" -ne 0 ]
-  then echo "Please run as root!"
+then
+  echo -e "\e[31mPlease run as root!\e[0m" > /dev/stderr
   exit
 fi
+
+# Check for unzip and wget
+echo -e "Testing for unzip..."
+if ! command -v unzip &> /dev/null
+then
+  echo -e "\e[31munzip not installed!\e[0m" > /dev/stderr
+  exit
+fi
+echo -e "Testing for wget..."
+if ! command -v wget &> /dev/null
+then
+  echo -e "\e[31mwget not installed, defaulting to curl!\e[0m"  > /dev/stderr
+  DOWNLOAD_CMD="curl -O -L -J -s"
+  if ! command -v curl &> /dev/null
+  then
+    echo -e "\e[31mcurl not installed!\e[0m"  > /dev/stderr
+    exit
+  fi
+fi
+
+
 
 cd /tmp
 # If the directory exists, delete it
@@ -11,11 +43,9 @@ if [ -d "basic_math_operations-install" ]; then
 fi
 mkdir basic_math_operations-install
 cd basic_math_operations-install
-curl -s https://api.github.com/repos/avighnac/basic_math_operations/releases/latest \
-| grep "browser_download_url.*zip" \
-| cut -d : -f 2,3 \
-| tr -d \" \
-| wget -qi -
+# Download the latest release
+$DOWNLOAD_CMD https://github.com/avighnac/basic_math_operations/releases/latest/download/libbasic_math_operations-linux.zip
+
 
 echo "Sucessfully downloaded the latest release."
 
@@ -24,12 +54,15 @@ unzip "libbasic_math_operations-linux.zip" -d libs
 echo "Sucessfully extracted the files."
 
 # Copy the libs to /usr/lib, if they exist then replace them
-cp -r libs/libbasic_math_operations.a /usr/lib/
+mkdir -p $PREFIX/lib
+mkdir -p $PREFIX/include
+cp -r libs/libbasic_math_operations.a $PREFIX/lib/
 # Copy the header files to /usr/include
-cp -r libs/basic_math_operations.h /usr/include/
-cp -r libs/basic_math_operations.hpp /usr/include/
-
-echo "Installation complete!"
+cd libs
+find . -name '*.h' -exec cp -prv '{}' "$PREFIX/include" ";"
+find . -name '*.hpp' -exec cp -prv '{}' "$PREFIX/include" ";"
+cd ..
+echo -e "\e[32mInstallation complete!\e[0m"
 
 # Delete the temporary directory
 cd ..

@@ -1,4 +1,4 @@
-extern strlen
+extern strlen_asm
 
 section .text
 global remove_leading_zeroes
@@ -17,7 +17,7 @@ remove_leading_zeroes:
 
   push   r12
   push   r13
-  call   strlen
+  call   strlen_asm
   lea    r12, [rax-1]
   xor    r10b, r10b
   cmp    byte [rcx], 2DH
@@ -79,7 +79,7 @@ remove_leading_zeroes_inplace:
   push   rax
   push   rcx
   mov    rcx, rax
-  call   strlen
+  call   strlen_asm
   lea    r8, [rax+1]
   pop    rcx
   pop    rax

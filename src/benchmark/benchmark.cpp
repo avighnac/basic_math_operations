@@ -1,4 +1,4 @@
-#include <basic_math_operations.h>
+#include "../library/basic_math_operations.hpp"
 #include <chrono>
 #include <iostream>
 
@@ -7,7 +7,7 @@ std::string factorial(int x) {
   for (auto i = 2; i <= x; i++) {
     std::string toMultiply = std::to_string(i);
     char *partAns =
-        (char *)calloc(answer.length() + toMultiply.length() + 1, 1);
+        (char *)calloc(answer.length() + toMultiply.length() + 1, sizeof(char));
     multiply(answer.c_str(), toMultiply.c_str(), partAns);
     answer = partAns;
     free(partAns);
@@ -19,7 +19,8 @@ std::string factorial(int x) {
 int main() {
   double time = 0;
   int x = 0;
-  while (time < 1) {
+
+  while (time < 10) {
     auto start = std::chrono::high_resolution_clock::now();
     std::string s = factorial(1000);
     auto end = std::chrono::high_resolution_clock::now();
@@ -29,5 +30,5 @@ int main() {
     x++;
   }
 
-  std::cout << "1000!'s per second: " << x << '\n';
+  std::cout << "1000!'s per second: " << x / 10 << '\n';
 }
