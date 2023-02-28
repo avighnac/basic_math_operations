@@ -1,6 +1,6 @@
 section .text
-global  strlen
-strlen:
+global  strlen_asm
+strlen_asm:
   ; Input:
   ;   - char *str -> rcx
 

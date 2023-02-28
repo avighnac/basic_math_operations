@@ -1,13 +1,14 @@
 #include <stdlib.h>
+#include "../basic_math_operations.h"
 
 extern void divide_whole(const char *numerator, const char *denominator,
                          char *quotient, size_t accuracy);
 
 void dividep(const char *numerator, const char *denominator, char *quotient,
              size_t accuracy) {
-  extern size_t strlen(const char *str);
-  size_t numerator_length = strlen(numerator);
-  size_t denominator_length = strlen(denominator);
+  
+  size_t numerator_length = strlen_asm(numerator);
+  size_t denominator_length = strlen_asm(denominator);
   size_t max_length = numerator_length;
   if (denominator_length > numerator_length)
     max_length = denominator_length;

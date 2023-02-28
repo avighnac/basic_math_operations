@@ -2,6 +2,7 @@
 #define _basic_math_operations_
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #if defined(__cplusplus)
 #define bmo_function_start extern "C"
@@ -157,4 +158,10 @@ bmo_function_start void remove_zeroes(char *number);
 /// @return This function increments the number in place; there is no return
 /// value.
 bmo_function_start void increment_whole(char **number_in);
+
+/// @brief Gets the length of a string.
+/// @param string The string you want to get the length of.
+/// @return The length of the string.
+bmo_function_start size_t strlen_asm(const char *string);
+
 #endif

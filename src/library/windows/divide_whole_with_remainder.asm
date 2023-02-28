@@ -1,6 +1,6 @@
 extern _multiply_whole
 extern remove_leading_zeroes
-extern strlen
+extern strlen_asm
 extern subtract_whole
 
 section .text
@@ -10,8 +10,8 @@ _divide_whole_with_remainder:
   ;   - const char *numerator   -> rcx
   ;   - const char *denominator -> rdx
   ;   - char *res               -> r8
-  ;   - size_t bufsize          -> r9, set this to be strlen(numerator) + strlen(denominator) + 2
-  ;   - char *buf               -> stack, allocate 5 * bufsize + 10 * (strlen(denominator) + 2) + 3 bytes for this using calloc.
+  ;   - size_t bufsize          -> r9, set this to be strlen_asm(numerator) + strlen_asm(denominator) + 2
+  ;   - char *buf               -> stack, allocate 5 * bufsize + 10 * (strlen_asm(denominator) + 2) + 3 bytes for this using calloc.
 
   ; Output:
   ;   - Modular division of numerator / denominator in res
@@ -37,11 +37,11 @@ _divide_whole_with_remainder:
   push   r13
   push   r14
   push   r15
-  call   strlen
+  call   strlen_asm
   push   rax
   push   rcx
   mov    rcx, rdx
-  call   strlen
+  call   strlen_asm
   mov    rbx, rax
   pop    rcx
   pop    rax
@@ -95,7 +95,7 @@ _divide_whole_with_remainder:
   pop    r9
   pop    r10
   mov    rcx, r8
-  call   strlen
+  call   strlen_asm
   lea    rsi, [rax-1]
   pop    r15
   pop    r14
@@ -211,7 +211,7 @@ _divide_whole_with_remainder:
   pop   r12
   pop   r10
   mov   rcx, r12
-  call  strlen
+  call  strlen_asm
   mov   r15, rax
   pop   r9
   pop   r12
@@ -260,7 +260,7 @@ _divide_whole_with_remainder:
   add   rcx, rax
   pop   r8
   push  r11
-  call  strlen
+  call  strlen_asm
   pop   r11
   mov   r12, rax
   pop   r9
@@ -322,7 +322,7 @@ _divide_whole_with_remainder:
   pop   r13
   pop   r12
   mov   rcx, r8
-  call  strlen
+  call  strlen_asm
   mov   rdi, rax
   pop   rsi
   pop   r11

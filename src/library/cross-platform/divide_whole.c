@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <string.h>
+#include "../basic_math_operations.h"
 
 extern char *_divide_whole_with_remainder(const char *numerator,
                                           const char *denominator,
@@ -9,8 +9,8 @@ extern char *_divide_whole_with_remainder(const char *numerator,
 void divide_whole(const char *numerator, const char *denominator,
                   char *quotient, size_t accuracy) {
 
-  size_t numerator_length = strlen(numerator);
-  size_t denominator_length = strlen(denominator);
+  size_t numerator_length = strlen_asm(numerator);
+  size_t denominator_length = strlen_asm(denominator);
   size_t modified_numerator_length = numerator_length + accuracy;
   char *modified_numerator = (char *)calloc(modified_numerator_length + 1, 1);
 
@@ -25,7 +25,7 @@ void divide_whole(const char *numerator, const char *denominator,
   char *rem = _divide_whole_with_remainder(modified_numerator, denominator,
                                            quotient, bufferSize, buffer);
 
-  size_t quotient_length = strlen(quotient);
+  size_t quotient_length = strlen_asm(quotient);
   for (size_t i = 0; i < accuracy; i++)
     quotient[quotient_length - i] = quotient[quotient_length - i - 1];
   quotient[quotient_length - accuracy] = '.';
