@@ -1,4 +1,4 @@
-#include "remove_zeroes.h"
+#include "../basic_math_operations.h"
 
 void remove_zeroes(char *number) {
   char *firstPointer = number;
@@ -6,7 +6,7 @@ void remove_zeroes(char *number) {
   if (negative) {
     number++; // we restore this later
   }
-  size_t numberLength = strlen(number);
+  size_t numberLength = strlen_asm(number);
   char *originalPointer = number;
   while (*number == '0') {
     number++;
@@ -17,7 +17,7 @@ void remove_zeroes(char *number) {
   }
   if (number - originalPointer == numberLength) // if all were '0'
     number--;
-  numberLength = strlen(number);
+  numberLength = strlen_asm(number);
 
   unsigned char decimal = 0;
   for (size_t i = 0; i < numberLength; i++) {
@@ -33,9 +33,9 @@ void remove_zeroes(char *number) {
         break;
       to_remove++;
     }
-    number[numberLength - to_remove] = '\0';
+    number[numberLength - to_remove] = 0;
     if (number[numberLength - to_remove - 1] == '.') // to avoid stuff like "0."
-      number[numberLength - to_remove - 1] = '\0';
+      number[numberLength - to_remove - 1] = 0;
   }
 
   if (negative) {
@@ -57,6 +57,6 @@ void remove_zeroes(char *number) {
     origTemp++;
     firstPointer++;
   }
-  *firstPointer = '\0';
+  *firstPointer = 0;
   free(realOrigTemp);
 }

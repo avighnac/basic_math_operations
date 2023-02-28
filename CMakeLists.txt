@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
+set (CMAKE_CXX_STANDARD 17)
 
 project(basic_math_operations C)
 
 option(ENABLE_TESTS "Build tests" OFF)
-option(BENCHMARK "Benchmark" OFF)
+option(BENCHMARK "Benchmark" ON)
 
 add_subdirectory(src/library)
 
