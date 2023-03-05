@@ -475,8 +475,8 @@ int main() {
   size_t i = 0;
 
   for (i = 0; i < 10000; i++) {
-    // If time exceeds 10 seconds, stop the test.
-    if (time > 1e7)
+    // If time exceeds 1 hour, stop the test.
+    if (time > 3.6e+9)
       break;
 
     std::string firstInput;
@@ -536,7 +536,7 @@ int main() {
   }
 
   for (i = 0; i < 10000; i++) {
-    if (time > 1e7)
+    if (time > 3.6e+9)
       break;
 
     std::string firstInput, secondInput, Expected;
@@ -595,7 +595,7 @@ int main() {
   }
 
   for (i = 0; i < 10000; i++) {
-    if (time > 1e7)
+    if (time > 3.6e+9)
       break;
 
     std::string firstInput, secondInput, Expected;
@@ -652,7 +652,7 @@ int main() {
   }
 
   for (i = 0; i < 10000; i++) {
-    if (time > 1e7)
+    if (time > 3.6e+9)
       break;
 
     std::string firstInput, secondInput, firstExpected, secondExpected;
