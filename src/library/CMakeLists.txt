@@ -6,6 +6,8 @@ enable_language(ASM_NASM)
 enable_language(C)
 enable_language(CXX)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
 if(UNIX)
     set(sources_linux
         basic_math_operations.c
