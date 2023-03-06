@@ -1,5 +1,10 @@
-# basic_math_operations
-A biginteger library for both Windows and Linux written in Assembly and C that can be used in C++, C, and Python.
+<h1 align='center'>basic_math_operations</h1>
+
+> A biginteger library for both Windows and Linux written in Assembly and C that can be used in C++, C, and Python.
+
+<p align='center'>
+Explore the <a href='https://github.com/avighnac/basic_math_operations/wiki'><strong>docs</strong></a>
+</p>
 
 Have you ever wanted to add, subtract, or multiply huge numbers but your calculator or favourite programming language only gives you an approximation?
 
