@@ -68,7 +68,7 @@ if(WIN32)
         cross-platform/multiplyp.c
         cross-platform/multiply.c
 
-        windows/divide_whole_with_remainder.asm
+        windows/_divide_whole_with_remainder.asm
         cross-platform/divide_whole_with_remainder.c
         cross-platform/divide_whole.c
         cross-platform/dividep.c
