@@ -44,7 +44,7 @@ int main() {
 }
 ```
 
-And that too with blazing fast speeds! Most of the heavy-lifting of these algorithms is written in x86 assembly in order to maximize its efficiency.
+And that too with blazing-fast speeds! Most of the heavy lifting of these algorithms is written in x86 assembly in order to maximize their efficiency.
 
 Downloading and using this library is as simple as including the header file (`basic_math_operations.h` or `basic_math_operations.hpp`), and linking the `libbasic_math_operations.a` file using `-L. -lbasic_math_operations`.
 
@@ -96,7 +96,7 @@ Compile this with `gcc main.c -L. -lbasic_math_operations -o filename.out`. Make
 # Features
 This library has functions that can add, subtract, multiply, and divide with arbitrary precision.
 
-When allocating memory for the result buffer, use `calloc()` and not `malloc()` (for `calloc`, you can use malloc syntax, just add `1` as it's second argument). This is because `calloc()` zeroes the allocated memory for you: you could also use `malloc()` and zero the memory yourself.
+When allocating memory for the result buffer, use `calloc()` and not `malloc()` (for `calloc`, you can use malloc syntax, just add `1` as its second argument). This is because `calloc()` zeroes the allocated memory for you: you could also use `malloc()` and zero the memory yourself.
 
 The functions higher up in each of their respective sections are *usually* faster than their lower counterparts. If you know that two numbers will have the same length, using the specialized function will be faster.
 
