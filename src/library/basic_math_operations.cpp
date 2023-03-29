@@ -116,3 +116,17 @@ bool basic_math_operations::BMONum::operator>=(
     basic_math_operations::BMONum n) {
   return *this > n || *this == n;
 }
+
+basic_math_operations::BMONum random(unsigned long long decimal_places) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> dis(0, 9);
+  std::string number = "";
+  for (unsigned long long i = 0; i < decimal_places; ++i) {
+    number += std::to_string(dis(gen));
+  }
+  if (dis(gen) % 2 == 0) {
+    number = "-" + number;
+  }
+  return basic_math_operations::BMONum(number);
+}

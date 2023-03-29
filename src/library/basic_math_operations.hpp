@@ -3,6 +3,7 @@
 #include "basic_math_operations.h"
 #include <cstdlib>
 #include <string>
+#include <random>
 #ifdef _WIN32
 #include <ostream>
 #endif
@@ -73,5 +74,7 @@ public:
     os << n.number;
     return os;
   }
+
+  BMONum random(unsigned long long decimal_places);
 };
 } // namespace basic_math_operations
