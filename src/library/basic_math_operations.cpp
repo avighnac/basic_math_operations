@@ -117,7 +117,7 @@ bool basic_math_operations::BMONum::operator>=(
   return *this > n || *this == n;
 }
 
-basic_math_operations::BMONum random(unsigned long long decimal_places) {
+basic_math_operations::BMONum basic_math_operations::random(unsigned long long decimal_places) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(0, 9);

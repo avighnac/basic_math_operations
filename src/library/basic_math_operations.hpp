@@ -74,7 +74,7 @@ public:
     os << n.number;
     return os;
   }
-
-  BMONum random(unsigned long long decimal_places);
 };
+
+BMONum random(unsigned long long decimal_places);
 } // namespace basic_math_operations

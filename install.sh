@@ -15,6 +15,27 @@ then
   exit
 fi
 
+# Check for '--local' flag to perform a local install instead.
+if [ "$1" = "--local" ]; then
+  # Check for current_dir/build/src/library/libbasic_math_operations.a
+  if [ -f "build/src/library/libbasic_math_operations.a" ]; then
+    echo -e "\e[32mFound local build, installing...\e[0m"
+    mkdir -p $PREFIX/lib
+    mkdir -p $PREFIX/include
+    cp -r build/src/library/libbasic_math_operations.a $PREFIX/lib/
+    # Copy the header files to /usr/include
+    cd src/library
+    find . -name '*.h' -exec cp -prv '{}' "$PREFIX/include" ";"
+    find . -name '*.hpp' -exec cp -prv '{}' "$PREFIX/include" ";"
+    cd ../../../../
+    echo -e "\e[32mInstallation complete!\e[0m"
+    exit
+  else
+    echo -e "\e[31mNo local build found!\e[0m" > /dev/stderr
+    exit
+  fi
+fi
+
 # Check for unzip and wget
 echo -e "Testing for unzip..."
 if ! command -v unzip &> /dev/null
