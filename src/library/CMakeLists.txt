@@ -34,6 +34,7 @@ if(UNIX)
         cross-platform/divide_whole.c
         cross-platform/dividep.c
         cross-platform/divide.c
+        cross-platform/abs_mod.c
 
         linux/asmalloc.asm
         linux/multiply_whole.asm

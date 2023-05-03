@@ -147,6 +147,12 @@ bmo_function_start void dividep(const char *numerator, const char *denominator,
 bmo_function_start void divide(const char *numerator, const char *denominator,
                                char *quotient, size_t accuracy);
 
+/// @brief Finds |a| mod |b|.
+/// @param a The first whole number.
+/// @param b The second whole number.
+/// @return The modulus of |a| and |b|.
+bmo_function_start char *abs_mod(const char *a, const char *b);
+
 /// @brief Removes excess leading and trailing zeroes from a number.
 /// @param number The number you want to remove zeroes from. The number is
 /// overwritten.
