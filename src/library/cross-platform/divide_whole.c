@@ -25,10 +25,12 @@ void divide_whole(const char *numerator, const char *denominator,
   char *rem = _divide_whole_with_remainder(modified_numerator, denominator,
                                            quotient, bufferSize, buffer);
 
-  size_t quotient_length = strlen_asm(quotient);
-  for (size_t i = 0; i < accuracy; i++)
-    quotient[quotient_length - i] = quotient[quotient_length - i - 1];
-  quotient[quotient_length - accuracy] = '.';
+  if (accuracy != 0) {
+    size_t quotient_length = strlen_asm(quotient);
+    for (size_t i = 0; i < accuracy; i++)
+      quotient[quotient_length - i] = quotient[quotient_length - i - 1];
+    quotient[quotient_length - accuracy] = '.';
+  }
 
   free(buffer);
   free(modified_numerator);
