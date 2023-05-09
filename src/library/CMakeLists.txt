@@ -74,6 +74,7 @@ if(WIN32)
         cross-platform/divide_whole.c
         cross-platform/dividep.c
         cross-platform/divide.c
+        cross-platform/abs_mod.c
 
         cross-platform/multiply_whole.c
         cross-platform/addp.c
