@@ -1,3 +1,0 @@
-[submodule "src/tests/basic_math_operations_tests"]
-	path = src/tests/basic_math_operations_tests
-	url = https://github.com/avighnac/basic_math_operations_tests
