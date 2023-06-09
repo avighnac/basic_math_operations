@@ -9,6 +9,7 @@ option(
   BMO_BIG_TEST_FILES
   "Clone the big test files from github (only use this if you really wanna check that nothing's wrong)"
   OFF)
+option(BMO_BUILD_SHARED "Build shared library" OFF)
 
 add_subdirectory(src/library)
 
