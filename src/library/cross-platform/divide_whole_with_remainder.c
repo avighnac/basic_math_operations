@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include "../basic_math_operations.h"
 
 extern char *_divide_whole_with_remainder(const char *numerator,
@@ -8,6 +9,13 @@ extern char *_divide_whole_with_remainder(const char *numerator,
 
 void divide_whole_with_remainder(const char *numerator, const char *denominator,
                                  char *quotient, char *remainder) {
+
+  if (!strcmp(numerator, "u") || !strcmp(denominator, "u") || !strcmp(denominator, "0") || !strcmp(denominator, "-0")) {
+    strcpy(quotient, "u");
+    strcpy(remainder, "u");
+    return;
+  }
+
   size_t bufferSize = strlen_asm(numerator) + strlen_asm(denominator) + 2;
   char *buffer =
       (char *)calloc(5 * bufferSize + 10 * (strlen_asm(denominator) + 2) + 3, 1);

@@ -2,9 +2,16 @@
 
 extern void multiplyp(const char *a, const char *b, char *res);
 
+#include <string.h>
+
 void multiply(const char *a, const char *b, char *res) {
   if (!(a[0] && b[0]))
     return;
+
+  if (!strcmp(a, "u") || !strcmp(b, "u")) {
+    strcpy(res, "u");
+    return;
+  }
 
   if (a[0] != '-' && b[0] != '-') {
     multiplyp(a, b, res);

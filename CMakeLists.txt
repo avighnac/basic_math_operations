@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(basic_math_operations C)
 
-option(ENABLE_TESTS "Build tests" OFF)
+option(ENABLE_TESTS "Build tests" ON)
 option(BENCHMARK "Benchmark" ON)
 option(
   BMO_BIG_TEST_FILES

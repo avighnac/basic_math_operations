@@ -1,10 +1,16 @@
 #include "../basic_math_operations.h"
+#include <string.h>
 
 void dividep(const char *a, const char *b, char *res, size_t accuracy);
 
 void divide(const char *a, const char *b, char *res, size_t accuracy) {
   if (!(a[0] && b[0]))
     return;
+
+  if (!strcmp(a, "u") || !strcmp(b, "u") || !strcmp(b, "0") || !strcmp(b, "-0")) {
+    strcpy(res, "u");
+    return;
+  }
 
   // a is the numerator and b is the denominator
   // I've used different names to shorten the code
