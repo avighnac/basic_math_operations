@@ -1,1 +1,2 @@
 src/tests/test.cpp linguist-vendored
+install.sh eol=lf
