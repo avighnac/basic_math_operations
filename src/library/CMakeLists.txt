@@ -8,6 +8,10 @@ enable_language(CXX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
+if(APPLE)
+    set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -D__MACH__")
+endif()
+
 if(UNIX)
     set(sources_linux
         basic_math_operations.c
@@ -43,6 +47,7 @@ if(UNIX)
 
         cross-platform/increment_whole.c
     )
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/linux)
     add_library(basic_math_operations STATIC ${sources_linux})
     if (BMO_BUILD_SHARED)
         add_library(basic_math_operations_so SHARED ${sources_linux})

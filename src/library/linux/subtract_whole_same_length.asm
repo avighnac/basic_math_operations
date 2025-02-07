@@ -1,8 +1,10 @@
-extern strlen_asm
+%include "defines.asm"
+
+extern Strlen_asm
 
 section .text
-global subtract_whole_same_length
-subtract_whole_same_length:
+global Subtract_whole_same_length
+Subtract_whole_same_length:
   ; Input:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
@@ -17,7 +19,7 @@ subtract_whole_same_length:
   ;   - r10
   ;   - r11
 
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   xor    cl, cl
   lea    r8, [rax - 1]
 .loop_1:
@@ -59,7 +61,7 @@ subtract_whole_same_length:
   push   rdi
   push   rcx
   mov    rdi, rdx
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   pop    rcx
   pop    rdi
   test   cl, cl

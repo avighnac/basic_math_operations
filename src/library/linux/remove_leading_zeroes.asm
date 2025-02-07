@@ -1,8 +1,10 @@
-extern strlen_asm
+%include "defines.asm"
+
+extern Strlen_asm
 
 section .text
-global remove_leading_zeroes
-remove_leading_zeroes:
+global Remove_leading_zeroes
+Remove_leading_zeroes:
   ; Input:
   ;   - const char *string -> rdi
   ;   - char *res -> rsi
@@ -15,7 +17,7 @@ remove_leading_zeroes:
   ;   - r10
   ;   - r11
 
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   lea    r10, [rax-1]
   xor    r8b, r8b
   cmp    byte [rdi], 2DH
@@ -44,8 +46,8 @@ remove_leading_zeroes:
   js     .loop_1
   mov    byte [rsi+r9], 0
   ret
-global remove_leading_zeroes_inplace
-remove_leading_zeroes_inplace:
+global Remove_leading_zeroes_inplace
+Remove_leading_zeroes_inplace:
   ; Input:
   ;   - char *number -> rdi, removes the leading zeroes in [number] in-place.
   ;                          Note that [number] has to be non negative.
@@ -75,7 +77,7 @@ remove_leading_zeroes_inplace:
   push   rax
   push   rdi
   mov    rdi, rax
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   lea    rcx, [rax+1]
   pop    rdi
   pop    rax

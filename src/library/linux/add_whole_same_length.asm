@@ -1,8 +1,10 @@
-extern strlen_asm
+%include "defines.asm"
+
+extern Strlen_asm
 
 section .text
-global add_whole_same_length
-add_whole_same_length:
+global Add_whole_same_length
+Add_whole_same_length:
   ; Input:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
@@ -18,7 +20,7 @@ add_whole_same_length:
   ;   - r12
 
   push   r12
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   lea    rcx, [rax - 1]
   xor    r11d, r11d
   xor    r10b, r10b

@@ -1,9 +1,11 @@
-extern  subtract_whole
-extern  asmalloc
-extern  strlen_asm
+%include "defines.asm"
+
+extern  Subtract_whole
+extern  Asmalloc
+extern  Strlen_asm
 
 section .text
-global  subtractp
+global  Subtractp
 ; Subtracts two positive rational numbers; stores the result in `rdx`.
 
 ; Registers used:
@@ -18,7 +20,7 @@ global  subtractp
 ;   - r13
 ;   - r14
 ;   - r15
-subtractp:
+Subtractp:
 
   ; Align the stack.
   push  rbp
@@ -41,11 +43,11 @@ subtractp:
   ; Store the lengths of a (rdi) and b (rsi)
   ; in [rbp-8] and [rbp-16] respectively.
   ; Also, store sum+1 in r14
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov   [rbp-8], rax
   lea   r14, [rax+1]
   mov   rdi, r13
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   add   r14, rax
   mov   [rbp-16], rax
 
@@ -53,10 +55,10 @@ subtractp:
   ; Store one memory pointer in [rbp-24],
   ; and the other one in rdx.
   mov   rdi, r14
-  call  asmalloc wrt ..plt
+  CALL(Asmalloc)
   mov   [rbp-24], rax
   mov   rdi, r14
-  call  asmalloc wrt ..plt
+  CALL(Asmalloc)
   mov   rdx, rax
 
   ; Declare variables ptr1, n1, flag, and i.
@@ -160,7 +162,7 @@ subtractp:
   mov   rdi, r12
   mov   rsi, r13
   mov   rdx, r15
-  call  subtract_whole wrt ..plt
+  CALL(Subtract_whole)
 
   jmp   .return
 
@@ -213,7 +215,7 @@ subtractp:
   mov   rdi, rdx
   mov   rsi, [rbp-24]
   mov   rdx, r15
-  call  subtract_whole wrt ..plt
+  CALL(Subtract_whole)
   pop   rdx
   pop   rcx
 
@@ -224,7 +226,7 @@ subtractp:
   ; since it's never used again (in its
   ; old context) ahead this point.
   mov   rdi, r15
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov   r8, rax
 
   xor   ebx, ebx ; i = 0

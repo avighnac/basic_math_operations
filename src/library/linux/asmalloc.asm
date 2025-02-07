@@ -1,6 +1,8 @@
+%include "defines.asm"
+
 section .text
-global  asmalloc
-asmalloc:
+global  Asmalloc
+Asmalloc:
   ; Dynamically allocates memory (without any zeroing gurantee)
   ; Honestly this is just an mmap wrapper.
 

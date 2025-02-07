@@ -1,8 +1,10 @@
-extern strlen_asm
+%include "defines.asm"
+
+extern Strlen_asm
 
 section .text
-global add_whole
-add_whole:
+global Add_whole
+Add_whole:
   ; Input:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
@@ -18,10 +20,10 @@ add_whole:
 
   push   rbx              ; The only callee-saved register to preserve.
   push   rdi              ; Preserving rdi since it's gonna have to be overwritten.
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov    ebx, eax         ; ebx = strlen_asm(a)
   mov    rdi, rsi         ; To prepare another call to strlen_asm.
-  call   strlen_asm wrt ..plt ; eax = strlen_asm(b)
+  CALL(Strlen_asm)
   pop    rdi              ; Restoring rdi.
   cmp    ebx, eax
   jae    .no_swap

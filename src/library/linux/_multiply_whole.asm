@@ -1,9 +1,11 @@
-extern add_whole
-extern strlen_asm
+%include "defines.asm"
+
+extern Add_whole
+extern Strlen_asm
 
 section .text
-global _multiply_whole
-_multiply_whole:
+global _Multiply_whole
+_Multiply_whole:
   ; Input:
   ;   - char *a    -> rdi
   ;   - char *b    -> rsi
@@ -29,10 +31,10 @@ _multiply_whole:
   push   r15
   mov    r9, rdi               ; Move char* a to r9.
   mov    r10, rcx              ; Save rcx since strlen_asm() doesn't preserve it.
-  call   strlen_asm wrt ..plt      ; rax = strlen_asm(a)
+  CALL(Strlen_asm)             ; rax = strlen_asm(a)
   mov    rbx, rax              ; Save rax in order to prevent it from being overwritten.
   mov    rdi, rsi              ; strlen_asm's first argument is now b.
-  call   strlen_asm wrt ..plt      ; Call strlen_asm with b.
+  CALL(Strlen_asm)             ; Call strlen_asm with b.
   dec    rax
   xchg   rax, rbx              ; rbx = strlen_asm(b) - 1
   mov    rdi, r9               ; Restore rdi.
@@ -87,13 +89,13 @@ _multiply_whole:
   mov    rsi, rcx              ; param2 = rcx (char *buf1)
   mov    rdx, r8               ; param3 = r8 (char *buf2)
   mov    r15, r8               ; Saving the r8 register.
-  call   add_whole wrt ..plt   ; buf2 = add_whole(res, buf1) (this doesn't actually return anything)
+  CALL(Add_whole)              ; buf2 = add_whole(res, buf1) (this doesn't actually return anything)
   mov    r8, r15               ; Restoring the r8 register.
   pop    rdx
   pop    rsi
   xor    r11d, r11d
   mov    rdi, r8
-  call   strlen_asm wrt ..plt                ; r9 = strlen_asm(buf2) (length of the addition result)
+  CALL(Strlen_asm)             ; r9 = strlen_asm(buf2) (length of the addition result)
   mov    r9, rax
   pop    rdi
   pop    rcx
@@ -118,7 +120,7 @@ _multiply_whole:
   test   r15, r15
   jg     .loop_1
   mov    rdi, rdx
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov    byte [rdx+rax], 0
   pop    r15
   pop    r14

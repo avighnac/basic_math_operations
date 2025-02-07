@@ -1,6 +1,8 @@
+%include "defines.asm"
+
 section .text
-global strlen_asm
-strlen_asm:
+global Strlen_asm
+Strlen_asm:
   ; Input:
   ;   - char *str -> rdi
 

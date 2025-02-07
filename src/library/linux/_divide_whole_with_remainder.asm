@@ -1,11 +1,13 @@
-extern _multiply_whole
-extern remove_leading_zeroes
-extern strlen_asm
-extern subtract_whole
+%include "defines.asm"
+
+extern _Multiply_whole
+extern Remove_leading_zeroes
+extern Strlen_asm
+extern Subtract_whole
 
 section .text
-global _divide_whole_with_remainder
-_divide_whole_with_remainder:
+global _Divide_whole_with_remainder
+_Divide_whole_with_remainder:
   ; Input:
   ;   - const char *numerator   -> rdi
   ;   - const char *denominator -> rsi
@@ -34,13 +36,13 @@ _divide_whole_with_remainder:
   push   r14
   push   r15
   push   rcx
-  call   strlen_asm wrt ..plt   ; rax = strlen_asm(numerator)
+  CALL(Strlen_asm)         ; rax = strlen_asm(numerator)
   pop    rcx
   push   rax
   push   rdi
   push   rcx
   mov    rdi, rsi
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov    rbx, rax          ; rbx = strlen_asm(denominator)
   pop    rcx
   pop    rdi
@@ -80,9 +82,9 @@ _divide_whole_with_remainder:
   mov    r12, rcx
   mov    rcx, r8
   add    r8, r12
-  call   _multiply_whole wrt ..plt ; Multiply the numbers
+  CALL(_Multiply_whole)    ; Multiply the numbers
   mov    rdi, rdx
-  call   strlen_asm wrt ..plt   ; Get the length of the multiplication result.
+  CALL(Strlen_asm)         ; Get the length of the multiplication result.
   lea    r11, [rax-1]      ; r11 = strlen_asm(mul_res) - 1
   pop    r15
   pop    r14
@@ -175,7 +177,7 @@ _divide_whole_with_remainder:
   pop   rax
   lea   rdx, [rcx*2]
   add   rdx, r8
-  call  subtract_whole wrt ..plt
+  CALL(Subtract_whole)
   pop   rcx
   pop   r8
   lea   r12, [rcx*4]
@@ -184,10 +186,10 @@ _divide_whole_with_remainder:
   mov   rsi, r12
   push  rcx
   push  r8
-  call  remove_leading_zeroes wrt ..plt
+  CALL(Remove_leading_zeroes)
   pop   r8
   mov   rdi, r12
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov   r15, rax
   pop   rcx
   pop   r11
@@ -230,7 +232,7 @@ _divide_whole_with_remainder:
   mul   r9
   add   rdi, rax
   pop   rdx
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov   r12, rax
   pop   rcx
   pop   rdi
@@ -281,9 +283,9 @@ _divide_whole_with_remainder:
   mov   rsi, r8
   lea   rdx, [rcx*2]
   add   rdx, r8
-  call  subtract_whole wrt ..plt
+  CALL(Subtract_whole)
   mov   rdi, rdx
-  call  strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov   r10, rax
   pop   r11
   pop   r9

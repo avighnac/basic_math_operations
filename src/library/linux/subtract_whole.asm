@@ -1,8 +1,10 @@
-extern strlen_asm
+%include "defines.asm"
+
+extern Strlen_asm
 
 section .text
-global subtract_whole
-subtract_whole:
+global Subtract_whole
+Subtract_whole:
   ; Input:
   ;   - char *a -> rdi
   ;   - char *b -> rsi
@@ -20,11 +22,11 @@ subtract_whole:
 
   push   rbx
   push   r12
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov    r10, rax
   push   rdi
   mov    rdi, rsi
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   mov    r8, rax
   pop    rdi
   mov    rax, r10
@@ -83,7 +85,7 @@ subtract_whole:
   push   rdi
   push   rcx
   mov    rdi, rdx
-  call   strlen_asm wrt ..plt
+  CALL(Strlen_asm)
   pop    rcx
   pop    rdi
   test   cl, cl
