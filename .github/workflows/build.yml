@@ -86,7 +86,7 @@ jobs:
     - name: Install Rosetta 2 and CMake
       run: |
         /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
-        arch -x86_64 /usr/local/bin/brew install cmake
+        arch -x86_64 brew install cmake
     - name: Checkout repo.
       uses: actions/checkout@v2
       with:
