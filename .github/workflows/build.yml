@@ -34,7 +34,7 @@ jobs:
         path: version.txt
 
   make-linux:
-    name: Make libbasic_math_operations for Linux.
+    name: Linux build
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -70,7 +70,7 @@ jobs:
         path: linux-build/libbasic_math_operations-linux.zip
 
   make-macos:
-    name: Make libbasic_math_operations for macOS.
+    name: macOS build
     runs-on: macos-latest
     permissions:
       actions: write
@@ -86,7 +86,8 @@ jobs:
     - name: Install Rosetta 2 and CMake
       run: |
         /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
-        arch -x86_64 brew install cmake
+        which cmake
+        arch -x86_64 brew reinstall cmake
     - name: Checkout repo.
       uses: actions/checkout@v2
       with:
@@ -110,7 +111,7 @@ jobs:
         path: macos-build/libbasic_math_operations-macos-x86_64.zip
 
   make-windows:
-    name: Make libbasic_math_operations-windows.a
+    name: Windows build
     runs-on: windows-latest
     permissions:
       actions: write
