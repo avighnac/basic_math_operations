@@ -55,10 +55,16 @@ To install the module `basic_math_operations`, you can use pip (for Python >= 3.
 And you're done! Now you'll be able to import the library into your Python programs using this line: `import basic_math_operations`.
 
 ## C/C++
+### Linux
 If you're on Linux, you'll be able to install this library and copy its headers to `/usr/include` by executing a single shell command.
-
 ```shell
-curl -s -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/avighnac/basic_math_operations/contents/install.sh | sudo bash
+curl -s -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/avighnac/basic_math_operations/contents/install_linux.sh | sudo bash
+```
+
+### macOS
+The same holds true for macOS, here's the command!
+```shell
+curl -s -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/avighnac/basic_math_operations/contents/install_macos.sh | sudo zsh
 ```
 
 # Compilation
