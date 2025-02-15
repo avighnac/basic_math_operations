@@ -1,0 +1,343 @@
+name: "Make the library, upload to PyPi, and create a release."
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '18 13 * * 6'
+
+jobs:
+  determine_version:
+    name: Determine the major.minor.patch version.
+    runs-on: ubuntu-latest
+    permissions:
+        actions: write
+        contents: write
+        security-events: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Git Version
+      id: version
+      uses: codacy/git-version@2.7.1
+    - name: Use the version
+      run: |
+        echo ${{ steps.version.outputs.version }} > version.txt
+        g++ src/python-module/fix-version.cpp -O3
+        ./a.out version.txt
+        echo ${{ steps.version.outputs.version }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: version-info
+        path: version.txt
+
+  make-linux:
+    name: Linux build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        cmake --no-warn-unused-cli -DBMO_BUILD_SHARED=ON -DENABLE_TESTS=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S . -B build -G "Unix Makefiles"
+        cmake --build build --config Release --target all -j 10 --
+        mkdir linux-build
+        mv build/src/library/libbasic_math_operations.a linux-build/libbasic_math_operations.a
+        mv build/src/library/libbasic_math_operations.so linux-build/libbasic_math_operations.so
+        cp src/library/basic_math_operations.h linux-build/basic_math_operations.h
+        cp src/library/basic_math_operations.hpp linux-build/basic_math_operations.hpp
+        cd linux-build
+        zip -r libbasic_math_operations-linux.zip ./
+    - uses: actions/upload-artifact@v4
+      with:
+        name: linux-build
+        path: linux-build/libbasic_math_operations-linux.zip
+
+  make-macos:
+    name: macOS build
+    runs-on: macos-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Install Rosetta 2, x86 Brew and CMake
+      run: |
+        /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
+        file $(which cmake)
+        arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        arch -x86_64 /usr/local/bin/brew reinstall cmake
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - name: Compile basic_math_operations with CMake (for x86-64 using arch)
+      run: |
+        arch -x86_64 /usr/local/bin/cmake -S. -B build
+        arch -x86_64 /usr/local/bin/cmake --build build --config Release --target all -j 10 --
+        mkdir macos-build
+        mv build/src/library/libbasic_math_operations.a macos-build/libbasic_math_operations.a
+        cp src/library/basic_math_operations.h macos-build/basic_math_operations.h
+        cp src/library/basic_math_operations.hpp macos-build/basic_math_operations.hpp
+        cd macos-build
+        zip -r libbasic_math_operations-macos-x86_64.zip ./
+    - name: Upload compiled binaries.
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-build
+        path: macos-build/libbasic_math_operations-macos-x86_64.zip
+
+  make-windows:
+    name: Windows build
+    runs-on: windows-latest
+    permissions:
+      actions: write
+      contents: write
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+    steps:
+    - name: Set up NASM
+      uses: ilammy/setup-nasm@v1.3.0
+    - name: Checkout repo.
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - run: |
+        cmake --no-warn-unused-cli -DBMO_BUILD_SHARED=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -S . -B build -G "MinGW Makefiles"
+        cmake --build build --config Release --target all -j 10 -- || echo Error Bypass!
+        cd  "build/src/library"
+        ren libbasic_math_operations.a libbasic_math_operations-windows.a
+    - uses: actions/upload-artifact@v4
+      with:
+        name: windows-build
+        path: build/src/library/libbasic_math_operations-windows.a
+  make-wheel-windows:
+    needs:
+      - make-windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/artifacts
+      - name: Move version info
+        run: |
+          cp dist/artifacts/version-info/version.txt version.txt
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/artifacts
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-whl
+          path: dist/*.whl
+  make-wheel-linux:
+    needs:
+      - make-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }} > version.txt
+          g++ src/python-module/fix-version.cpp -O3
+          ./a.out version.txt
+          echo ${{ steps.version.outputs.version }}
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/artifacts
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+          pip3 install auditwheel
+          auditwheel repair dist/*.whl --plat manylinux2014_x86_64
+          rm dist/*linux_x86_64.whl
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-whl
+          path: wheelhouse/*.whl
+      
+  release:
+    needs:
+      - make-linux
+      - make-windows
+      - make-macos
+      - make-wheel-linux
+      - make-wheel-windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Download all git history and tags
+      - name: Declare github short hash.
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/artifacts
+      - name: Create GitHub release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.sha_short }}
+          release_name: basic_math_operations ${{ steps.vars.outputs.sha_short }}
+          draft: false
+          prerelease: false
+      - name: Upload asset for Linux.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/linux-build/libbasic_math_operations-linux.zip
+          asset_name: libbasic_math_operations-linux.zip
+          asset_content_type: application/zip
+      - name: Upload asset for Windows.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/windows-build/libbasic_math_operations-windows.a
+          asset_name: libbasic_math_operations-windows.a
+          asset_content_type: application/octet-stream
+      - name: Upload asset for macOS.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/macos-build/libbasic_math_operations-macos-x86_64.zip
+          asset_name: libbasic_math_operations-macos-x86_64.zip
+          asset_content_type: application/octet-stream
+      - name: Get Linux and Windows wheel name
+        run: |
+          cd dist/artifacts/linux-whl/
+          echo "LINUX_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../windows-whl/
+          echo "WIN_WHEEL=$(ls *.whl)" >> $GITHUB_ENV
+          cd ../..
+      - name: Upload wheel for Linux.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/linux-whl/${{ env.LINUX_WHEEL }}
+          asset_name: ${{ env.LINUX_WHEEL }}
+          asset_content_type: application/octet-stream
+      - name: Upload wheel for Windows.
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/artifacts/windows-whl/${{ env.WIN_WHEEL }}
+          asset_name: ${{ env.WIN_WHEEL }}
+          asset_content_type: application/octet-stream
+  pypi-upload:
+    needs:
+      - make-wheel-linux
+      - make-wheel-windows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/artifacts
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.x'
+      - name: Git Version
+        id: version
+        uses: codacy/git-version@2.7.1
+      - name: Use the version
+        run: |
+          echo ${{ steps.version.outputs.version }} > version.txt
+          g++ src/python-module/fix-version.cpp -O3
+          ./a.out version.txt
+          echo ${{ steps.version.outputs.version }}
+      - name: Install Twine and create SDIST
+        run: |
+          sudo apt-get install rename -y
+          python -m pip install twine
+          python setup.py sdist --formats=gztar
+          mkdir -p build/dist/ && mv dist/artifacts build/dist
+          mv build/dist/artifacts/windows-whl/* dist/
+          mv build/dist/artifacts/linux-whl/* dist/
+          echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Run Twine
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: |
+          twine upload --verbose dist/*
