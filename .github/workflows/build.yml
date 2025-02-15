@@ -96,8 +96,8 @@ jobs:
         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     - name: Compile basic_math_operations with CMake (for x86-64 using arch)
       run: |
-        arch -x86_64 cmake -S. -B build
-        arch -x86_64 cmake --build build --config Release --target all -j 10 --
+        arch -x86_64 /usr/local/bin/cmake -S. -B build
+        arch -x86_64 /usr/local/bin/cmake --build build --config Release --target all -j 10 --
         mkdir macos-build
         mv build/src/library/libbasic_math_operations.a macos-build/libbasic_math_operations.a
         mv build/src/library/libbasic_math_operations.so macos-build/libbasic_math_operations.so
