@@ -125,10 +125,6 @@ jobs:
     steps:
     - name: Set up NASM
       uses: ilammy/setup-nasm@v1.3.0
-    - name: Set up MinGW
-      uses: egor-tensin/setup-mingw@v2
-      with:
-        platform: x64
     - name: Checkout repo.
       uses: actions/checkout@v2
       with:
