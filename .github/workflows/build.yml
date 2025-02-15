@@ -28,7 +28,7 @@ jobs:
         g++ src/python-module/fix-version.cpp -O3
         ./a.out version.txt
         echo ${{ steps.version.outputs.version }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: version-info
         path: version.txt
@@ -64,7 +64,7 @@ jobs:
         cp src/library/basic_math_operations.hpp linux-build/basic_math_operations.hpp
         cd linux-build
         zip -r libbasic_math_operations-linux.zip ./
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: linux-build
         path: linux-build/libbasic_math_operations-linux.zip
@@ -97,7 +97,7 @@ jobs:
         cmake --build build --config Release --target all -j 10 -- || echo Error Bypass!
         cd  "build/src/library"
         ren libbasic_math_operations.a libbasic_math_operations-windows.a
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: windows-build
         path: build/src/library/libbasic_math_operations-windows.a
@@ -131,7 +131,7 @@ jobs:
         run: |
           python setup.py bdist_wheel
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-whl
           path: dist/*.whl
@@ -172,7 +172,7 @@ jobs:
           auditwheel repair dist/*.whl --plat manylinux2014_x86_64
           rm dist/*linux_x86_64.whl
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-whl
           path: wheelhouse/*.whl
