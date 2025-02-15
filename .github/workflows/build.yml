@@ -86,8 +86,9 @@ jobs:
     - name: Install Rosetta 2 and CMake
       run: |
         /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
-        which cmake
-        arch -x86_64 brew reinstall cmake
+        file $(which cmake)
+        arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        arch -x86_64 /usr/local/bin/brew reinstall cmake
     - name: Checkout repo.
       uses: actions/checkout@v2
       with:
