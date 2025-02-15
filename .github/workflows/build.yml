@@ -109,7 +109,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/artifacts
       - name: Move version info
@@ -124,7 +124,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install wheel
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/artifacts
       - name: Build wheel
@@ -162,7 +162,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install wheel
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/artifacts
       - name: Build wheel
@@ -195,7 +195,7 @@ jobs:
         run: |
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/artifacts
       - name: Create GitHub release
@@ -262,7 +262,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/artifacts
       - name: Set up Python
