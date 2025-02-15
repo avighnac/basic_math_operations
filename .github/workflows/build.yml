@@ -100,7 +100,7 @@ jobs:
         cd macos-build
         zip -r libbasic_math_operations-macos-x86_64.zip ./
     - name: Upload compiled binaries.
-    - uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         name: macos-build
         path: macos-build/libbasic_math_operations-macos-x86_64.zip
