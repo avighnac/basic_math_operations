@@ -83,6 +83,8 @@ jobs:
     steps:
     - name: Set up NASM
       uses: ilammy/setup-nasm@v1.3.0
+    - name: Install Rosetta 2
+      run: /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
     - name: Checkout repo.
       uses: actions/checkout@v2
       with:
