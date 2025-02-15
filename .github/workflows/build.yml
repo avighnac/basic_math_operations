@@ -89,7 +89,7 @@ jobs:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     - name: Compile basic_math_operations with CMake (for x86-64 using arch)
-    - run: |
+      run: |
         arch -x86_64 cmake -S. -B build
         arch -x86_64 cmake --build build --config Release --target all -j 10 --
         mkdir macos-build
