@@ -100,7 +100,6 @@ jobs:
         arch -x86_64 /usr/local/bin/cmake --build build --config Release --target all -j 10 --
         mkdir macos-build
         mv build/src/library/libbasic_math_operations.a macos-build/libbasic_math_operations.a
-        mv build/src/library/libbasic_math_operations.so macos-build/libbasic_math_operations.so
         cp src/library/basic_math_operations.h macos-build/basic_math_operations.h
         cp src/library/basic_math_operations.hpp macos-build/basic_math_operations.hpp
         cd macos-build
